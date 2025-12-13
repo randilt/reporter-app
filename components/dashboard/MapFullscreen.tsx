@@ -153,6 +153,29 @@ export default function MapFullscreen() {
     ? severityColor[selected.severity] || "#7c3aed"
     : "#7c3aed";
 
+  // Helper to get current selected index
+  const selectedIdx = selected
+    ? points.findIndex((p) => p.id === selected.id)
+    : -1;
+  const canGoPrev = selectedIdx > 0;
+  const canGoNext = selectedIdx >= 0 && selectedIdx < points.length - 1;
+
+  // Handlers for next/prev
+  const goToPrev = () => {
+    if (canGoPrev) {
+      const prev = points[selectedIdx - 1];
+      setSelected(prev);
+      mapRef.current?.setView([prev.lat, prev.lng], 14);
+    }
+  };
+  const goToNext = () => {
+    if (canGoNext) {
+      const next = points[selectedIdx + 1];
+      setSelected(next);
+      mapRef.current?.setView([next.lat, next.lng], 14);
+    }
+  };
+
   return (
     <div className="relative w-full h-screen bg-slate-50">
       {/* Map fills the viewport */}
@@ -161,11 +184,13 @@ export default function MapFullscreen() {
         center={center}
         zoom={12}
         scrollWheelZoom={true}
+        maxZoom={19}
         style={{ height: "100%", width: "100%", zIndex: 49 }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maxZoom={19}
         />
 
         {points.map((p) => (
@@ -228,6 +253,8 @@ export default function MapFullscreen() {
             <X className="w-5 h-5 text-slate-600" />
           </button>
         </div>
+
+        {/* ...existing code... */}
 
         <div className="p-4 space-y-4">
           {selected?.images && selected.images.length > 0 && (
@@ -331,7 +358,34 @@ export default function MapFullscreen() {
           </div>
         </div>
 
-        {/* Back to Home button at the bottom */}
+        {/* Next/Previous navigation at the very bottom */}
+        {selected && points.length > 1 && (
+          <div className="sticky bottom-16 bg-white p-4 border-t flex items-center justify-between gap-2 z-10">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={goToPrev}
+              disabled={!canGoPrev}
+              className="flex-1"
+            >
+              Previous
+            </Button>
+            <div className="text-xs text-slate-500 px-2">
+              {selectedIdx + 1} / {points.length}
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={goToNext}
+              disabled={!canGoNext}
+              className="flex-1"
+            >
+              Next
+            </Button>
+          </div>
+        )}
+
+        {/* Back to Home button at the very bottom */}
         <div className="sticky bottom-0 bg-white p-4 border-t flex justify-center z-10">
           <Link href="/dashboard" className="w-full">
             <Button
