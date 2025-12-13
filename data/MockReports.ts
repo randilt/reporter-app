@@ -42,6 +42,8 @@ export interface IncidentReport {
   description: string;
   images?: string[];
   status?: string;
+  city?: string; // City from reverse geocoding
+  province?: string; // Province from reverse geocoding
 }
 
 // API types
@@ -63,6 +65,8 @@ export interface ApiIncidentReport {
   description: string;
   userCorrectedTime: string | null;
   severity: string;
+  city?: string; // City from reverse geocoding
+  province?: string; // Province from reverse geocoding
 }
 
 export interface ApiResponse {
@@ -95,6 +99,8 @@ export function convertApiToReport(
     description: apiReport.description,
     images: [],
     status: apiReport.status,
+    city: apiReport.city,
+    province: apiReport.province,
   };
 }
 

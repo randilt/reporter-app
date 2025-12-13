@@ -1,15 +1,20 @@
 "use client";
 import { useState, useMemo } from "react";
 import { ListView } from "@/components/dashboard/ListView";
-import dynamic from 'next/dynamic';
-const LiveMap = dynamic(() => import('@/components/dashboard/LiveMap'), { ssr: false });
+import dynamic from "next/dynamic";
+const LiveMap = dynamic(() => import("@/components/dashboard/LiveMap"), {
+  ssr: false,
+});
 import { Button } from "@/components/ui/button";
 import { Plus, List, Map } from "lucide-react";
 import { useApiReports } from "@/hooks/useApiReports";
-import { ReportFilters, FilterState } from "@/components/dashboard/ReportFilters";
+import {
+  ReportFilters,
+  FilterState,
+} from "@/components/dashboard/ReportFilters";
 
 export default function DashboardPage() {
-  const [view, setView] = useState<"list" | "map">("list");
+  const [view, setView] = useState<"list" | "map">("map");
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     incidentType: "all",
@@ -20,10 +25,10 @@ export default function DashboardPage() {
 
   // Filter reports based on current filters
   const normalizeAdminStatus = (s?: string) => {
-    const val = (s || '').toLowerCase();
-    if (val === 'resolved') return 'resolved';
-    if (val === 'cancelled' || val === 'canceled') return 'canceled';
-    return 'pending';
+    const val = (s || "").toLowerCase();
+    if (val === "resolved") return "resolved";
+    if (val === "cancelled" || val === "canceled") return "canceled";
+    return "pending";
   };
 
   const filteredReports = useMemo(() => {
@@ -31,16 +36,20 @@ export default function DashboardPage() {
       const matchesSearch =
         filters.search === "" ||
         report.localId.toLowerCase().includes(filters.search.toLowerCase()) ||
-        report.responderName?.toLowerCase().includes(filters.search.toLowerCase());
+        report.responderName
+          ?.toLowerCase()
+          .includes(filters.search.toLowerCase());
 
       const matchesIncidentType =
-        filters.incidentType === "all" || report.incidentType === filters.incidentType;
+        filters.incidentType === "all" ||
+        report.incidentType === filters.incidentType;
 
       const matchesSeverity =
         filters.severity === "all" || report.severity === filters.severity;
 
       const matchesAdminStatus =
-        filters.adminStatus === "all" || normalizeAdminStatus(report.status) === filters.adminStatus;
+        filters.adminStatus === "all" ||
+        normalizeAdminStatus(report.status) === filters.adminStatus;
 
       return (
         matchesSearch &&
@@ -52,9 +61,15 @@ export default function DashboardPage() {
   }, [apiReports, filters]);
 
   // Calculate stats from API reports
-  const pendingCount = apiReports.filter(r => r.syncStatus === 'pending').length;
-  const syncedCount = apiReports.filter(r => r.syncStatus === 'synced').length;
-  const failedCount = apiReports.filter(r => r.syncStatus === 'failed').length;
+  const pendingCount = apiReports.filter(
+    (r) => r.syncStatus === "pending"
+  ).length;
+  const syncedCount = apiReports.filter(
+    (r) => r.syncStatus === "synced"
+  ).length;
+  const failedCount = apiReports.filter(
+    (r) => r.syncStatus === "failed"
+  ).length;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
@@ -63,7 +78,8 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-4xl font-bold text-slate-900">Dashboard</h1>
             <p className="text-slate-600 mt-2">
-              Total Reports: {apiReports.length} | Pending: {pendingCount} | Synced: {syncedCount} | Failed: {failedCount}
+              Total Reports: {apiReports.length} | Pending: {pendingCount} |
+              Synced: {syncedCount} | Failed: {failedCount}
             </p>
           </div>
         </div>
@@ -93,14 +109,6 @@ export default function DashboardPage() {
           <>
             <div className="mb-6 flex gap-4">
               <Button
-                onClick={() => setView("list")}
-                variant={view === "list" ? "default" : "outline"}
-                className="gap-2"
-              >
-                <List className="h-4 w-4" />
-                List View
-              </Button>
-              <Button
                 onClick={() => setView("map")}
                 variant={view === "map" ? "default" : "outline"}
                 className="gap-2"
@@ -108,17 +116,27 @@ export default function DashboardPage() {
                 <Map className="h-4 w-4" />
                 Map View
               </Button>
+              <Button
+                onClick={() => setView("list")}
+                variant={view === "list" ? "default" : "outline"}
+                className="gap-2"
+              >
+                <List className="h-4 w-4" />
+                List View
+              </Button>
             </div>
-
-            {view === "list" && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <ListView reports={filteredReports} adminStatusFilter={filters.adminStatus ?? 'all'} />
-              </div>
-            )}
-
             {view === "map" && (
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <LiveMap />
+              </div>
+            )}
+
+            {view === "list" && (
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <ListView
+                  reports={filteredReports}
+                  adminStatusFilter={filters.adminStatus ?? "all"}
+                />
               </div>
             )}
           </>

@@ -1,6 +1,12 @@
 "use client";
 import React, { useRef, useEffect } from "react";
-import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  CircleMarker,
+  Popup,
+  Tooltip,
+} from "react-leaflet";
 import { useApiReports } from "@/hooks/useApiReports";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
@@ -21,19 +27,34 @@ export default function LiveMap() {
   const reports = apiReports;
 
   const points = reports
-    .map((r: any) => {
-      const lat = r.locationCapturedAtCreation?.lat ?? r.location?.latitude ?? r.location?.lat;
-      const lng = r.locationCapturedAtCreation?.lng ?? r.location?.longitude ?? r.location?.lng;
-      const reporterName = r.reporter?.name ?? r.reporterName ?? r.responderName ?? (r.createdByUser ? `Reporter ${new Date(r.createdByUser).toLocaleString()}` : r.localId);
-      const incidentType = r.incidentType ?? r.type ?? "Unknown";
-      const createdAtLocal = r.createdAtLocal ?? r.createdByUser ?? new Date().toISOString();
+    .map((r) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const report = r as any;
+      const lat =
+        r.locationCapturedAtCreation?.lat ??
+        report.location?.latitude ??
+        report.location?.lat;
+      const lng =
+        r.locationCapturedAtCreation?.lng ??
+        report.location?.longitude ??
+        report.location?.lng;
+      const reporterName =
+        report.reporter?.name ??
+        report.reporterName ??
+        report.responderName ??
+        (report.createdByUser
+          ? `Reporter ${new Date(report.createdByUser).toLocaleString()}`
+          : r.localId);
+      const incidentType = r.incidentType ?? report.type ?? "Unknown";
+      const createdAtLocal =
+        r.createdAtLocal ?? report.createdByUser ?? new Date().toISOString();
       const severity = r.severity?.toString().toLowerCase() ?? "medium";
-      const address = r.location?.address ?? "Unknown location";
+      const address = report.location?.address ?? "Unknown location";
       const description = r.description ?? "";
-      const phone = r.reporter?.phone ?? r.responderPhone ?? "";
-      
+      const phone = report.reporter?.phone ?? report.responderPhone ?? "";
+
       return {
-        id: r.localId ?? r.id,
+        id: r.localId ?? report.id,
         lat,
         lng,
         severity,
@@ -45,7 +66,13 @@ export default function LiveMap() {
         phone,
       };
     })
-    .filter((p) => p.lat !== undefined && p.lng !== undefined && p.lat !== null && p.lng !== null);
+    .filter(
+      (p) =>
+        p.lat !== undefined &&
+        p.lng !== undefined &&
+        p.lat !== null &&
+        p.lng !== null
+    );
 
   useEffect(() => {
     if (!mapRef.current || points.length === 0) return;
@@ -54,14 +81,19 @@ export default function LiveMap() {
         mapRef.current.setView([points[0].lat, points[0].lng], 13);
       } else {
         const bounds = points.map((p) => [p.lat as number, p.lng as number]);
-        mapRef.current.fitBounds(bounds as any, { padding: [50, 50] });
+        mapRef.current.fitBounds(bounds as unknown as [[number, number]], {
+          padding: [50, 50],
+        });
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
   }, [points]);
 
-  const center: [number, number] = points.length > 0 ? [points[0].lat as number, points[0].lng as number] : [6.6828, 80.3990];
+  const center: [number, number] =
+    points.length > 0
+      ? [points[0].lat as number, points[0].lng as number]
+      : [6.6828, 80.399];
 
   return (
     <div className="relative h-[60vh] rounded-xl overflow-hidden">
@@ -82,57 +114,65 @@ export default function LiveMap() {
             key={p.id}
             center={[p.lat as number, p.lng as number]}
             radius={8}
-            pathOptions={{ 
-              color: severityColor[p.severity] || "#7c3aed", 
-              fillColor: severityColor[p.severity] || "#7c3aed", 
+            pathOptions={{
+              color: severityColor[p.severity] || "#7c3aed",
+              fillColor: severityColor[p.severity] || "#7c3aed",
               fillOpacity: 0.8,
-              weight: 2
+              weight: 2,
             }}
           >
             <Tooltip direction="top" offset={[0, -10]}>
               <div className="text-sm">
-                <div className="font-semibold">{p.incidentType.toUpperCase()}</div>
+                <div className="font-semibold">
+                  {p.incidentType.toUpperCase()}
+                </div>
                 <div className="text-xs text-gray-600">{p.reporterName}</div>
               </div>
             </Tooltip>
             <Popup maxWidth={300}>
               <div className="text-sm space-y-2 p-1">
-                <div className="font-bold text-base border-b pb-1">{p.incidentType.toUpperCase()}</div>
-                
+                <div className="font-bold text-base border-b pb-1">
+                  {p.incidentType.toUpperCase()}
+                </div>
+
                 {p.description && (
                   <div className="text-gray-700 text-xs leading-relaxed">
                     {p.description}
                   </div>
                 )}
-                
+
                 <div className="space-y-1">
                   <div className="flex items-start gap-2">
                     <span className="font-medium text-gray-800">Reporter:</span>
                     <span className="text-gray-700">{p.reporterName}</span>
                   </div>
-                  
+
                   {p.phone && (
                     <div className="flex items-start gap-2">
                       <span className="font-medium text-gray-800">Phone:</span>
-                      <span className="text-gray-700 font-mono text-xs">{p.phone}</span>
+                      <span className="text-gray-700 font-mono text-xs">
+                        {p.phone}
+                      </span>
                     </div>
                   )}
-                  
+
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-gray-800">Severity:</span>
-                    <span 
+                    <span
                       className="inline-block px-2 py-0.5 rounded text-white text-xs font-bold uppercase"
-                      style={{ backgroundColor: severityColor[p.severity] || "#7c3aed" }}
+                      style={{
+                        backgroundColor: severityColor[p.severity] || "#7c3aed",
+                      }}
                     >
                       {p.severity}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-start gap-2">
                     <span className="font-medium text-gray-800">Location:</span>
                     <span className="text-gray-600 text-xs">{p.address}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-gray-800">Time:</span>
                     <span className="text-gray-600 text-xs">
@@ -145,36 +185,63 @@ export default function LiveMap() {
           </CircleMarker>
         ))}
       </MapContainer>
-      
+
       <div
         role="region"
         aria-label="Severity legend"
-        className="absolute top-4 right-4 z-[10000] bg-white/95 border border-slate-300 rounded-lg p-3 shadow-lg pointer-events-auto backdrop-blur-sm"
+        className="absolute top-4 right-4 z-10000 bg-white/95 border border-slate-300 rounded-lg p-3 shadow-lg pointer-events-auto backdrop-blur-sm"
         style={{ maxWidth: 220 }}
       >
-        <div className="text-xs font-bold mb-2 text-gray-800">SEVERITY LEGEND</div>
+        <div className="text-xs font-bold mb-2 text-gray-800">
+          SEVERITY LEGEND
+        </div>
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.critical, border: `2px solid ${severityColor.critical}` }} />
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{
+                backgroundColor: severityColor.critical,
+                border: `2px solid ${severityColor.critical}`,
+              }}
+            />
             <span className="font-medium">Critical</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.high, border: `2px solid ${severityColor.high}` }} />
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{
+                backgroundColor: severityColor.high,
+                border: `2px solid ${severityColor.high}`,
+              }}
+            />
             <span className="font-medium">High</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.medium, border: `2px solid ${severityColor.medium}` }} />
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{
+                backgroundColor: severityColor.medium,
+                border: `2px solid ${severityColor.medium}`,
+              }}
+            />
             <span className="font-medium">Medium</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.low, border: `2px solid ${severityColor.low}` }} />
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{
+                backgroundColor: severityColor.low,
+                border: `2px solid ${severityColor.low}`,
+              }}
+            />
             <span className="font-medium">Low</span>
           </div>
         </div>
-        
+
         <div className="mt-3 pt-2 border-t border-gray-200">
           <div className="text-xs text-gray-600">
-            <span className="font-semibold">{points.length}</span> incidents shown
+            <span className="font-semibold">{points.length}</span> incidents
+            shown
           </div>
         </div>
       </div>

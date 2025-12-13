@@ -10,6 +10,45 @@ import { NextRequest, NextResponse } from "next/server";
 const BACKEND_API_URL =
   "https://wpdut9liq3.execute-api.ap-southeast-1.amazonaws.com/report/initiate";
 
+const BIGDATA_GEOCODE_API =
+  "https://api.bigdatacloud.net/data/reverse-geocode-client";
+
+interface GeocodeResponse {
+  city?: string;
+  locality?: string;
+  principalSubdivision?: string;
+  principalSubdivisionCode?: string;
+  countryName?: string;
+  countryCode?: string;
+}
+
+async function getLocationDetails(
+  latitude: number,
+  longitude: number
+): Promise<{ city: string; province: string } | null> {
+  try {
+    const url = `${BIGDATA_GEOCODE_API}?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.error("[Geocode] API error:", response.status);
+      return null;
+    }
+
+    const data: GeocodeResponse = await response.json();
+
+    const city = data.city || data.locality || "";
+    const province = data.principalSubdivision || "";
+
+    console.log("[Geocode] Location details:", { city, province });
+
+    return { city, province };
+  } catch (error) {
+    console.error("[Geocode] Failed to fetch location details:", error);
+    return null;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -42,13 +81,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get location details from BigDataCloud API using coordinates
+    let city = "";
+    let province = "";
+
+    if (body.locationCapturedAtCreation) {
+      const { lat, lng } = body.locationCapturedAtCreation;
+      if (lat && lng) {
+        const locationDetails = await getLocationDetails(lat, lng);
+        if (locationDetails) {
+          city = locationDetails.city;
+          province = locationDetails.province;
+        }
+      }
+    }
+
+    // Add city and province to the payload
+    const enhancedBody = {
+      ...body,
+      city,
+      province,
+    };
+
+    console.log("[API] Enhanced payload with location:", {
+      city,
+      province,
+      coordinates: body.locationCapturedAtCreation,
+    });
+
     // Forward the request to the actual backend API
     const backendResponse = await fetch(BACKEND_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(enhancedBody),
     });
 
     // Get the response from backend

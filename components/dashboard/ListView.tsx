@@ -153,6 +153,9 @@ export function ListView({
               <TableHead className="text-muted-foreground font-medium">
                 Phone
               </TableHead>
+              <TableHead className="text-muted-foreground font-medium">
+                City
+              </TableHead>
               <TableHead
                 className="text-muted-foreground font-medium cursor-pointer hover:text-foreground transition-colors"
                 onClick={() => toggleSort("createdAtLocal")}
@@ -195,6 +198,11 @@ export function ListView({
                 </TableCell>
                 <TableCell className="text-sm font-mono">
                   {report.responderPhone}
+                </TableCell>
+                <TableCell className="text-sm">
+                  {report.city || (
+                    <span className="text-muted-foreground">—</span>
+                  )}
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {format(new Date(report.createdAtLocal), "MMM d, HH:mm")}
@@ -339,27 +347,148 @@ export function ListView({
                 Location Information
               </h3>
               <div className="space-y-4">
-                <LocationGeocode
-                  latitude={selectedReport.locationCapturedAtCreation.lat}
-                  longitude={selectedReport.locationCapturedAtCreation.lng}
-                  accuracyMeters={
-                    selectedReport.locationCapturedAtCreation.accuracyMeters
-                  }
-                  label="Location at Creation"
-                  language="en"
-                  iconClassName="text-primary"
-                />
+                {/* Location at Creation */}
+                <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                  <div className="flex items-start gap-3">
+                    <div className="text-primary mt-1">
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-slate-900 mb-2">
+                        Location at Creation
+                      </h4>
+                      {selectedReport.city && selectedReport.province ? (
+                        <div className="space-y-1 text-sm text-slate-600">
+                          <p>
+                            <span className="font-medium">City:</span>{" "}
+                            {selectedReport.city}
+                          </p>
+                          <p>
+                            <span className="font-medium">Province:</span>{" "}
+                            {selectedReport.province}
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            {selectedReport.locationCapturedAtCreation.lat.toFixed(
+                              6
+                            )}
+                            ,{" "}
+                            {selectedReport.locationCapturedAtCreation.lng.toFixed(
+                              6
+                            )}
+                            {selectedReport.locationCapturedAtCreation
+                              .accuracyMeters && (
+                              <span className="ml-2">
+                                (±
+                                {selectedReport.locationCapturedAtCreation.accuracyMeters.toFixed(
+                                  0
+                                )}
+                                m)
+                              </span>
+                            )}
+                          </p>
+                          <a
+                            href={`https://www.google.com/maps?q=${selectedReport.locationCapturedAtCreation.lat},${selectedReport.locationCapturedAtCreation.lng}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline text-xs inline-flex items-center gap-1 mt-1"
+                          >
+                            View on Google Maps
+                            <svg
+                              className="h-3 w-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                              />
+                            </svg>
+                          </a>
+                        </div>
+                      ) : (
+                        <LocationGeocode
+                          latitude={
+                            selectedReport.locationCapturedAtCreation.lat
+                          }
+                          longitude={
+                            selectedReport.locationCapturedAtCreation.lng
+                          }
+                          accuracyMeters={
+                            selectedReport.locationCapturedAtCreation
+                              .accuracyMeters
+                          }
+                          label=""
+                          language="en"
+                          iconClassName="text-primary"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location at Sync */}
                 {selectedReport.locationCapturedAtSync && (
-                  <LocationGeocode
-                    latitude={selectedReport.locationCapturedAtSync.lat}
-                    longitude={selectedReport.locationCapturedAtSync.lng}
-                    accuracyMeters={
-                      selectedReport.locationCapturedAtSync.accuracyMeters
-                    }
-                    label="Location at Sync"
-                    language="en"
-                    iconClassName="text-green-600"
-                  />
+                  <div className="border border-green-200 rounded-lg p-4 bg-green-50">
+                    <div className="flex items-start gap-3">
+                      <div className="text-green-600 mt-1">
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-medium text-slate-900 mb-2">
+                          Location at Sync
+                        </h4>
+                        <LocationGeocode
+                          latitude={selectedReport.locationCapturedAtSync.lat}
+                          longitude={selectedReport.locationCapturedAtSync.lng}
+                          accuracyMeters={
+                            selectedReport.locationCapturedAtSync.accuracyMeters
+                          }
+                          label=""
+                          language="en"
+                          iconClassName="text-green-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>

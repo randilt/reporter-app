@@ -36,6 +36,8 @@ export interface IncidentReport {
   severity: Severity;
   description?: string;
   manualAddress?: string; // Optional manual address if GPS fails
+  city?: string; // City from reverse geocoding
+  province?: string; // Province from reverse geocoding
   createdAtLocal: string;
   lastEditedAtLocal: string;
   syncedAt: string | null;
