@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, List, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { Header } from "@/components/Header";
@@ -27,6 +28,7 @@ const Index = () => {
   } = useResponder();
   const t = useTranslations("HomePage");
   const tList = useTranslations("ReportsList");
+
 
   // Show loading state while checking responder registration
   if (responderLoading) {
@@ -90,7 +92,7 @@ const Index = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
               >
-                <div className="mb-6">
+                <div className={cn("mb-6", "text-center")}>
                   <h2 className="text-2xl font-bold mb-1">
                     {t("newIncidentReport")}
                   </h2>
@@ -98,7 +100,7 @@ const Index = () => {
                     {t("newIncidentDesc")}
                   </p>
                 </div>
-
+                <hr className="my-4 border-t border-border" />
                 <IncidentForm onSuccess={() => setView("queue")} />
               </motion.div>
             ) : (
