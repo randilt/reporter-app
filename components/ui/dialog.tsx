@@ -1,13 +1,13 @@
-import * as React from "react"
-import { X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface DialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  title?: string
-  children: React.ReactNode
-  className?: string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title?: string;
+  children: React.ReactNode;
+  className?: string;
 }
 
 export function Dialog({
@@ -19,16 +19,16 @@ export function Dialog({
 }: DialogProps) {
   React.useEffect(() => {
     if (open) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset"
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [open])
+      document.body.style.overflow = "unset";
+    };
+  }, [open]);
 
-  if (!open) return null
+  if (!open) return null;
 
   return (
     <>
@@ -36,7 +36,7 @@ export function Dialog({
         className="fixed inset-0 z-40 bg-black/50"
         onClick={() => onOpenChange(false)}
       />
-      <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6">
+      <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-7xl -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-4">
           {title && <h2 className="text-xl font-bold">{title}</h2>}
           <Button
@@ -51,5 +51,5 @@ export function Dialog({
         <div className={className}>{children}</div>
       </div>
     </>
-  )
+  );
 }

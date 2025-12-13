@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { format } from 'date-fns';
-import { ChevronDown, ChevronUp, MapPin, Clock, Smartphone, Phone } from 'lucide-react';
+import { useState } from "react";
+import { format } from "date-fns";
+import { ChevronDown, ChevronUp, Phone } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -8,52 +8,73 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { SeverityBadge } from '@/components/dashboard/StatusBadge';
-import { Carousel } from '@/components/ui/carousel';
-import { Dialog } from '@/components/ui/dialog';
+} from "@/components/ui/table";
+import { SeverityBadge } from "@/components/dashboard/StatusBadge";
+import { Carousel } from "@/components/ui/carousel";
+import { Dialog } from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { IncidentReport, getSyncLatency, formatLatency } from '@/data/MockReports';
+} from "@/components/ui/select";
+import {
+  IncidentReport,
+  getSyncLatency,
+  formatLatency,
+} from "@/data/MockReports";
+import { LocationGeocode } from "@/components/dashboard/LocationGeocode";
 
 interface ListViewProps {
   reports: IncidentReport[];
 }
 
-type AdminStatus = 'pending' | 'resolved' | 'canceled';
+type AdminStatus = "pending" | "resolved" | "canceled";
+
+// Move SortIcon outside the component to prevent recreation on each render
+const SortIcon = ({
+  field,
+  sortField,
+  sortDirection,
+}: {
+  field: "createdAtLocal" | "severity";
+  sortField: "createdAtLocal" | "severity";
+  sortDirection: "asc" | "desc";
+}) => {
+  if (sortField !== field) return null;
+  return sortDirection === "asc" ? (
+    <ChevronUp className="h-4 w-4 inline ml-1" />
+  ) : (
+    <ChevronDown className="h-4 w-4 inline ml-1" />
+  );
+};
 
 export function ListView({ reports }: ListViewProps) {
-  const [selectedReport, setSelectedReport] = useState<IncidentReport | null>(null);
+  const [selectedReport, setSelectedReport] = useState<IncidentReport | null>(
+    null
+  );
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [sortField, setSortField] = useState<'createdAtLocal' | 'severity'>('createdAtLocal');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [sortField, setSortField] = useState<"createdAtLocal" | "severity">(
+    "createdAtLocal"
+  );
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [statusById, setStatusById] = useState<Record<string, AdminStatus>>(
-    () => Object.fromEntries(reports.map((r) => [r.localId, 'pending']))
+    () => {
+      const existing: Record<string, AdminStatus> = {};
+      for (const r of reports) {
+        existing[r.localId] = "pending";
+      }
+      return existing;
+    }
   );
 
-  useEffect(() => {
-    setStatusById((prev) => {
-      const next = { ...prev };
-      for (const r of reports) {
-        if (!next[r.localId]) {
-          next[r.localId] = 'pending';
-        }
-      }
-      return next;
-    });
-  }, [reports]);
-
-  const toggleSort = (field: 'createdAtLocal' | 'severity') => {
+  const toggleSort = (field: "createdAtLocal" | "severity") => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('desc');
+      setSortDirection("desc");
     }
   };
 
@@ -61,22 +82,15 @@ export function ListView({ reports }: ListViewProps) {
 
   const sortedReports = [...reports].sort((a, b) => {
     let comparison = 0;
-    if (sortField === 'createdAtLocal') {
-      comparison = new Date(a.createdAtLocal).getTime() - new Date(b.createdAtLocal).getTime();
-    } else if (sortField === 'severity') {
+    if (sortField === "createdAtLocal") {
+      comparison =
+        new Date(a.createdAtLocal).getTime() -
+        new Date(b.createdAtLocal).getTime();
+    } else if (sortField === "severity") {
       comparison = severityOrder[a.severity] - severityOrder[b.severity];
     }
-    return sortDirection === 'asc' ? comparison : -comparison;
+    return sortDirection === "asc" ? comparison : -comparison;
   });
-
-  const SortIcon = ({ field }: { field: 'createdAtLocal' | 'severity' }) => {
-    if (sortField !== field) return null;
-    return sortDirection === 'asc' ? (
-      <ChevronUp className="h-4 w-4 inline ml-1" />
-    ) : (
-      <ChevronDown className="h-4 w-4 inline ml-1" />
-    );
-  };
 
   const openDetailsDialog = (report: IncidentReport) => {
     setSelectedReport(report);
@@ -89,62 +103,98 @@ export function ListView({ reports }: ListViewProps) {
         <Table>
           <TableHeader>
             <TableRow className="border-border/50 hover:bg-transparent">
-              <TableHead className="text-muted-foreground font-medium">ID</TableHead>
-              <TableHead className="text-muted-foreground font-medium">Type</TableHead>
-              <TableHead 
-                className="text-muted-foreground font-medium cursor-pointer hover:text-foreground transition-colors"
-                onClick={() => toggleSort('severity')}
-              >
-                Severity <SortIcon field="severity" />
+              <TableHead className="text-muted-foreground font-medium">
+                ID
               </TableHead>
-              <TableHead className="text-muted-foreground font-medium">Responder</TableHead>
-              <TableHead className="text-muted-foreground font-medium">Phone</TableHead>
-              <TableHead 
-                className="text-muted-foreground font-medium cursor-pointer hover:text-foreground transition-colors"
-                onClick={() => toggleSort('createdAtLocal')}
-              >
-                Created <SortIcon field="createdAtLocal" />
+              <TableHead className="text-muted-foreground font-medium">
+                Type
               </TableHead>
-              <TableHead className="text-muted-foreground font-medium">Latency</TableHead>
-              <TableHead className="text-muted-foreground font-medium">Status</TableHead>
+              <TableHead
+                className="text-muted-foreground font-medium cursor-pointer hover:text-foreground transition-colors"
+                onClick={() => toggleSort("severity")}
+              >
+                Severity{" "}
+                <SortIcon
+                  field="severity"
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                />
+              </TableHead>
+              <TableHead className="text-muted-foreground font-medium">
+                Responder
+              </TableHead>
+              <TableHead className="text-muted-foreground font-medium">
+                Phone
+              </TableHead>
+              <TableHead
+                className="text-muted-foreground font-medium cursor-pointer hover:text-foreground transition-colors"
+                onClick={() => toggleSort("createdAtLocal")}
+              >
+                Created{" "}
+                <SortIcon
+                  field="createdAtLocal"
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                />
+              </TableHead>
+              <TableHead className="text-muted-foreground font-medium">
+                Latency
+              </TableHead>
+              <TableHead className="text-muted-foreground font-medium">
+                Status
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sortedReports.map((report) => (
-              <TableRow 
+              <TableRow
                 key={report.localId}
                 className="border-border/30 transition-colors hover:bg-secondary/30 cursor-pointer"
                 onClick={() => openDetailsDialog(report)}
               >
                 <TableCell className="font-mono text-xs">
-                  {report.serverId || <span className="text-muted-foreground">—</span>}
+                  {report.serverId || (
+                    <span className="text-muted-foreground">—</span>
+                  )}
                 </TableCell>
-                <TableCell className="font-medium">{report.incidentType}</TableCell>
+                <TableCell className="font-medium">
+                  {report.incidentType}
+                </TableCell>
                 <TableCell>
                   <SeverityBadge severity={report.severity} />
                 </TableCell>
-                <TableCell className="text-sm">{report.responderName}</TableCell>
-                <TableCell className="text-sm font-mono">{report.responderPhone}</TableCell>
+                <TableCell className="text-sm">
+                  {report.responderName}
+                </TableCell>
+                <TableCell className="text-sm font-mono">
+                  {report.responderPhone}
+                </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
-                  {format(new Date(report.createdAtLocal), 'MMM d, HH:mm')}
+                  {format(new Date(report.createdAtLocal), "MMM d, HH:mm")}
                 </TableCell>
                 <TableCell className="font-mono text-xs text-muted-foreground">
                   {formatLatency(getSyncLatency(report))}
                 </TableCell>
                 <TableCell onClick={(e) => e.stopPropagation()}>
                   <Select
-                    value={statusById[report.localId] ?? 'pending'}
+                    value={statusById[report.localId] ?? "pending"}
                     onValueChange={(value) =>
-                      setStatusById((prev) => ({ ...prev, [report.localId]: value as AdminStatus }))
+                      setStatusById((prev) => ({
+                        ...prev,
+                        [report.localId]: value as AdminStatus,
+                      }))
                     }
                   >
-                    <SelectTrigger className={`w-32 border ${
-                      (statusById[report.localId] ?? 'pending') === 'resolved'
-                        ? 'bg-green-50 border-green-200 text-green-700'
-                        : (statusById[report.localId] ?? 'pending') === 'pending'
-                        ? 'bg-red-50 border-red-200 text-red-700'
-                        : 'bg-slate-50 border-slate-200 text-slate-700'
-                    }`}>
+                    <SelectTrigger
+                      className={`w-32 border ${
+                        (statusById[report.localId] ?? "pending") === "resolved"
+                          ? "bg-green-50 border-green-200 text-green-700"
+                          : (statusById[report.localId] ?? "pending") ===
+                            "pending"
+                          ? "bg-red-50 border-red-200 text-red-700"
+                          : "bg-slate-50 border-slate-200 text-slate-700"
+                      }`}
+                    >
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -168,15 +218,21 @@ export function ListView({ reports }: ListViewProps) {
       <Dialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        title={selectedReport ? `Details - ${selectedReport.incidentType}` : 'Details'}
-        className="max-h-96 overflow-y-auto"
+        title={
+          selectedReport
+            ? `Details - ${selectedReport.incidentType}`
+            : "Details"
+        }
+        className=" overflow-y-auto sm:w-full sm:max-w-7xl max-w-7xl"
       >
         {selectedReport && (
           <div className="space-y-6">
             {/* Carousel Section */}
             {selectedReport.images && selectedReport.images.length > 0 && (
               <div>
-                <h3 className="font-semibold text-slate-900 mb-3">Images ({selectedReport.images.length})</h3>
+                <h3 className="font-semibold text-slate-900 mb-3">
+                  Images ({selectedReport.images.length})
+                </h3>
                 <Carousel images={selectedReport.images} />
               </div>
             )}
@@ -189,50 +245,58 @@ export function ListView({ reports }: ListViewProps) {
 
             {/* Responder Information */}
             <div>
-              <h3 className="font-semibold text-slate-900 mb-3">Responder Information</h3>
+              <h3 className="font-semibold text-slate-900 mb-3">
+                Responder Information
+              </h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <span className="text-slate-600">Name:</span>
-                  <span className="font-medium">{selectedReport.responderName}</span>
+                  <span className="font-medium">
+                    {selectedReport.responderName}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4 text-slate-600" />
-                  <span className="font-mono text-slate-600">{selectedReport.responderPhone}</span>
+                  <span className="font-mono text-slate-600">
+                    {selectedReport.responderPhone}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Location Information */}
             <div>
-              <h3 className="font-semibold text-slate-900 mb-3">Location Information</h3>
-              <div className="space-y-3">
-                <div className="flex items-start gap-2">
-                  <MapPin className="h-4 w-4 text-primary mt-0.5" />
-                  <div>
-                    <div className="text-xs text-slate-600">Location at Creation</div>
-                    <div className="font-mono text-sm">
-                      {selectedReport.locationCapturedAtCreation.lat.toFixed(4)}, {selectedReport.locationCapturedAtCreation.lng.toFixed(4)}
-                      <span className="text-slate-600 ml-2">±{selectedReport.locationCapturedAtCreation.accuracyMeters}m</span>
-                    </div>
-                  </div>
-                </div>
+              <h3 className="font-semibold text-slate-900 mb-3">
+                Location Information
+              </h3>
+              <div className="space-y-4">
+                <LocationGeocode
+                  latitude={selectedReport.locationCapturedAtCreation.lat}
+                  longitude={selectedReport.locationCapturedAtCreation.lng}
+                  accuracyMeters={
+                    selectedReport.locationCapturedAtCreation.accuracyMeters
+                  }
+                  label="Location at Creation"
+                  language="en"
+                  iconClassName="text-primary"
+                />
                 {selectedReport.locationCapturedAtSync && (
-                  <div className="flex items-start gap-2">
-                    <MapPin className="h-4 w-4 text-green-600 mt-0.5" />
-                    <div>
-                      <div className="text-xs text-slate-600">Location at Sync</div>
-                      <div className="font-mono text-sm">
-                        {selectedReport.locationCapturedAtSync.lat.toFixed(4)}, {selectedReport.locationCapturedAtSync.lng.toFixed(4)}
-                        <span className="text-slate-600 ml-2">±{selectedReport.locationCapturedAtSync.accuracyMeters}m</span>
-                      </div>
-                    </div>
-                  </div>
+                  <LocationGeocode
+                    latitude={selectedReport.locationCapturedAtSync.lat}
+                    longitude={selectedReport.locationCapturedAtSync.lng}
+                    accuracyMeters={
+                      selectedReport.locationCapturedAtSync.accuracyMeters
+                    }
+                    label="Location at Sync"
+                    language="en"
+                    iconClassName="text-green-600"
+                  />
                 )}
               </div>
             </div>
 
             {/* Sync Information */}
-            <div>
+            {/* <div>
               <h3 className="font-semibold text-slate-900 mb-3">Sync Information</h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -257,7 +321,7 @@ export function ListView({ reports }: ListViewProps) {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         )}
       </Dialog>
