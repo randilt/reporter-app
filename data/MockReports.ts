@@ -65,6 +65,7 @@ export interface ApiIncidentReport {
   severity: string;
   city?: string; // City from reverse geocoding
   province?: string; // Province from reverse geocoding
+  images?: string[]; // Array of base64 encoded images
 }
 
 export interface ApiResponse {
@@ -95,7 +96,7 @@ export function convertApiToReport(
     deviceId: apiReport.deviceId,
     appVersion: apiReport.appVersion,
     description: apiReport.description,
-    images: [],
+    images: apiReport.images || [], // Use images from API or empty array
     status: apiReport.status,
     city: apiReport.city,
     province: apiReport.province,

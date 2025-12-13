@@ -157,6 +157,7 @@ export const useReports = () => {
         responderInfo,
         deviceId: report.deviceId,
         appVersion: report.appVersion,
+        images: report.images, // Include images array
       };
 
       // Make actual API call

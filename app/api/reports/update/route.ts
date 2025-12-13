@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getIdToken } from "@/lib/auth-server";
 
 const EXTERNAL_API_URL =
   "https://wpdut9liq3.execute-api.ap-southeast-1.amazonaws.com/report/update";
@@ -23,9 +24,20 @@ export async function PATCH(request: NextRequest) {
       status
     )}`;
 
+    // Get idToken from cookies for authorization
+    const idToken = await getIdToken();
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+
+    // Add Authorization header if idToken is available
+    if (idToken) {
+      headers["Authorization"] = `Bearer ${idToken}`;
+    }
+
     const resp = await fetch(targetUrl, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers,
     });
 
     const body = await resp.text();

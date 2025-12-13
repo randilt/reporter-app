@@ -16,7 +16,7 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="flex items-center gap-2">
-      <label className="text-sm text-muted-foreground">{t("label")}</label>
+      {/* <label className="text-sm text-muted-foreground">{t("label")}</label> */}
       <select
         value={currentLocale}
         onChange={(e) => switchLocale(e.target.value)}

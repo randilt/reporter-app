@@ -52,6 +52,7 @@ export default function LiveMap() {
       const address = report.location?.address ?? "Unknown location";
       const description = r.description ?? "";
       const phone = report.reporter?.phone ?? report.responderPhone ?? "";
+      const images = r.images ?? report.images ?? [];
 
       return {
         id: r.localId ?? report.id,
@@ -64,6 +65,7 @@ export default function LiveMap() {
         address,
         description,
         phone,
+        images,
       };
     })
     .filter(
@@ -123,6 +125,16 @@ export default function LiveMap() {
           >
             <Tooltip direction="top" offset={[0, -10]}>
               <div className="text-sm">
+                {p.images && p.images.length > 0 && (
+                  <div className="mb-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.images[0]}
+                      alt="Incident preview"
+                      className="w-32 h-20 object-cover rounded border border-gray-300"
+                    />
+                  </div>
+                )}
                 <div className="font-semibold">
                   {p.incidentType.toUpperCase()}
                 </div>
@@ -134,6 +146,22 @@ export default function LiveMap() {
                 <div className="font-bold text-base border-b pb-1">
                   {p.incidentType.toUpperCase()}
                 </div>
+
+                {p.images && p.images.length > 0 && (
+                  <div className="space-y-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.images[0]}
+                      alt="Incident"
+                      className="w-full h-32 object-cover rounded border border-gray-300"
+                    />
+                    {p.images.length > 1 && (
+                      <div className="text-xs text-gray-600 text-center">
+                        +{p.images.length - 1} more image(s)
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {p.description && (
                   <div className="text-gray-700 text-xs leading-relaxed">

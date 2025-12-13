@@ -1,15 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { getIdToken } from "@/lib/auth-server";
 
 const EXTERNAL_API_URL =
   "https://wpdut9liq3.execute-api.ap-southeast-1.amazonaws.com/report";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
+    // Get idToken from cookies for authorization
+    const idToken = await getIdToken();
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+
+    // Add Authorization header if idToken is available
+    if (idToken) {
+      headers["Authorization"] = `Bearer ${idToken}`;
+    }
+
     const response = await fetch(EXTERNAL_API_URL, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
     });
 
     if (!response.ok) {
@@ -32,7 +42,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     headers: {
       "Access-Control-Allow-Origin": "*",

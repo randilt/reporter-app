@@ -46,6 +46,7 @@ export interface SyncReportPayload {
   responderInfo: ResponderInfo | null; // Full responder details
   deviceId: string;
   appVersion: string;
+  images?: string[]; // Array of base64 encoded images
 }
 
 export interface SyncResponse {

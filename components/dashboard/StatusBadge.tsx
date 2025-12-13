@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
-import { SyncStatus, Severity } from '@/data/MockReports';
+import { cn } from "@/lib/utils";
+import { SyncStatus, Severity } from "@/data/MockReports";
 
 interface StatusBadgeProps {
   status: SyncStatus;
@@ -8,9 +8,9 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ status, animated = false }: StatusBadgeProps) {
   const statusConfig = {
-    pending: { label: 'Pending', emoji: '🟡', className: 'status-pending' },
-    synced: { label: 'Synced', emoji: '🟢', className: 'status-synced' },
-    failed: { label: 'Failed', emoji: '🔴', className: 'status-failed' },
+    pending: { label: "Pending", emoji: "🟡", className: "status-pending" },
+    synced: { label: "Synced", emoji: "🟢", className: "status-synced" },
+    failed: { label: "Failed", emoji: "🔴", className: "status-failed" },
   };
 
   const config = statusConfig[status];
@@ -18,9 +18,9 @@ export function StatusBadge({ status, animated = false }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        'status-badge',
+        "status-badge",
         config.className,
-        animated && status === 'pending' && 'animate-pulse-status'
+        animated && status === "pending" && "animate-pulse-status"
       )}
     >
       <span className="text-[10px]">{config.emoji}</span>
@@ -35,15 +35,13 @@ interface SeverityBadgeProps {
 
 export function SeverityBadge({ severity }: SeverityBadgeProps) {
   const severityConfig: Record<Severity, string> = {
-    Low: 'font-bold text-green-600',
-    Medium: 'font-bold text-yellow-600',
-    High: 'font-bold text-red-400',
-    Critical: 'font-bold text-red-700',
+    low: "px-2 py-1 rounded-md bg-green-100 dark:bg-green-950 font-bold text-green-600 dark:text-green-400",
+    medium:
+      "px-2 py-1 rounded-md bg-yellow-100 dark:bg-yellow-950 font-bold text-yellow-600 dark:text-yellow-400",
+    high: "px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-950 font-bold text-orange-600 dark:text-orange-400",
+    critical:
+      "px-2 py-1 rounded-md bg-red-100 dark:bg-red-950 font-bold text-red-600 dark:text-red-400",
   };
 
-  return (
-    <span className={severityConfig[severity]}>
-      {severity}
-    </span>
-  );
+  return <span className={severityConfig[severity]}>{severity}</span>;
 }

@@ -53,6 +53,7 @@ export interface IncidentReport {
   deviceId: string;
   appVersion: string;
   photoBlob?: Blob;
+  images?: string[]; // Array of base64 encoded images
 }
 
 const db = new Dexie("AegisDB") as Dexie & {
