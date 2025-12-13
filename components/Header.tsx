@@ -18,7 +18,7 @@ export const Header = () => {
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border"
+      className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border px-4"
     >
       <div className="container py-4">
         <div className="flex items-center justify-between">
