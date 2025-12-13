@@ -25,6 +25,13 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface SafePlace {
   PK: string;
@@ -105,6 +112,12 @@ export default function SafePlacesView() {
   const [safePlaces, setSafePlaces] = useState<SafePlace[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
+  const [selectedStatuses, setSelectedStatuses] = useState<
+    Record<string, string>
+  >({});
+  const [updatingStatuses, setUpdatingStatuses] = useState<
+    Record<string, boolean>
+  >({});
   const [sortField, setSortField] =
     useState<"createdAtLocal">("createdAtLocal");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
@@ -153,6 +166,44 @@ export default function SafePlacesView() {
 
   const toggleRow = (id: string) => {
     setExpandedRow(expandedRow === id ? null : id);
+  };
+
+  const updateStatus = async (pk: string, newStatus: string) => {
+    const prev = safePlaces.find((p) => p.PK === pk)?.status;
+    // optimistic update
+    setSafePlaces((prevPlaces) =>
+      prevPlaces.map((p) => (p.PK === pk ? { ...p, status: newStatus } : p))
+    );
+    setUpdatingStatuses((s) => ({ ...s, [pk]: true }));
+
+    try {
+      const res = await fetch(
+        `/api/safe-places/update?status=${encodeURIComponent(
+          newStatus
+        )}&id=${encodeURIComponent(pk)}`,
+        { method: "PATCH" }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to update status");
+      }
+
+      const json = await res.json();
+      toast.success("Status updated", { description: json?.message || "" });
+    } catch (err) {
+      console.error("Error updating status:", err);
+      // revert optimistic update
+      setSafePlaces((prevPlaces) =>
+        prevPlaces.map((p) =>
+          p.PK === pk ? { ...p, status: prev ?? p.status } : p
+        )
+      );
+      toast.error("Failed to update status", {
+        description: err instanceof Error ? err.message : String(err),
+      });
+    } finally {
+      setUpdatingStatuses((s) => ({ ...s, [pk]: false }));
+    }
   };
 
   if (loading) {
@@ -277,7 +328,9 @@ export default function SafePlacesView() {
                       className={`px-2 py-1 rounded-md text-xs font-medium ${
                         place.status === "waiting"
                           ? "bg-yellow-100 dark:bg-yellow-950 text-yellow-600 dark:text-yellow-400"
-                          : "bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400"
+                          : place.status === "verified"
+                          ? "bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400"
+                          : "bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400"
                       }`}
                     >
                       {place.status}
@@ -373,6 +426,49 @@ export default function SafePlacesView() {
                               <span className="font-medium">Timezone:</span>{" "}
                               {place.deviceTimezone}
                             </p>
+                          </div>
+                        </div>
+                        {/* Admin Controls: status change */}
+                        <div>
+                          <h4 className="font-semibold mb-2">Admin</h4>
+                          <div className="flex items-center gap-3">
+                            <Select
+                              value={selectedStatuses[place.PK] ?? place.status}
+                              onValueChange={(v) =>
+                                setSelectedStatuses((s) => ({
+                                  ...s,
+                                  [place.PK]: v,
+                                }))
+                              }
+                            >
+                              <SelectTrigger size="sm">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="waiting">Waiting</SelectItem>
+                                <SelectItem value="verified">
+                                  Verified
+                                </SelectItem>
+                                <SelectItem value="rejected">
+                                  Rejected
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+
+                            <Button
+                              size="sm"
+                              onClick={() =>
+                                updateStatus(
+                                  place.PK,
+                                  selectedStatuses[place.PK] ?? place.status
+                                )
+                              }
+                              disabled={!!updatingStatuses[place.PK]}
+                            >
+                              {updatingStatuses[place.PK]
+                                ? "Updating..."
+                                : "Update Status"}
+                            </Button>
                           </div>
                         </div>
                       </div>

@@ -134,7 +134,7 @@ export function LocationGeocode({
               className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline"
             >
               <MapIcon className="h-3 w-3" />
-              View on Google Maps
+              View Directions on Google Maps
             </a>
           </div>
         )}
