@@ -11,12 +11,14 @@
     },
     "severity": "high",
     "status": "in-progress",
-    "reporter": {
+    "reportedBy": {
+      "responderId": "resp_1734089234000_abc123",
       "name": "Kamal Perera",
       "phone": "+94771234567",
-      "email": "kamal.perera@email.com"
+      "email": "kamal.perera@email.com",
+      "nic": "912345678V"
     },
-    "responder": {
+    "assignedTo": {
       "name": "Fire Chief Nimal Silva",
       "mobile": "+94772345678",
       "unit": "Fire Station Alpha",
@@ -43,22 +45,24 @@
     },
     "severity": "critical",
     "status": "resolved",
-    "reporter": {
-      "name": "Sanduni Fernando",
-      "phone": "+94763456789",
-      "email": "sanduni.f@email.com"
-    },
-    "responder": {
-      "name": "Dr. Ruwan Jayawardena",
-      "mobile": "+94773456789",
-      "unit": "Colombo General Hospital",
-      "badge": "EMT-042"
-    },
     "updatedAt": "2024-12-13T09:20:45.678Z",
     "synced": true,
     "images": ["https://example.com/incident2_img1.jpg"],
     "createdByUser": "2024-12-13T08:15:34.123Z",
-    "syncedAt": "2024-12-13T08:21:15.873Z"
+    "syncedAt": "2024-12-13T08:21:15.873Z",
+    "reportedBy": {
+      "responderId": "resp_1765616979022_opke2u",
+      "name": "Sanduni Fernando",
+      "phone": "+94763456789",
+      "email": "sanduni.f@email.com",
+      "nic": "887654321V"
+    },
+    "assignedTo": {
+      "name": "Dr. Ruwan Jayawardena",
+      "mobile": "+94773456789",
+      "unit": "Colombo General Hospital",
+      "badge": "EMT-042"
+    }
   },
   {
     "id": "srv_1734087634890_g7h8i9",
@@ -72,22 +76,24 @@
     },
     "severity": "medium",
     "status": "in-progress",
-    "reporter": {
-      "name": "Dilshan Rajapaksa",
-      "phone": "+94754567890",
-      "email": "dilshan.r@email.com"
-    },
-    "responder": {
-      "name": "Inspector Chaminda Wickramasinghe",
-      "mobile": "+94774567890",
-      "unit": "Colombo Central Police",
-      "badge": "POL-156"
-    },
     "updatedAt": "2024-12-13T08:10:22.456Z",
     "synced": true,
     "images": [],
     "createdByUser": "2024-12-13T07:53:54.890Z",
-    "syncedAt": "2024-12-13T07:57:36.333Z"
+    "syncedAt": "2024-12-13T07:57:36.333Z",
+    "reportedBy": {
+      "responderId": "resp_1765616969022_vfcuh",
+      "name": "Dilshan Rajapaksa",
+      "phone": "+94754567890",
+      "email": "dilshan.r@email.com",
+      "nic": "945678901V"
+    },
+    "assignedTo": {
+      "name": "Inspector Chaminda Wickramasinghe",
+      "mobile": "+94774567890",
+      "unit": "Colombo Central Police",
+      "badge": "POL-156"
+    }
   },
   {
     "id": "srv_1734086234456_j1k2l3",
@@ -101,17 +107,6 @@
     },
     "severity": "high",
     "status": "pending",
-    "reporter": {
-      "name": "Tharindu Gunasekara",
-      "phone": "+94745678901",
-      "email": "tharindu.g@email.com"
-    },
-    "responder": {
-      "name": "Lt. Pradeep Samaraweera",
-      "mobile": "+94775678901",
-      "unit": "Disaster Response Team Bravo",
-      "badge": "DRT-089"
-    },
     "updatedAt": "2024-12-13T07:30:34.456Z",
     "synced": true,
     "images": [
@@ -120,7 +115,20 @@
       "https://example.com/incident4_img3.jpg"
     ],
     "createdByUser": "2024-12-13T07:30:34.456Z",
-    "syncedAt": "2024-12-13T07:31:50.382Z"
+    "syncedAt": "2024-12-13T07:31:50.382Z",
+    "reportedBy": {
+      "responderId": "resp_1765616959022_b23xp",
+      "name": "Tharindu Gunasekara",
+      "phone": "+94745678901",
+      "email": "tharindu.g@email.com",
+      "nic": "923456789V"
+    },
+    "assignedTo": {
+      "name": "Lt. Pradeep Samaraweera",
+      "mobile": "+94775678901",
+      "unit": "Disaster Response Team Bravo",
+      "badge": "DRT-089"
+    }
   },
   {
     "id": "srv_1734085134789_m4n5o6",
@@ -134,22 +142,24 @@
     },
     "severity": "critical",
     "status": "in-progress",
-    "reporter": {
-      "name": "Lakshmi Wijesinghe",
-      "phone": "+94736789012",
-      "email": "lakshmi.w@email.com"
-    },
-    "responder": {
-      "name": "Engineer Sunil Bandara",
-      "mobile": "+94776789012",
-      "unit": "Ceylon Electricity Board - Emergency",
-      "badge": "CEB-234"
-    },
     "updatedAt": "2024-12-13T07:45:33.890Z",
     "synced": true,
     "images": ["https://example.com/incident5_img1.jpg"],
     "createdByUser": "2024-12-13T07:12:14.789Z",
-    "syncedAt": "2024-12-13T07:13:23.869Z"
+    "syncedAt": "2024-12-13T07:13:23.869Z",
+    "reportedBy": {
+      "responderId": "resp_1765616949022_ecm4wq",
+      "name": "Lakshmi Wijesinghe",
+      "phone": "+94736789012",
+      "email": "lakshmi.w@email.com",
+      "nic": "856789012V"
+    },
+    "assignedTo": {
+      "name": "Engineer Sunil Bandara",
+      "mobile": "+94776789012",
+      "unit": "Ceylon Electricity Board - Emergency",
+      "badge": "CEB-234"
+    }
   },
   {
     "id": "srv_1734084034123_p7q8r9",
@@ -163,17 +173,6 @@
     },
     "severity": "medium",
     "status": "resolved",
-    "reporter": {
-      "name": "Asanka De Silva",
-      "phone": "+94727890123",
-      "email": "asanka.ds@email.com"
-    },
-    "responder": {
-      "name": "Fire Officer Mahesh Kumara",
-      "mobile": "+94777890123",
-      "unit": "Fire Station Beta",
-      "badge": "FS-087"
-    },
     "updatedAt": "2024-12-13T07:30:22.567Z",
     "synced": true,
     "images": [
@@ -181,7 +180,20 @@
       "https://example.com/incident6_img2.jpg"
     ],
     "createdByUser": "2024-12-13T06:53:54.123Z",
-    "syncedAt": "2024-12-13T06:57:44.284Z"
+    "syncedAt": "2024-12-13T06:57:44.284Z",
+    "reportedBy": {
+      "responderId": "resp_1765616939022_uz4oi9",
+      "name": "Asanka De Silva",
+      "phone": "+94727890123",
+      "email": "asanka.ds@email.com",
+      "nic": "901234567V"
+    },
+    "assignedTo": {
+      "name": "Fire Officer Mahesh Kumara",
+      "mobile": "+94777890123",
+      "unit": "Fire Station Beta",
+      "badge": "FS-087"
+    }
   },
   {
     "id": "srv_1734082934456_s1t2u3",
@@ -195,22 +207,24 @@
     },
     "severity": "high",
     "status": "resolved",
-    "reporter": {
-      "name": "Nimali Jayakody",
-      "phone": "+94718901234",
-      "email": "nimali.j@email.com"
-    },
-    "responder": {
-      "name": "Dr. Anura Rodrigo",
-      "mobile": "+94778901234",
-      "unit": "National Hospital Colombo",
-      "badge": "EMT-067"
-    },
     "updatedAt": "2024-12-13T07:05:12.789Z",
     "synced": true,
     "images": [],
     "createdByUser": "2024-12-13T06:35:34.456Z",
-    "syncedAt": "2024-12-13T06:36:37.231Z"
+    "syncedAt": "2024-12-13T06:36:37.231Z",
+    "reportedBy": {
+      "responderId": "resp_1765616929022_hnlx7c",
+      "name": "Nimali Jayakody",
+      "phone": "+94718901234",
+      "email": "nimali.j@email.com",
+      "nic": "934567890X"
+    },
+    "assignedTo": {
+      "name": "Dr. Anura Rodrigo",
+      "mobile": "+94778901234",
+      "unit": "National Hospital Colombo",
+      "badge": "EMT-067"
+    }
   },
   {
     "id": "srv_1734081834789_v4w5x6",
@@ -224,22 +238,24 @@
     },
     "severity": "critical",
     "status": "in-progress",
-    "reporter": {
-      "name": "Priyanka Mendis",
-      "phone": "+94709012345",
-      "email": "priyanka.m@email.com"
-    },
-    "responder": {
-      "name": "Sergeant Rohan Perera",
-      "mobile": "+94779012345",
-      "unit": "Colombo South Police - Rapid Response",
-      "badge": "POL-234"
-    },
     "updatedAt": "2024-12-13T06:25:45.123Z",
     "synced": true,
     "images": ["https://example.com/incident8_img1.jpg"],
     "createdByUser": "2024-12-13T06:17:14.789Z",
-    "syncedAt": "2024-12-13T06:19:05.277Z"
+    "syncedAt": "2024-12-13T06:19:05.277Z",
+    "reportedBy": {
+      "responderId": "resp_1765616919022_gylf2j",
+      "name": "Priyanka Mendis",
+      "phone": "+94709012345",
+      "email": "priyanka.m@email.com",
+      "nic": "878901234V"
+    },
+    "assignedTo": {
+      "name": "Sergeant Rohan Perera",
+      "mobile": "+94779012345",
+      "unit": "Colombo South Police - Rapid Response",
+      "badge": "POL-234"
+    }
   },
   {
     "id": "srv_1734080734123_y7z8a9",
@@ -253,17 +269,6 @@
     },
     "severity": "medium",
     "status": "pending",
-    "reporter": {
-      "name": "Rajitha Amarasinghe",
-      "phone": "+94700123456",
-      "email": "rajitha.a@email.com"
-    },
-    "responder": {
-      "name": "Supervisor Gamini Fonseka",
-      "mobile": "+94770123456",
-      "unit": "Municipal Council - Emergency Services",
-      "badge": "MC-123"
-    },
     "updatedAt": "2024-12-13T05:58:54.123Z",
     "synced": true,
     "images": [
@@ -271,7 +276,20 @@
       "https://example.com/incident9_img2.jpg"
     ],
     "createdByUser": "2024-12-13T05:58:54.123Z",
-    "syncedAt": "2024-12-13T06:00:18.386Z"
+    "syncedAt": "2024-12-13T06:00:18.386Z",
+    "reportedBy": {
+      "responderId": "resp_1765616909022_o7j6ej",
+      "name": "Rajitha Amarasinghe",
+      "phone": "+94700123456",
+      "email": "rajitha.a@email.com",
+      "nic": "912345670V"
+    },
+    "assignedTo": {
+      "name": "Supervisor Gamini Fonseka",
+      "mobile": "+94770123456",
+      "unit": "Municipal Council - Emergency Services",
+      "badge": "MC-123"
+    }
   },
   {
     "id": "srv_1734079634456_b1c2d3",
@@ -285,22 +303,24 @@
     },
     "severity": "high",
     "status": "in-progress",
-    "reporter": {
-      "name": "Chaminda Rathnayake",
-      "phone": "+94691234567",
-      "email": "chaminda.r@email.com"
-    },
-    "responder": {
-      "name": "Engineer Saman Dias",
-      "mobile": "+94771234568",
-      "unit": "Water Supply & Drainage Board",
-      "badge": "WSDB-067"
-    },
     "updatedAt": "2024-12-13T06:15:23.678Z",
     "synced": true,
     "images": ["https://example.com/incident10_img1.jpg"],
     "createdByUser": "2024-12-13T05:40:34.456Z",
-    "syncedAt": "2024-12-13T05:42:19.921Z"
+    "syncedAt": "2024-12-13T05:42:19.921Z",
+    "reportedBy": {
+      "responderId": "resp_1765616899022_riirum",
+      "name": "Chaminda Rathnayake",
+      "phone": "+94691234567",
+      "email": "chaminda.r@email.com",
+      "nic": "945678902V"
+    },
+    "assignedTo": {
+      "name": "Engineer Saman Dias",
+      "mobile": "+94771234568",
+      "unit": "Water Supply & Drainage Board",
+      "badge": "WSDB-067"
+    }
   },
   {
     "id": "srv_1734078534789_e4f5g6",
@@ -314,22 +334,24 @@
     },
     "severity": "medium",
     "status": "resolved",
-    "reporter": {
-      "name": "Malini Samarawickrama",
-      "phone": "+94682345678",
-      "email": "malini.s@email.com"
-    },
-    "responder": {
-      "name": "Dr. Thilini Abeywickrama",
-      "mobile": "+94772345679",
-      "unit": "Lady Ridgeway Hospital",
-      "badge": "EMT-101"
-    },
     "updatedAt": "2024-12-13T06:10:45.234Z",
     "synced": true,
     "images": [],
     "createdByUser": "2024-12-13T05:22:14.789Z",
-    "syncedAt": "2024-12-13T05:25:12.431Z"
+    "syncedAt": "2024-12-13T05:25:12.431Z",
+    "reportedBy": {
+      "responderId": "resp_1765616889022_fm1pi",
+      "name": "Malini Samarawickrama",
+      "phone": "+94682345678",
+      "email": "malini.s@email.com",
+      "nic": "912345678V"
+    },
+    "assignedTo": {
+      "name": "Dr. Thilini Abeywickrama",
+      "mobile": "+94772345679",
+      "unit": "Lady Ridgeway Hospital",
+      "badge": "EMT-101"
+    }
   },
   {
     "id": "srv_1734077434123_h7i8j9",
@@ -343,17 +365,6 @@
     },
     "severity": "high",
     "status": "resolved",
-    "reporter": {
-      "name": "Dinesh Bandara",
-      "phone": "+94673456789",
-      "email": "dinesh.b@email.com"
-    },
-    "responder": {
-      "name": "Fire Chief Ajith Gunasekara",
-      "mobile": "+94773456780",
-      "unit": "Fire Station Gamma - Highway Unit",
-      "badge": "FS-145"
-    },
     "updatedAt": "2024-12-13T05:45:12.890Z",
     "synced": true,
     "images": [
@@ -362,7 +373,20 @@
       "https://example.com/incident12_img3.jpg"
     ],
     "createdByUser": "2024-12-13T05:03:54.123Z",
-    "syncedAt": "2024-12-13T05:07:51.451Z"
+    "syncedAt": "2024-12-13T05:07:51.451Z",
+    "reportedBy": {
+      "responderId": "resp_1765616879022_86knol",
+      "name": "Dinesh Bandara",
+      "phone": "+94673456789",
+      "email": "dinesh.b@email.com",
+      "nic": "887654321V"
+    },
+    "assignedTo": {
+      "name": "Fire Chief Ajith Gunasekara",
+      "mobile": "+94773456780",
+      "unit": "Fire Station Gamma - Highway Unit",
+      "badge": "FS-145"
+    }
   },
   {
     "id": "srv_1734076334456_k1l2m3",
@@ -376,22 +400,24 @@
     },
     "severity": "medium",
     "status": "resolved",
-    "reporter": {
-      "name": "Anonymous Caller",
-      "phone": "+94664567890",
-      "email": null
-    },
-    "responder": {
-      "name": "Officer Kusala Fernando",
-      "mobile": "+94774567891",
-      "unit": "Cinnamon Gardens Police",
-      "badge": "POL-178"
-    },
     "updatedAt": "2024-12-13T05:20:34.567Z",
     "synced": true,
     "images": [],
     "createdByUser": "2024-12-13T04:45:34.456Z",
-    "syncedAt": "2024-12-13T04:47:32.391Z"
+    "syncedAt": "2024-12-13T04:47:32.391Z",
+    "reportedBy": {
+      "responderId": "resp_1765616869022_n6lc4q",
+      "name": "Anonymous Caller",
+      "phone": "+94664567890",
+      "email": "dilshan.r@email.com",
+      "nic": "945678901V"
+    },
+    "assignedTo": {
+      "name": "Officer Kusala Fernando",
+      "mobile": "+94774567891",
+      "unit": "Cinnamon Gardens Police",
+      "badge": "POL-178"
+    }
   },
   {
     "id": "srv_1734075234789_n4o5p6",
@@ -405,22 +431,24 @@
     },
     "severity": "critical",
     "status": "in-progress",
-    "reporter": {
-      "name": "Suresh Wickramaratne",
-      "phone": "+94655678901",
-      "email": "suresh.w@email.com"
-    },
-    "responder": {
-      "name": "Engineer Lalith Senanayake",
-      "mobile": "+94775678902",
-      "unit": "Laugfs Gas - Emergency Response",
-      "badge": "LG-045"
-    },
     "updatedAt": "2024-12-13T04:50:45.123Z",
     "synced": true,
     "images": ["https://example.com/incident14_img1.jpg"],
     "createdByUser": "2024-12-13T04:27:14.789Z",
-    "syncedAt": "2024-12-13T04:29:00.441Z"
+    "syncedAt": "2024-12-13T04:29:00.441Z",
+    "reportedBy": {
+      "responderId": "resp_1765616859022_2fj7zj",
+      "name": "Suresh Wickramaratne",
+      "phone": "+94655678901",
+      "email": "suresh.w@email.com",
+      "nic": "923456789V"
+    },
+    "assignedTo": {
+      "name": "Engineer Lalith Senanayake",
+      "mobile": "+94775678902",
+      "unit": "Laugfs Gas - Emergency Response",
+      "badge": "LG-045"
+    }
   },
   {
     "id": "srv_1734074134123_q7r8s9",
@@ -434,17 +462,6 @@
     },
     "severity": "critical",
     "status": "resolved",
-    "reporter": {
-      "name": "Ranjith Herath",
-      "phone": "+94646789012",
-      "email": "ranjith.h@email.com"
-    },
-    "responder": {
-      "name": "Dr. Kumari Dissanayake",
-      "mobile": "+94776789013",
-      "unit": "Castle Street Hospital",
-      "badge": "EMT-092"
-    },
     "updatedAt": "2024-12-13T04:55:23.456Z",
     "synced": true,
     "images": [
@@ -452,7 +469,20 @@
       "https://example.com/incident15_img2.jpg"
     ],
     "createdByUser": "2024-12-13T04:08:54.123Z",
-    "syncedAt": "2024-12-13T04:13:32.597Z"
+    "syncedAt": "2024-12-13T04:13:32.597Z",
+    "reportedBy": {
+      "responderId": "resp_1765616849022_jg1lyp",
+      "name": "Ranjith Herath",
+      "phone": "+94646789012",
+      "email": "ranjith.h@email.com",
+      "nic": "856789012V"
+    },
+    "assignedTo": {
+      "name": "Dr. Kumari Dissanayake",
+      "mobile": "+94776789013",
+      "unit": "Castle Street Hospital",
+      "badge": "EMT-092"
+    }
   },
   {
     "id": "srv_1734073034456_t1u2v3",
@@ -466,17 +496,6 @@
     },
     "severity": "high",
     "status": "pending",
-    "reporter": {
-      "name": "Anura Silva",
-      "phone": "+94637890123",
-      "email": "anura.s@email.com"
-    },
-    "responder": {
-      "name": "Lt. Nuwan Jayasinghe",
-      "mobile": "+94777890124",
-      "unit": "Disaster Response Team Charlie",
-      "badge": "DRT-112"
-    },
     "updatedAt": "2024-12-13T03:50:34.456Z",
     "synced": true,
     "images": [
@@ -484,7 +503,20 @@
       "https://example.com/incident16_img2.jpg"
     ],
     "createdByUser": "2024-12-13T03:50:34.456Z",
-    "syncedAt": "2024-12-13T03:53:59.427Z"
+    "syncedAt": "2024-12-13T03:53:59.427Z",
+    "reportedBy": {
+      "responderId": "resp_1765616839022_gqsr4k",
+      "name": "Anura Silva",
+      "phone": "+94637890123",
+      "email": "anura.s@email.com",
+      "nic": "901234567V"
+    },
+    "assignedTo": {
+      "name": "Lt. Nuwan Jayasinghe",
+      "mobile": "+94777890124",
+      "unit": "Disaster Response Team Charlie",
+      "badge": "DRT-112"
+    }
   },
   {
     "id": "srv_1734071934789_w4x5y6",
@@ -498,22 +530,24 @@
     },
     "severity": "low",
     "status": "pending",
-    "reporter": {
-      "name": "Samantha Wijesekara",
-      "phone": "+94628901234",
-      "email": "samantha.w@email.com"
-    },
-    "responder": {
-      "name": "Constable Janaka Abeyratne",
-      "mobile": "+94778901235",
-      "unit": "Narahenpita Police",
-      "badge": "POL-089"
-    },
     "updatedAt": "2024-12-13T03:32:14.789Z",
     "synced": true,
     "images": ["https://example.com/incident17_img1.jpg"],
     "createdByUser": "2024-12-13T03:32:14.789Z",
-    "syncedAt": "2024-12-13T03:33:21.537Z"
+    "syncedAt": "2024-12-13T03:33:21.537Z",
+    "reportedBy": {
+      "responderId": "resp_1765616829022_zsga0m",
+      "name": "Samantha Wijesekara",
+      "phone": "+94628901234",
+      "email": "samantha.w@email.com",
+      "nic": "934567890X"
+    },
+    "assignedTo": {
+      "name": "Constable Janaka Abeyratne",
+      "mobile": "+94778901235",
+      "unit": "Narahenpita Police",
+      "badge": "POL-089"
+    }
   },
   {
     "id": "srv_1734070834123_z7a8b9",
@@ -527,17 +561,6 @@
     },
     "severity": "high",
     "status": "in-progress",
-    "reporter": {
-      "name": "Buddhi Rathnayake",
-      "phone": "+94619012345",
-      "email": "buddhi.r@email.com"
-    },
-    "responder": {
-      "name": "Engineer Piyal Gunawardena",
-      "mobile": "+94779012346",
-      "unit": "National Water Supply & Drainage Board",
-      "badge": "NWSDB-156"
-    },
     "updatedAt": "2024-12-13T03:45:12.678Z",
     "synced": true,
     "images": [
@@ -545,7 +568,20 @@
       "https://example.com/incident18_img2.jpg"
     ],
     "createdByUser": "2024-12-13T03:13:54.123Z",
-    "syncedAt": "2024-12-13T03:18:19.527Z"
+    "syncedAt": "2024-12-13T03:18:19.527Z",
+    "reportedBy": {
+      "responderId": "resp_1765616819022_7mzbjf",
+      "name": "Buddhi Rathnayake",
+      "phone": "+94619012345",
+      "email": "buddhi.r@email.com",
+      "nic": "878901234V"
+    },
+    "assignedTo": {
+      "name": "Engineer Piyal Gunawardena",
+      "mobile": "+94779012346",
+      "unit": "National Water Supply & Drainage Board",
+      "badge": "NWSDB-156"
+    }
   },
   {
     "id": "srv_1734069734456_c1d2e3",
@@ -559,22 +595,24 @@
     },
     "severity": "critical",
     "status": "resolved",
-    "reporter": {
-      "name": "Restaurant Manager",
-      "phone": "+94610123456",
-      "email": "manager@restaurant.lk"
-    },
-    "responder": {
-      "name": "Dr. Sampath Wijeratne",
-      "mobile": "+94770123457",
-      "unit": "Colombo General Hospital",
-      "badge": "EMT-078"
-    },
     "updatedAt": "2024-12-13T03:30:45.890Z",
     "synced": true,
     "images": [],
     "createdByUser": "2024-12-13T02:55:34.456Z",
-    "syncedAt": "2024-12-13T03:01:09.763Z"
+    "syncedAt": "2024-12-13T03:01:09.763Z",
+    "reportedBy": {
+      "responderId": "resp_1765616809022_7arqt",
+      "name": "Restaurant Manager",
+      "phone": "+94610123456",
+      "email": "manager@restaurant.lk",
+      "nic": "912345670V"
+    },
+    "assignedTo": {
+      "name": "Dr. Sampath Wijeratne",
+      "mobile": "+94770123457",
+      "unit": "Colombo General Hospital",
+      "badge": "EMT-078"
+    }
   },
   {
     "id": "srv_1734068634789_f4g5h6",
@@ -588,21 +626,23 @@
     },
     "severity": "medium",
     "status": "resolved",
-    "reporter": {
-      "name": "Security Officer",
-      "phone": "+94601234567",
-      "email": "security@building.lk"
-    },
-    "responder": {
-      "name": "Fire Officer Chandana Bandara",
-      "mobile": "+94771234569",
-      "unit": "Fire Station Alpha",
-      "badge": "FS-023"
-    },
     "updatedAt": "2024-12-13T03:15:34.123Z",
     "synced": true,
     "images": ["https://example.com/incident20_img1.jpg"],
     "createdByUser": "2024-12-13T02:37:14.789Z",
-    "syncedAt": "2024-12-13T02:41:40.817Z"
+    "syncedAt": "2024-12-13T02:41:40.817Z",
+    "reportedBy": {
+      "responderId": "resp_1765616799022_lvy8og",
+      "name": "Security Officer",
+      "phone": "+94601234567",
+      "email": "security@building.lk",
+      "nic": "945678902V"
+    },
+    "assignedTo": {
+      "name": "Fire Officer Chandana Bandara",
+      "mobile": "+94771234569",
+      "unit": "Fire Station Alpha",
+      "badge": "FS-023"
+    }
   }
 ]

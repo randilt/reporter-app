@@ -12,6 +12,14 @@ export const API_CONFIG = {
   // timeout: 30000,
 } as const;
 
+export interface ResponderInfo {
+  responderId: string;
+  name: string;
+  phone: string;
+  email?: string;
+  nic?: string;
+}
+
 export interface SyncReportPayload {
   localId: string;
   serverId: string | null;
@@ -34,6 +42,7 @@ export interface SyncReportPayload {
   deviceTimezone: string;
   timezoneOffsetMinutes: number;
   responderId: string;
+  responderInfo: ResponderInfo | null; // Full responder details
   deviceId: string;
   appVersion: string;
 }

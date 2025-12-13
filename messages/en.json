@@ -78,5 +78,33 @@
     "all": "All",
     "newReport": "New Report",
     "queue": "Queue"
+  },
+  "ResponderRegistration": {
+    "title": "Responder Registration",
+    "subtitle": "Please register your details to start reporting incidents",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "John Doe",
+    "nameRequired": "Name is required",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "+94771234567",
+    "phoneRequired": "Phone number is required",
+    "phoneInvalid": "Please enter a valid phone number",
+    "emailLabel": "Email",
+    "emailPlaceholder": "john.doe@example.com",
+    "emailInvalid": "Please enter a valid email address",
+    "nicLabel": "NIC / ID Number",
+    "nicPlaceholder": "123456789V",
+    "nicInvalid": "Please enter a valid NIC",
+    "optional": "Optional",
+    "submitButton": "Register & Continue",
+    "saving": "Saving...",
+    "validationError": "Validation Error",
+    "fixErrors": "Please fix the errors in the form",
+    "registrationSuccess": "Registration Successful",
+    "welcomeMessage": "Welcome, {name}! You can now report incidents.",
+    "registrationFailed": "Registration Failed",
+    "registrationFailedDesc": "Could not save your profile. Please try again.",
+    "privacyTitle": "Privacy Notice",
+    "privacyNotice": "Your information is stored securely on your device and is only shared with emergency services when you submit incident reports. We respect your privacy and will never share your data with third parties."
   }
 }

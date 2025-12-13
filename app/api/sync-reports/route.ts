@@ -22,6 +22,13 @@ export async function POST(request: NextRequest) {
       reportId: body.localId,
       incidentType: body.incidentType,
       severity: body.severity,
+      responder: body.responderInfo
+        ? {
+            name: body.responderInfo.name,
+            phone: body.responderInfo.phone,
+            responderId: body.responderInfo.responderId,
+          }
+        : null,
       locationAtCreation: body.locationCapturedAtCreation,
       locationAtSync: body.locationCapturedAtSync,
       userCreatedAt: body.createdAtLocal, // When user actually created the incident

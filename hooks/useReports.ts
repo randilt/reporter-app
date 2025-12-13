@@ -60,6 +60,7 @@ export const useReports = () => {
       >
     ) => {
       const deviceInfo = getDeviceInfo();
+      const responderId = await getResponderId();
       const now = new Date().toISOString();
 
       const report: IncidentReport = {
@@ -73,7 +74,7 @@ export const useReports = () => {
         syncAttempts: 0,
         lastSyncError: null,
         locationCapturedAtSync: null,
-        responderId: getResponderId(),
+        responderId,
         ...deviceInfo,
       };
 
@@ -125,6 +126,16 @@ export const useReports = () => {
         syncLocation = null;
       }
 
+      // Get responder info for API
+      const responderProfile = await db.responders.get(report.responderId);
+      const responderInfo = responderProfile ? {
+        responderId: responderProfile.responderId,
+        name: responderProfile.name,
+        phone: responderProfile.phone,
+        email: responderProfile.email,
+        nic: responderProfile.nic,
+      } : null;
+
       // Prepare payload for API
       const payload: SyncReportPayload = {
         localId: report.localId,
@@ -140,6 +151,7 @@ export const useReports = () => {
         deviceTimezone: report.deviceTimezone,
         timezoneOffsetMinutes: report.timezoneOffsetMinutes,
         responderId: report.responderId,
+        responderInfo,
         deviceId: report.deviceId,
         appVersion: report.appVersion,
       };

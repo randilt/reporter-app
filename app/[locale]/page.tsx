@@ -5,8 +5,10 @@ import { Plus, List, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { Header } from "@/components/Header";
 import { IncidentForm } from "@/components/IncidentForm";
 import { ReportsList } from "@/components/ReportsList";
+import { ResponderRegistration } from "@/components/ResponderRegistration";
 import { Button } from "@/components/ui/button";
 import { useReports } from "@/hooks/useReports";
+import { useResponder } from "@/hooks/useResponder";
 import { cn } from "@/lib/utils";
 import type { SyncStatus } from "@/lib/db";
 import { useTranslations } from "next-intl";
@@ -18,8 +20,30 @@ const Index = () => {
   const [view, setView] = useState<View>("new");
   const [queueFilter, setQueueFilter] = useState<QueueFilter>("all");
   const { pendingCount, syncedCount, failedCount } = useReports();
+  const {
+    responder,
+    loading: responderLoading,
+    refreshResponder,
+  } = useResponder();
   const t = useTranslations("HomePage");
   const tList = useTranslations("ReportsList");
+
+  // Show loading state while checking responder registration
+  if (responderLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show registration form if not registered
+  if (!responder) {
+    return <ResponderRegistration onRegistrationComplete={refreshResponder} />;
+  }
 
   const filterTabs: {
     value: QueueFilter;
