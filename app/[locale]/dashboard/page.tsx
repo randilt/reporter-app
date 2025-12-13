@@ -1,15 +1,46 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ListView } from "@/components/dashboard/ListView";
 import { Button } from "@/components/ui/button";
 import { Plus, List, Map } from "lucide-react";
 import { useReports } from "@/hooks/useReports";
 import { mockReports } from "@/data/MockReports";
-import {ReportFilters} from "@/components/dashboard/ReportFilters";
+import { ReportFilters, FilterState } from "@/components/dashboard/ReportFilters";
 
 export default function DashboardPage() {
   const [view, setView] = useState<"list" | "map">("list");
+  const [filters, setFilters] = useState<FilterState>({
+    search: "",
+    incidentType: "all",
+    severity: "all",
+    syncStatus: "all",
+  });
   const { pendingCount, syncedCount, failedCount } = useReports();
+
+  // Filter reports based on current filters
+  const filteredReports = useMemo(() => {
+    return mockReports.filter((report) => {
+      const matchesSearch =
+        filters.search === "" ||
+        report.description.toLowerCase().includes(filters.search.toLowerCase());
+
+      const matchesIncidentType =
+        filters.incidentType === "all" || report.incidentType === filters.incidentType;
+
+      const matchesSeverity =
+        filters.severity === "all" || report.severity === filters.severity;
+
+      const matchesSyncStatus =
+        filters.syncStatus === "all" || report.syncStatus === filters.syncStatus;
+
+      return (
+        matchesSearch &&
+        matchesIncidentType &&
+        matchesSeverity &&
+        matchesSyncStatus
+      );
+    });
+  }, [filters]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -22,6 +53,16 @@ export default function DashboardPage() {
             </p>
           </div>
         </div>
+
+        <div className="mb-6">
+          <ReportFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            totalCount={mockReports.length}
+            filteredCount={filteredReports.length}
+          />
+        </div>
+      
 
         <div className="mb-6 flex gap-4">
           <Button
@@ -44,7 +85,7 @@ export default function DashboardPage() {
 
         {view === "list" && (
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <ListView reports={mockReports} />
+            <ListView reports={filteredReports} />
           </div>
         )}
 
