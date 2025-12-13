@@ -1,24 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Mock API endpoint for syncing incident reports
- * This simulates a backend API that would process and store reports
+ * API endpoint for syncing incident reports
+ * Proxies requests to the actual backend API
  *
- * TO REPLACE WITH REAL API:
- * 1. Update the endpoint URL in lib/api-client.ts
- * 2. Add authentication headers if needed
- * 3. Update the response structure to match your backend
- * 4. Handle error responses appropriately
+ * Backend API: https://wpdut9liq3.execute-api.ap-southeast-1.amazonaws.com/report/initiate
  */
+
+const BACKEND_API_URL =
+  "https://wpdut9liq3.execute-api.ap-southeast-1.amazonaws.com/report/initiate";
+
 export async function POST(request: NextRequest) {
   try {
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const body = await request.json();
 
     // Log the received report for debugging
-    console.log("[API] Received sync request:", {
+    console.log("[API] Proxying sync request to backend:", {
       reportId: body.localId,
       incidentType: body.incidentType,
       severity: body.severity,
@@ -31,8 +28,7 @@ export async function POST(request: NextRequest) {
         : null,
       locationAtCreation: body.locationCapturedAtCreation,
       locationAtSync: body.locationCapturedAtSync,
-      userCreatedAt: body.createdAtLocal, // When user actually created the incident
-      syncedAtServer: new Date().toISOString(), // When server received it
+      userCreatedAt: body.createdAtLocal,
     });
 
     // Validate required fields
@@ -46,34 +42,53 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Simulate random failure for testing (5% chance)
-    if (Math.random() < 0.05) {
+    // Forward the request to the actual backend API
+    const backendResponse = await fetch(BACKEND_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    // Get the response from backend
+    const backendData = await backendResponse.json();
+
+    // Log backend response
+    console.log("[API] Backend response:", {
+      status: backendResponse.status,
+      data: backendData,
+    });
+
+    // If backend request failed, return error
+    if (!backendResponse.ok) {
+      console.error("[API] Backend API error:", {
+        status: backendResponse.status,
+        data: backendData,
+      });
+
       return NextResponse.json(
         {
           success: false,
-          error: "Simulated server error",
+          error:
+            backendData.error || backendData.message || "Backend API error",
+          details: backendData,
         },
-        { status: 500 }
+        { status: backendResponse.status }
       );
     }
 
-    // Mock successful response
-    // In production, this would be the server-generated ID
-    const serverId = `srv_${Date.now()}_${Math.random()
-      .toString(36)
-      .substring(7)}`;
-
-    const syncedAtServer = new Date().toISOString();
-
+    // Return backend response to client
+    // Normalize the response to maintain compatibility with existing client code
     return NextResponse.json(
       {
         success: true,
         data: {
-          serverId,
+          ...backendData,
+          // Ensure localId is present for client tracking
           localId: body.localId,
-          createdByUser: body.createdAtLocal, // When user created the incident
-          syncedAt: syncedAtServer, // When server received/processed it
-          message: "Report synced successfully",
+          // Add synced timestamp if not provided by backend
+          syncedAt: backendData.syncedAt || new Date().toISOString(),
         },
       },
       {
@@ -84,11 +99,19 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error("[API] Sync error:", error);
+    console.error("[API] Proxy error:", error);
+
+    // Check if it's a network error
+    const isNetworkError =
+      error instanceof TypeError && error.message.includes("fetch");
+
     return NextResponse.json(
       {
         success: false,
-        error: "Internal server error",
+        error: isNetworkError
+          ? "Failed to connect to backend API"
+          : "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );
