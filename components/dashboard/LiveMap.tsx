@@ -1,9 +1,7 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip } from "react-leaflet";
-import { useReports } from "@/hooks/useReports";
-
-import { sampleReports } from "@/data/SampleReports";
+import { useApiReports } from "@/hooks/useApiReports";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap } from "leaflet";
@@ -16,21 +14,23 @@ const severityColor: Record<string, string> = {
 };
 
 export default function LiveMap() {
-  const { reports } = useReports();
+  const { reports: apiReports = [] } = useApiReports();
   const mapRef = useRef<LeafletMap | null>(null);
 
-  const combined = [...(reports ?? []), ...(sampleReports ?? [])];
+  // Use only API reports
+  const reports = apiReports;
 
-  const points = combined
+  const points = reports
     .map((r: any) => {
       const lat = r.locationCapturedAtCreation?.lat ?? r.location?.latitude ?? r.location?.lat;
       const lng = r.locationCapturedAtCreation?.lng ?? r.location?.longitude ?? r.location?.lng;
-      const reporterName = r.reporter?.name ?? r.reporterName ?? (r.createdByUser ? `Reporter ${new Date(r.createdByUser).toLocaleString()}` : r.localId);
+      const reporterName = r.reporter?.name ?? r.reporterName ?? r.responderName ?? (r.createdByUser ? `Reporter ${new Date(r.createdByUser).toLocaleString()}` : r.localId);
       const incidentType = r.incidentType ?? r.type ?? "Unknown";
       const createdAtLocal = r.createdAtLocal ?? r.createdByUser ?? new Date().toISOString();
       const severity = r.severity?.toString().toLowerCase() ?? "medium";
       const address = r.location?.address ?? "Unknown location";
       const description = r.description ?? "";
+      const phone = r.reporter?.phone ?? r.responderPhone ?? "";
       
       return {
         id: r.localId ?? r.id,
@@ -42,6 +42,7 @@ export default function LiveMap() {
         reporterName,
         address,
         description,
+        phone,
       };
     })
     .filter((p) => p.lat !== undefined && p.lng !== undefined && p.lat !== null && p.lng !== null);
@@ -110,6 +111,13 @@ export default function LiveMap() {
                     <span className="text-gray-700">{p.reporterName}</span>
                   </div>
                   
+                  {p.phone && (
+                    <div className="flex items-start gap-2">
+                      <span className="font-medium text-gray-800">Phone:</span>
+                      <span className="text-gray-700 font-mono text-xs">{p.phone}</span>
+                    </div>
+                  )}
+                  
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-gray-800">Severity:</span>
                     <span 
@@ -138,23 +146,28 @@ export default function LiveMap() {
         ))}
       </MapContainer>
       
-      <div className="absolute top-4 right-4 z-50 bg-white border border-slate-300 rounded-lg p-3 shadow-lg">
+      <div
+        role="region"
+        aria-label="Severity legend"
+        className="absolute top-4 right-4 z-[10000] bg-white/95 border border-slate-300 rounded-lg p-3 shadow-lg pointer-events-auto backdrop-blur-sm"
+        style={{ maxWidth: 220 }}
+      >
         <div className="text-xs font-bold mb-2 text-gray-800">SEVERITY LEGEND</div>
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full border-2" style={{ backgroundColor: severityColor.critical, borderColor: severityColor.critical }} />
+            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.critical, border: `2px solid ${severityColor.critical}` }} />
             <span className="font-medium">Critical</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full border-2" style={{ backgroundColor: severityColor.high, borderColor: severityColor.high }} />
+            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.high, border: `2px solid ${severityColor.high}` }} />
             <span className="font-medium">High</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full border-2" style={{ backgroundColor: severityColor.medium, borderColor: severityColor.medium }} />
+            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.medium, border: `2px solid ${severityColor.medium}` }} />
             <span className="font-medium">Medium</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            <span className="w-4 h-4 rounded-full border-2" style={{ backgroundColor: severityColor.low, borderColor: severityColor.low }} />
+            <span className="w-4 h-4 rounded-full" style={{ backgroundColor: severityColor.low, border: `2px solid ${severityColor.low}` }} />
             <span className="font-medium">Low</span>
           </div>
         </div>
