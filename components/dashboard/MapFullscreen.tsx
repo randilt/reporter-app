@@ -193,42 +193,47 @@ export default function MapFullscreen() {
           maxZoom={19}
         />
 
-        {points.map((p) => (
-          <CircleMarker
-            key={p.id}
-            className="animate-pulse"
-            center={[p.lat as number, p.lng as number]}
-            radius={8}
-            pathOptions={{
-              color: severityColor[p.severity] || "#7c3aed",
-              fillColor: severityColor[p.severity] || "#7c3aed",
-              fillOpacity: 0.9,
-              weight: 2,
-            }}
-            eventHandlers={{
-              click: () => {
-                setSelected(p);
-                try {
-                  mapRef.current?.setView(
-                    [p.lat as number, p.lng as number],
-                    14
-                  );
-                } catch {
-                  // ignore
-                }
-              },
-            }}
-          >
-            <Tooltip direction="top" offset={[0, -10]}>
-              <div className="text-sm">
-                <div className="font-semibold">
-                  {p.incidentType.toUpperCase()}
+        {points.map((p) => {
+          const isSelected = selected && selected.id === p.id;
+          return (
+            <CircleMarker
+              key={p.id}
+              className="animate-pulse"
+              center={[p.lat as number, p.lng as number]}
+              radius={8}
+              pathOptions={{
+                color: isSelected
+                  ? "#000"
+                  : severityColor[p.severity] || "#7c3aed",
+                fillColor: severityColor[p.severity] || "#7c3aed",
+                fillOpacity: 0.9,
+                weight: isSelected ? 4 : 2,
+              }}
+              eventHandlers={{
+                click: () => {
+                  setSelected(p);
+                  try {
+                    mapRef.current?.setView(
+                      [p.lat as number, p.lng as number],
+                      14
+                    );
+                  } catch {
+                    // ignore
+                  }
+                },
+              }}
+            >
+              <Tooltip direction="top" offset={[0, -10]}>
+                <div className="text-sm">
+                  <div className="font-semibold">
+                    {p.incidentType.toUpperCase()}
+                  </div>
+                  <div className="text-xs text-gray-600">{p.reporterName}</div>
                 </div>
-                <div className="text-xs text-gray-600">{p.reporterName}</div>
-              </div>
-            </Tooltip>
-          </CircleMarker>
-        ))}
+              </Tooltip>
+            </CircleMarker>
+          );
+        })}
       </MapContainer>
 
       {/* Right detail panel */}
@@ -260,11 +265,11 @@ export default function MapFullscreen() {
           {selected?.images && selected.images.length > 0 && (
             <div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              {/* <img
                 src={selected.images[0]}
                 alt="Incident"
                 className="w-full h-56 object-cover rounded border border-slate-200"
-              />
+              /> */}
               {selected.images.length > 1 && (
                 <div className="text-xs text-slate-500 mt-2">
                   +{selected.images.length - 1} more image(s)
