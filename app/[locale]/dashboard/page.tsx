@@ -33,12 +33,13 @@ export default function DashboardPage() {
 
   const filteredReports = useMemo(() => {
     return apiReports.filter((report) => {
+      const searchLower = filters.search.toLowerCase();
       const matchesSearch =
         filters.search === "" ||
-        report.localId.toLowerCase().includes(filters.search.toLowerCase()) ||
-        report.responderName
-          ?.toLowerCase()
-          .includes(filters.search.toLowerCase());
+        report.localId.toLowerCase().includes(searchLower) ||
+        report.serverId?.toLowerCase().includes(searchLower) ||
+        report.responderName?.toLowerCase().includes(searchLower) ||
+        report.responderPhone?.toLowerCase().includes(searchLower);
 
       const matchesIncidentType =
         filters.incidentType === "all" ||
