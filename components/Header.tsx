@@ -33,28 +33,28 @@ export const Header = () => {
               <ShieldCheck className="h-6 w-6 text-green-600 dark:text-green-400" />
             </button>
 
-          {/* Status Indicator - Centered */}
-          <div className="flex-1 flex justify-center">
-            <StatusIndicator syncing={syncing} pendingCount={pendingCount} />
-          </div>
+            {/* Status Indicator - Centered */}
+            <div className="flex-1 flex justify-center">
+              <StatusIndicator syncing={syncing} pendingCount={pendingCount} />
+            </div>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-2">
-            {isOnline && pendingCount > 0 && !syncing && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={syncAllPending}
-                className="h-9 w-9"
-                title="Sync pending reports"
-              >
-                <RefreshCw className="w-4 h-4" />
-              </Button>
-            )}
-            <LanguageSwitcher />
+            {/* Right Actions */}
+            <div className="flex items-center gap-2">
+              {isOnline && pendingCount > 0 && !syncing && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={syncAllPending}
+                  className="h-9 w-9"
+                  title="Sync pending reports"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                </Button>
+              )}
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>
-      </div>
       </motion.header>
 
       <SafePlaceDialog

@@ -147,140 +147,143 @@ export function SafePlaceDialog({ open, onOpenChange }: SafePlaceDialogProps) {
         <div className="px-4 pb-4 overflow-y-auto">
           {/* Location Section */}
           <div className="space-y-6">
-          <div className="space-y-3">
-            <Label className="text-base font-semibold">Location</Label>
-            <p className="text-sm text-muted-foreground">
-              Choose current location or enter an address
-            </p>
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Location</Label>
+              <p className="text-sm text-muted-foreground">
+                Choose current location or enter an address
+              </p>
 
-            <Button
-              onClick={handleGetCurrentLocation}
-              disabled={locationLoading}
-              variant="outline"
-              className="w-full"
-            >
-              {locationLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Getting location...
-                </>
-              ) : (
-                <>
-                  <MapPin className="w-4 h-4 mr-2" />
-                  Use Current Location
-                </>
+              <Button
+                onClick={handleGetCurrentLocation}
+                disabled={locationLoading}
+                variant="outline"
+                className="w-full"
+              >
+                {locationLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Getting location...
+                  </>
+                ) : (
+                  <>
+                    <MapPin className="w-4 h-4 mr-2" />
+                    Use Current Location
+                  </>
+                )}
+              </Button>
+
+              {formData.location && (
+                <div className="text-sm text-green-600 dark:text-green-400 p-2 bg-green-50 dark:bg-green-950/30 rounded">
+                  ✓ Location obtained: {formData.location.lat.toFixed(6)},{" "}
+                  {formData.location.lng.toFixed(6)}
+                </div>
               )}
-            </Button>
 
-            {formData.location && (
-              <div className="text-sm text-green-600 dark:text-green-400 p-2 bg-green-50 dark:bg-green-950/30 rounded">
-                ✓ Location obtained: {formData.location.lat.toFixed(6)},{" "}
-                {formData.location.lng.toFixed(6)}
+              <div className="space-y-2">
+                <Label htmlFor="address">Or Enter Address</Label>
+                <Input
+                  id="address"
+                  placeholder="e.g., 123 Main St, City"
+                  value={formData.address}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      address: e.target.value,
+                    }))
+                  }
+                />
               </div>
-            )}
+            </div>
 
+            {/* Amenities Checklist */}
+            <div className="space-y-3">
+              <div>
+                <Label className="text-base font-semibold">
+                  Available Amenities
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Check all that apply
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                {[
+                  { key: "networkAccess", label: "Network/Internet Access" },
+                  { key: "cleanWater", label: "Access to Clean Water" },
+                  { key: "shelter", label: "Shelter Available" },
+                  { key: "medicalAid", label: "Medical Aid/First Aid" },
+                  { key: "food", label: "Food Supply" },
+                  { key: "electricity", label: "Electricity" },
+                ].map(({ key, label }) => (
+                  <label
+                    key={key}
+                    className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={
+                        formData.amenities[
+                          key as keyof SafePlaceData["amenities"]
+                        ]
+                      }
+                      onChange={() =>
+                        handleAmenityToggle(
+                          key as keyof SafePlaceData["amenities"]
+                        )
+                      }
+                      className="w-4 h-4 text-primary rounded focus:ring-2 focus:ring-primary"
+                    />
+                    <span className="text-sm font-medium">{label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Description */}
             <div className="space-y-2">
-              <Label htmlFor="address">Or Enter Address</Label>
-              <Input
-                id="address"
-                placeholder="e.g., 123 Main St, City"
-                value={formData.address}
+              <Label htmlFor="description">
+                Additional Information (Optional)
+              </Label>
+              <Textarea
+                id="description"
+                placeholder="Any additional details about this safe place..."
+                value={formData.description}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, address: e.target.value }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
                 }
+                rows={3}
               />
             </div>
           </div>
 
-          {/* Amenities Checklist */}
-          <div className="space-y-3">
-            <div>
-              <Label className="text-base font-semibold">
-                Available Amenities
-              </Label>
-              <p className="text-sm text-muted-foreground">
-                Check all that apply
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              {[
-                { key: "networkAccess", label: "Network/Internet Access" },
-                { key: "cleanWater", label: "Access to Clean Water" },
-                { key: "shelter", label: "Shelter Available" },
-                { key: "medicalAid", label: "Medical Aid/First Aid" },
-                { key: "food", label: "Food Supply" },
-                { key: "electricity", label: "Electricity" },
-              ].map(({ key, label }) => (
-                <label
-                  key={key}
-                  className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                >
-                  <input
-                    type="checkbox"
-                    checked={
-                      formData.amenities[
-                        key as keyof SafePlaceData["amenities"]
-                      ]
-                    }
-                    onChange={() =>
-                      handleAmenityToggle(
-                        key as keyof SafePlaceData["amenities"]
-                      )
-                    }
-                    className="w-4 h-4 text-primary rounded focus:ring-2 focus:ring-primary"
-                  />
-                  <span className="text-sm font-medium">{label}</span>
-                </label>
-              ))}
-            </div>
+          {/* Footer */}
+          <div className="flex gap-3 pt-4 border-t mt-6">
+            <Button
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="flex-1"
+              disabled={submitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              disabled={submitting}
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                "Mark as Safe"
+              )}
+            </Button>
           </div>
-
-          {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">
-              Additional Information (Optional)
-            </Label>
-            <Textarea
-              id="description"
-              placeholder="Any additional details about this safe place..."
-              value={formData.description}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              rows={3}
-            />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="flex gap-3 pt-4 border-t mt-6">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            className="flex-1"
-            disabled={submitting}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-            disabled={submitting}
-          >
-            {submitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              "Mark as Safe"
-            )}
-          </Button>
-        </div>
         </div>
       </DrawerContent>
     </Drawer>
