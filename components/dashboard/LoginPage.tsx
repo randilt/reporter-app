@@ -4,15 +4,43 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempt:", { email, password });
+    setLoading(true);
+    try {
+      const resp = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await resp.json().catch(() => null);
+
+      if (!resp.ok) {
+        const message = (data as any)?.error || "Login failed";
+        throw new Error(message);
+      }
+
+      toast.success("Login successful", {
+        description: "You are now signed in as admin.",
+      });
+
+      // TODO: Store auth token / redirect to dashboard when backend provides it
+      console.log("Login success:", data);
+    } catch (err) {
+      toast.error("Login failed", {
+        description: err instanceof Error ? err.message : "Unexpected error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,8 +78,8 @@ export default function LoginPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Sign In
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
       </div>
