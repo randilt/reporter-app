@@ -58,7 +58,7 @@ export function ReportFilters({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-4">
+    <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6 h-full">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Filter className="h-5 w-5 text-slate-600" />
@@ -66,42 +66,42 @@ export function ReportFilters({
             Filters
           </span>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-slate-600">
-            Showing{" "}
-            <span className="text-slate-900 font-semibold">
-              {filteredCount}
-            </span>{" "}
-            of {totalCount} reports
-          </span>
-          {hasActiveFilters && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearFilters}
-              className="h-8 px-3 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            >
-              <X className="h-4 w-4 mr-1" />
-              Clear
-            </Button>
-          )}
-        </div>
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearFilters}
+            className="h-8 px-2 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder="Search by ID or Responder..."
-            value={filters.search}
-            onChange={(e) =>
-              onFiltersChange({ ...filters, search: e.target.value })
-            }
-            className="pl-9 bg-slate-50 border-slate-200 focus:border-slate-400 focus:ring-slate-400"
-          />
+      <div className="space-y-4">
+        {/* Search */}
+        <div>
+          <label className="text-sm font-medium text-slate-700 mb-2 block">
+            Search
+          </label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="ID or Responder..."
+              value={filters.search}
+              onChange={(e) =>
+                onFiltersChange({ ...filters, search: e.target.value })
+              }
+              className="pl-9 bg-slate-50 border-slate-200 focus:border-slate-400 focus:ring-slate-400"
+            />
+          </div>
         </div>
 
-        <div className="w-[180px]">
+        {/* Incident Type */}
+        <div>
+          <label className="text-sm font-medium text-slate-700 mb-2 block">
+            Incident Type
+          </label>
           <Select
             value={filters.incidentType}
             onValueChange={(value) =>
@@ -111,8 +111,8 @@ export function ReportFilters({
               })
             }
           >
-            <SelectTrigger className="bg-slate-50 border-slate-200">
-              <SelectValue placeholder="Incident Type" />
+            <SelectTrigger className="bg-slate-50 border-slate-200 w-full">
+              <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Types</SelectItem>
@@ -125,7 +125,11 @@ export function ReportFilters({
           </Select>
         </div>
 
-        <div className="w-[160px]">
+        {/* Severity */}
+        <div>
+          <label className="text-sm font-medium text-slate-700 mb-2 block">
+            Severity
+          </label>
           <Select
             value={filters.severity}
             onValueChange={(value) =>
@@ -135,8 +139,8 @@ export function ReportFilters({
               })
             }
           >
-            <SelectTrigger className="bg-slate-50 border-slate-200">
-              <SelectValue placeholder="Severity" />
+            <SelectTrigger className="bg-slate-50 border-slate-200 w-full">
+              <SelectValue placeholder="Select severity" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Severities</SelectItem>
@@ -149,7 +153,11 @@ export function ReportFilters({
           </Select>
         </div>
 
-        <div className="w-[160px]">
+        {/* Admin Status */}
+        <div>
+          <label className="text-sm font-medium text-slate-700 mb-2 block">
+            Status
+          </label>
           <Select
             value={filters.adminStatus}
             onValueChange={(value) =>
@@ -159,16 +167,25 @@ export function ReportFilters({
               })
             }
           >
-            <SelectTrigger className="bg-slate-50 border-slate-200">
-              <SelectValue placeholder="Admin Status" />
+            <SelectTrigger className="bg-slate-50 border-slate-200 w-full">
+              <SelectValue placeholder="Select status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Admin Statuses</SelectItem>
+              <SelectItem value="all">All Statuses</SelectItem>
               <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="resolved">Resolved</SelectItem>
               <SelectItem value="canceled">Canceled</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+      </div>
+
+      {/* Results Count */}
+      <div className="pt-4 border-t border-slate-200">
+        <div className="text-sm text-slate-600">
+          Showing{" "}
+          <span className="text-slate-900 font-semibold">{filteredCount}</span>{" "}
+          of <span className="font-semibold">{totalCount}</span>
         </div>
       </div>
     </div>

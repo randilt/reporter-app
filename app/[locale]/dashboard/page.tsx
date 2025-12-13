@@ -6,7 +6,7 @@ const LiveMap = dynamic(() => import("@/components/dashboard/LiveMap"), {
   ssr: false,
 });
 import { Button } from "@/components/ui/button";
-import { Plus, List, Map } from "lucide-react";
+import { List, Map } from "lucide-react";
 import { useApiReports } from "@/hooks/useApiReports";
 import {
   ReportFilters,
@@ -73,7 +73,8 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold text-slate-900">Dashboard</h1>
@@ -84,63 +85,72 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="mb-6">
-          <ReportFilters
-            filters={filters}
-            onFiltersChange={setFilters}
-            totalCount={apiReports.length}
-            filteredCount={filteredReports.length}
-          />
-        </div>
-
-        {loading && (
-          <div className="text-center py-12">
-            <p className="text-slate-600">Loading reports...</p>
-          </div>
-        )}
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-700">Error loading reports: {error}</p>
-          </div>
-        )}
-
-        {!loading && !error && (
-          <>
-            <div className="mb-6 flex gap-4">
-              <Button
-                onClick={() => setView("map")}
-                variant={view === "map" ? "default" : "outline"}
-                className="gap-2"
-              >
-                <Map className="h-4 w-4" />
-                Map View
-              </Button>
-              <Button
-                onClick={() => setView("list")}
-                variant={view === "list" ? "default" : "outline"}
-                className="gap-2"
-              >
-                <List className="h-4 w-4" />
-                List View
-              </Button>
+        {/* Two-column layout: Sidebar + Content */}
+        <div className="flex gap-6">
+          {/* Left Sidebar - Filters */}
+          <aside className="w-80 shrink-0">
+            <div className="sticky top-8">
+              <ReportFilters
+                filters={filters}
+                onFiltersChange={setFilters}
+                totalCount={apiReports.length}
+                filteredCount={filteredReports.length}
+              />
             </div>
-            {view === "map" && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <LiveMap />
+          </aside>
+
+          {/* Main Content */}
+          <main className="flex-1 min-w-0">
+            {loading && (
+              <div className="text-center py-12">
+                <p className="text-slate-600">Loading reports...</p>
               </div>
             )}
 
-            {view === "list" && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <ListView
-                  reports={filteredReports}
-                  adminStatusFilter={filters.adminStatus ?? "all"}
-                />
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <p className="text-red-700">Error loading reports: {error}</p>
               </div>
             )}
-          </>
-        )}
+
+            {!loading && !error && (
+              <>
+                <div className="mb-6 flex gap-4">
+                  <Button
+                    onClick={() => setView("map")}
+                    variant={view === "map" ? "default" : "outline"}
+                    className="gap-2"
+                  >
+                    <Map className="h-4 w-4" />
+                    Map View
+                  </Button>
+                  <Button
+                    onClick={() => setView("list")}
+                    variant={view === "list" ? "default" : "outline"}
+                    className="gap-2"
+                  >
+                    <List className="h-4 w-4" />
+                    List View
+                  </Button>
+                </div>
+                {view === "map" && (
+                  <div className="bg-white rounded-lg shadow-lg p-6">
+                    <LiveMap />
+                  </div>
+                )}
+
+                {view === "list" && (
+                  <div className="bg-white rounded-lg shadow-lg p-6">
+                    <ListView
+                      reports={filteredReports}
+                      adminStatusFilter={filters.adminStatus ?? "all"}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );
