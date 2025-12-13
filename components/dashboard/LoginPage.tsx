@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +11,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +27,7 @@ export default function LoginPage() {
       const data = await resp.json().catch(() => null);
 
       if (!resp.ok) {
-        const message = (data as any)?.error || "Login failed";
+        const message = (data as { error?: string })?.error || "Login failed";
         throw new Error(message);
       }
 
@@ -32,8 +35,9 @@ export default function LoginPage() {
         description: "You are now signed in as admin.",
       });
 
-      // TODO: Store auth token / redirect to dashboard when backend provides it
-      console.log("Login success:", data);
+      // Redirect to dashboard or the page user was trying to access
+      const redirectTo = searchParams.get("redirect") || "/en/dashboard";
+      router.push(redirectTo);
     } catch (err) {
       toast.error("Login failed", {
         description: err instanceof Error ? err.message : "Unexpected error",
@@ -44,7 +48,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg dark:bg-slate-950">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight">Admin Login</h2>

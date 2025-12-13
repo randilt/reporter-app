@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   MapPin,
@@ -9,6 +9,8 @@ import {
   Camera,
   Loader2,
   CheckCircle,
+  X,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -33,6 +35,12 @@ import {
 } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import {
+  compressImageToBase64,
+  validateImageFile,
+  formatFileSize,
+} from "@/lib/image-utils";
+import { toast } from "sonner";
 
 interface IncidentFormProps {
   onSuccess?: () => void;
@@ -56,6 +64,9 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
   const [customTime, setCustomTime] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [imageCompressing, setImageCompressing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Auto-set severity based on incident type
   useEffect(() => {
@@ -68,6 +79,59 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
   useEffect(() => {
     getLocation().catch(() => {});
   }, [getLocation]);
+
+  // Handle image file selection
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file
+    const validation = validateImageFile(file, 10); // Max 10MB
+    if (!validation.valid) {
+      toast.error("Invalid image", {
+        description: validation.error,
+      });
+      return;
+    }
+
+    setImageCompressing(true);
+
+    try {
+      // Compress image with aggressive settings
+      const compressed = await compressImageToBase64(file, {
+        maxWidth: 1920,
+        maxHeight: 1920,
+        quality: 0.7,
+        outputFormat: "image/jpeg",
+      });
+
+      setUploadedImage(compressed.base64);
+
+      // Show compression stats
+      toast.success("Image compressed", {
+        description: `${formatFileSize(
+          compressed.originalSize
+        )} → ${formatFileSize(compressed.compressedSize)} (${Math.round(
+          (1 - compressed.compressionRatio) * 100
+        )}% reduction)`,
+      });
+    } catch (error) {
+      console.error("Image compression failed:", error);
+      toast.error("Failed to compress image", {
+        description: error instanceof Error ? error.message : "Unknown error",
+      });
+    } finally {
+      setImageCompressing(false);
+    }
+  };
+
+  // Remove uploaded image
+  const handleRemoveImage = () => {
+    setUploadedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,6 +159,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
           overrideTime && customTime
             ? new Date(customTime).toISOString()
             : null,
+        images: uploadedImage ? [uploadedImage] : undefined, // Add image to array
       });
 
       setSubmitted(true);
@@ -319,16 +384,69 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
         />
       </div>
 
-      {/* Photo (placeholder) */}
+      {/* Photo Upload */}
       <div className="space-y-2">
         <Label className="text-base font-semibold flex items-center gap-2">
           <Camera className="w-4 h-4 text-primary" />
           {t("photo")}
         </Label>
-        <div className="p-8 rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer flex flex-col items-center justify-center text-muted-foreground">
-          <Camera className="w-8 h-8 mb-2" />
-          <span className="text-sm">{t("capturePhoto")}</span>
-        </div>
+
+        {!uploadedImage ? (
+          <div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleImageSelect}
+              className="hidden"
+              disabled={imageCompressing}
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={imageCompressing}
+              className="w-full p-8 rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors flex flex-col items-center justify-center text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {imageCompressing ? (
+                <>
+                  <Loader2 className="w-8 h-8 mb-2 animate-spin" />
+                  <span className="text-sm">Compressing image...</span>
+                </>
+              ) : (
+                <>
+                  <Camera className="w-8 h-8 mb-2" />
+                  <span className="text-sm">{t("capturePhoto")}</span>
+                  <span className="text-xs text-muted-foreground mt-1">
+                    Optional - Max 10MB
+                  </span>
+                </>
+              )}
+            </button>
+          </div>
+        ) : (
+          <div className="relative rounded-lg overflow-hidden border-2 border-border">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={uploadedImage}
+              alt="Uploaded incident"
+              className="w-full h-48 object-cover"
+            />
+            <button
+              type="button"
+              onClick={handleRemoveImage}
+              className="absolute top-2 right-2 p-2 rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-xs backdrop-blur-sm">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="w-4 h-4" />
+                <span>Image attached and compressed</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Submit */}

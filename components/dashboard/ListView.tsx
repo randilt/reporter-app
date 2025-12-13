@@ -10,7 +10,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SeverityBadge } from "@/components/dashboard/StatusBadge";
-import { Carousel } from "@/components/ui/carousel";
 import { Dialog } from "@/components/ui/dialog";
 import {
   Select,
@@ -87,6 +86,10 @@ export function ListView({
       return next;
     });
   }, [reports]);
+
+  useEffect(() => {
+    console.log(selectedReport);
+  }, [selectedReport]);
 
   const toggleSort = (field: "createdAtLocal" | "severity") => {
     if (sortField === field) {
@@ -302,19 +305,27 @@ export function ListView({
             ? `Details - ${selectedReport.incidentType}`
             : "Details"
         }
-        className=" overflow-y-auto sm:w-full sm:max-w-7xl max-w-7xl"
       >
         {selectedReport && (
           <div className="space-y-6">
-            {/* Carousel Section */}
-            {selectedReport.images && selectedReport.images.length > 0 && (
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-3">
-                  Images ({selectedReport.images.length})
-                </h3>
-                <Carousel images={selectedReport.images} />
-              </div>
-            )}
+            {/* Image Section */}
+            {selectedReport.images &&
+              selectedReport.images.length > 0 &&
+              selectedReport.images[0] && (
+                <div>
+                  <h3 className="font-semibold text-slate-900 mb-3">
+                    Incident Photo
+                  </h3>
+                  <div className="relative w-full rounded-lg overflow-hidden border border-slate-200">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={selectedReport.images[0]}
+                      alt="Incident"
+                      className="w-full h-auto max-h-[500px] object-contain bg-slate-50"
+                    />
+                  </div>
+                </div>
+              )}
 
             {/* Description */}
             <div>

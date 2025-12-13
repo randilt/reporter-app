@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
-import { SyncStatus, Severity } from '@/data/MockReports';
+import { cn } from "@/lib/utils";
+import { SyncStatus, Severity } from "@/data/MockReports";
 
 interface StatusBadgeProps {
   status: SyncStatus;
@@ -8,9 +8,9 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ status, animated = false }: StatusBadgeProps) {
   const statusConfig = {
-    pending: { label: 'Pending', emoji: '🟡', className: 'status-pending' },
-    synced: { label: 'Synced', emoji: '🟢', className: 'status-synced' },
-    failed: { label: 'Failed', emoji: '🔴', className: 'status-failed' },
+    pending: { label: "Pending", emoji: "🟡", className: "status-pending" },
+    synced: { label: "Synced", emoji: "🟢", className: "status-synced" },
+    failed: { label: "Failed", emoji: "🔴", className: "status-failed" },
   };
 
   const config = statusConfig[status];
@@ -18,9 +18,9 @@ export function StatusBadge({ status, animated = false }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        'status-badge',
+        "status-badge",
         config.className,
-        animated && status === 'pending' && 'animate-pulse-status'
+        animated && status === "pending" && "animate-pulse-status"
       )}
     >
       <span className="text-[10px]">{config.emoji}</span>
@@ -35,15 +35,11 @@ interface SeverityBadgeProps {
 
 export function SeverityBadge({ severity }: SeverityBadgeProps) {
   const severityConfig: Record<Severity, string> = {
-    Low: 'font-bold text-green-600',
-    Medium: 'font-bold text-yellow-600',
-    High: 'font-bold text-red-400',
-    Critical: 'font-bold text-red-700',
+    low: "font-bold text-green-600",
+    medium: "font-bold text-yellow-600",
+    high: "font-bold text-red-400",
+    critical: "font-bold text-red-700",
   };
 
-  return (
-    <span className={severityConfig[severity]}>
-      {severity}
-    </span>
-  );
+  return <span className={severityConfig[severity]}>{severity}</span>;
 }

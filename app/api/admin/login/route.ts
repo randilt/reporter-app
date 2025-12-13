@@ -3,6 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 const EXTERNAL_LOGIN_URL =
   "https://wpdut9liq3.execute-api.ap-southeast-1.amazonaws.com/admin/login";
 
+interface LoginResponse {
+  data?: {
+    data?: {
+      accessToken?: string;
+      refreshToken?: string;
+      idToken?: string;
+      expiresIn?: number;
+    };
+  };
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -41,9 +52,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Extract tokens from the backend response
-    const payload = data as any;
+    const payload = data as LoginResponse;
     const accessToken = payload?.data?.data?.accessToken;
     const refreshToken = payload?.data?.data?.refreshToken;
+    const idToken = payload?.data?.data?.idToken;
     const expiresIn = payload?.data?.data?.expiresIn ?? 3600; // seconds
 
     const response = NextResponse.json(data);
@@ -51,7 +63,17 @@ export async function POST(req: NextRequest) {
     if (accessToken) {
       response.cookies.set("accessToken", accessToken, {
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: expiresIn,
+      });
+    }
+
+    if (idToken) {
+      response.cookies.set("idToken", idToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
         maxAge: expiresIn,
@@ -63,7 +85,7 @@ export async function POST(req: NextRequest) {
       const refreshMaxAge = 30 * 24 * 60 * 60;
       response.cookies.set("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
         maxAge: refreshMaxAge,
