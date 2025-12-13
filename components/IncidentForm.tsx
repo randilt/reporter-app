@@ -99,9 +99,9 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
     try {
       // Compress image with aggressive settings
       const compressed = await compressImageToBase64(file, {
-        maxWidth: 1920,
-        maxHeight: 1920,
-        quality: 0.7,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        quality: 0.6,
         outputFormat: "image/jpeg",
       });
 
