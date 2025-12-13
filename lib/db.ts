@@ -163,10 +163,26 @@ export const incidentTypeLabels: Record<IncidentType, string> = {
 // Severity labels and colors
 export const severityConfig: Record<
   Severity,
-  { label: string; color: string }
+  { label: string; color: string; textColor: string }
 > = {
-  low: { label: "Low", color: "bg-success" },
-  medium: { label: "Medium", color: "bg-warning" },
-  high: { label: "High", color: "bg-primary" },
-  critical: { label: "Critical", color: "bg-destructive" },
+  low: {
+    label: "Low",
+    color: "bg-green-100 border border-green-300",
+    textColor: "text-green-900",
+  },
+  medium: {
+    label: "Medium",
+    color: "bg-yellow-100 border border-yellow-300",
+    textColor: "text-yellow-900",
+  },
+  high: {
+    label: "High",
+    color: "bg-blue-600 border border-blue-700",
+    textColor: "text-white",
+  },
+  critical: {
+    label: "Critical",
+    color: "bg-red-600 border border-red-700",
+    textColor: "text-white",
+  },
 };
