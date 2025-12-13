@@ -97,7 +97,7 @@ export function ListView({
     }
   };
 
-  const severityOrder = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+  const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
 
   const sortedReports = [...reports].sort((a, b) => {
     let comparison = 0;
@@ -106,7 +106,9 @@ export function ListView({
         new Date(a.createdAtLocal).getTime() -
         new Date(b.createdAtLocal).getTime();
     } else if (sortField === "severity") {
-      comparison = severityOrder[a.severity] - severityOrder[b.severity];
+      const aSeverity = a.severity.toLowerCase() as keyof typeof severityOrder;
+      const bSeverity = b.severity.toLowerCase() as keyof typeof severityOrder;
+      comparison = severityOrder[aSeverity] - severityOrder[bSeverity];
     }
     return sortDirection === "asc" ? comparison : -comparison;
   });

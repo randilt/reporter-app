@@ -77,10 +77,11 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900">Dashboard</h1>
+            <h1 className="text-4xl font-bold text-slate-900">
+              Command Dashboard
+            </h1>
             <p className="text-slate-600 mt-2">
-              Total Reports: {apiReports.length} | Pending: {pendingCount} |
-              Synced: {syncedCount} | Failed: {failedCount}
+              Total Reports: {apiReports.length} | Pending: {pendingCount}
             </p>
           </div>
         </div>

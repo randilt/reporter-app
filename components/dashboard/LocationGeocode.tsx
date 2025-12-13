@@ -54,7 +54,7 @@ export function LocationGeocode({
 
         {error && (
           <div className="flex items-start gap-2 text-sm text-red-600">
-            <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
             <div>
               <p>{error}</p>
               <Button
