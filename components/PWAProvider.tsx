@@ -81,7 +81,8 @@ export function PWAProvider({ children }: { children: React.ReactNode }) {
     // Handle install prompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      const promptEvent = e as BeforeInstallPromptEvent;
+      setDeferredPrompt(promptEvent);
       console.log("[PWA] Install prompt available");
 
       // Show install prompt after a delay
@@ -91,9 +92,9 @@ export function PWAProvider({ children }: { children: React.ReactNode }) {
           action: {
             label: "Install",
             onClick: () => {
-              if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
+              if (promptEvent) {
+                promptEvent.prompt();
+                promptEvent.userChoice.then((choiceResult) => {
                   if (choiceResult.outcome === "accepted") {
                     console.log("[PWA] User accepted the install prompt");
                   } else {
