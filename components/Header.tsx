@@ -1,19 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, RefreshCw } from "lucide-react";
+import { RefreshCw, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatusIndicator } from "./StatusIndicator";
 import { useReports } from "@/hooks/useReports";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
-import { useTranslations } from "next-intl";
+import { useResponder } from "@/hooks/useResponder";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 export const Header = () => {
   const { pendingCount, syncing, syncAllPending } = useReports();
   const { isOnline } = useOnlineStatus();
-
-  const t = useTranslations("Header");
+  const { responder } = useResponder();
 
   return (
     <motion.header
@@ -44,8 +43,20 @@ export const Header = () => {
                 size="icon"
                 onClick={syncAllPending}
                 className="h-9 w-9"
+                title="Sync pending reports"
               >
                 <RefreshCw className="w-4 h-4" />
+              </Button>
+            )}
+
+            {responder && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9"
+                title={`Logged in as ${responder.name}`}
+              >
+                <User className="w-4 h-4" />
               </Button>
             )}
           </div>
