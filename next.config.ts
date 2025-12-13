@@ -6,8 +6,13 @@ const withPWA = withPWAInit({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
   register: true,
+  // Use our custom service worker instead of auto-generated one
+  sw: "sw.js",
+  // Workbox options for production builds
   workboxOptions: {
     disableDevLogs: true,
+    // Don't auto-generate SW, we have our custom one
+    mode: "production",
   },
 });
 

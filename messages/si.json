@@ -53,7 +53,8 @@
   "StatusIndicator": {
     "syncing": "සමමුහුර්ත කරමින්...",
     "online": "Online",
-    "offline": "නොබැඳිව"
+    "offline": "නොබැඳිව",
+    "pending": "පොරොත්තුවෙන්"
   },
   "Toasts": {
     "reportSavedLocally": "වාර්තාව දේශීයව සුරැකිණි",

@@ -1,13 +1,11 @@
 /**
- * Custom Service Worker with Workbox Background Sync
- * This service worker intercepts failed POST requests and queues them
- * for automatic retry when internet connectivity is restored
- *
+ * Custom Service Worker with Workbox
  * Features:
- * - Intercepts POST requests to /api/sync-reports
- * - Queues failed requests in IndexedDB
- * - Automatically retries when online
- * - Works across page refreshes and browser restarts
+ * - Precaching: Static assets cached during installation
+ * - Background Sync: Failed POST requests queued for retry
+ * - Smart Caching: Different strategies for different resource types
+ * - Offline Fallback: Friendly offline page
+ * - Cache Management: Automatic expiration and cleanup
  */
 
 // Import Workbox libraries from CDN
@@ -17,8 +15,164 @@ importScripts(
 )
 
 const { BackgroundSyncPlugin } = workbox.backgroundSync
-const { registerRoute } = workbox.routing
-const { NetworkOnly } = workbox.strategies
+const { registerRoute, setDefaultHandler, setCatchHandler, NavigationRoute } =
+  workbox.routing
+const { NetworkOnly, CacheFirst, NetworkFirst, StaleWhileRevalidate } =
+  workbox.strategies
+const { ExpirationPlugin } = workbox.expiration
+const { CacheableResponsePlugin } = workbox.cacheableResponse
+const { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } =
+  workbox.precaching
+
+// ============================================================================
+// PRECACHING CONFIGURATION
+// ============================================================================
+
+/**
+ * Cleanup old caches from previous versions
+ */
+cleanupOutdatedCaches()
+
+/**
+ * Precache essential app shell assets
+ * These files will be cached during service worker installation
+ * and available offline immediately
+ *
+ * Note: In production with next-pwa, this list is auto-generated
+ * For development, we manually specify critical paths
+ */
+precacheAndRoute([
+  // Core app pages
+  { url: '/', revision: '1.0.0' },
+  { url: '/offline.html', revision: '1.0.0' },
+
+  // Localized routes (if you need to precache specific locales)
+  { url: '/en', revision: '1.0.0' },
+  { url: '/si', revision: '1.0.0' },
+])
+
+/**
+ * Navigation fallback handler
+ * When offline and a page isn't cached, serve the offline page
+ */
+const offlineHandler = createHandlerBoundToURL('/offline.html')
+const navigationRoute = new NavigationRoute(offlineHandler, {
+  // Don't use offline page for API routes
+  denylist: [/^\/api\//, /^\/en\/api\//, /^\/si\/api\//, /^\/_next\//],
+})
+registerRoute(navigationRoute)
+
+// ============================================================================
+// RESOURCE CACHING STRATEGIES
+// ============================================================================
+
+/**
+ * Cache images with CacheFirst strategy
+ * Images rarely change and can be served from cache for fast loading
+ */
+registerRoute(
+  ({ request }) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200], // Cache successful responses
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60, // Limit to 60 images
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+        purgeOnQuotaError: true, // Auto-cleanup if storage full
+      }),
+    ],
+  })
+)
+
+/**
+ * Cache CSS and JS with CacheFirst strategy
+ * Next.js assets have content hashes, so they're immutable
+ */
+registerRoute(
+  ({ request }) =>
+    request.destination === 'script' || request.destination === 'style',
+  new CacheFirst({
+    cacheName: 'static-resources',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+)
+
+/**
+ * Cache fonts with CacheFirst strategy
+ * Fonts don't change and should be cached aggressively
+ */
+registerRoute(
+  ({ request }) => request.destination === 'font',
+  new CacheFirst({
+    cacheName: 'fonts-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 30,
+        maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+)
+
+/**
+ * Cache GET API requests with StaleWhileRevalidate
+ * Serve cached data immediately, update in background
+ * Perfect for incident list - shows data fast, updates silently
+ */
+registerRoute(
+  ({ url, request }) =>
+    url.pathname.startsWith('/api/') && request.method === 'GET',
+  new StaleWhileRevalidate({
+    cacheName: 'api-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200], // Only cache successful responses
+      }),
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 24 * 60 * 60, // 1 day
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+)
+
+/**
+ * Default handler for unmatched requests
+ * Try network first, no caching
+ */
+setDefaultHandler(new NetworkOnly())
+
+/**
+ * Catch handler for failed requests
+ * Show offline page for navigation, error for everything else
+ */
+setCatchHandler(({ event }) => {
+  if (event.request.destination === 'document') {
+    return caches.match('/offline.html')
+  }
+  return Response.error()
+})
+
+// ============================================================================
+// BACKGROUND SYNC CONFIGURATION
+// ============================================================================
 
 // Queue name for background sync
 const SYNC_QUEUE_NAME = 'aegis-sync-queue'
@@ -141,8 +295,8 @@ async function getReportIdFromRequest(request) {
 /**
  * Service Worker installation
  */
-self.addEventListener('install', () => {
-  console.log('[SW] Installing service worker...')
+self.addEventListener('install', (event) => {
+  console.log('[SW] Installing service worker with precaching...')
   // Force the waiting service worker to become the active service worker
   self.skipWaiting()
 })
@@ -153,8 +307,12 @@ self.addEventListener('install', () => {
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activating service worker...')
   event.waitUntil(
-    // Claim all clients immediately
-    self.clients.claim()
+    Promise.all([
+      // Claim all clients immediately
+      self.clients.claim(),
+      // Cleanup old caches
+      cleanupOutdatedCaches(),
+    ])
   )
 })
 

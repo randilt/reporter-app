@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offline - Aegis Reporter</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+          "Helvetica Neue", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      .container {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        max-width: 28rem;
+        width: 100%;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        text-align: center;
+      }
+
+      .icon {
+        width: 5rem;
+        height: 5rem;
+        margin: 0 auto 1.5rem;
+        background: #fef3c7;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+      }
+
+      h1 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: #6b7280;
+        line-height: 1.625;
+        margin-bottom: 1.5rem;
+      }
+
+      .status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: #fef3c7;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .status-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        background: #f59e0b;
+        border-radius: 50%;
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .status-text {
+        color: #92400e;
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+
+      .button {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .button:hover {
+        background: #5568d3;
+      }
+
+      .button:active {
+        transform: scale(0.98);
+      }
+
+      .info {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .info-text {
+        font-size: 0.875rem;
+        color: #9ca3af;
+        line-height: 1.5;
+      }
+
+      .feature-list {
+        list-style: none;
+        margin-top: 1rem;
+        text-align: left;
+      }
+
+      .feature-list li {
+        padding: 0.5rem 0;
+        color: #6b7280;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .feature-list li::before {
+        content: "✓";
+        color: #10b981;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon">📡</div>
+      <h1>You're Offline</h1>
+      <p>
+        No internet connection detected. Don't worry, you can still use the app!
+      </p>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        <span class="status-text">Waiting for connection...</span>
+      </div>
+
+      <button class="button" onclick="location.reload()">Try Again</button>
+
+      <div class="info">
+        <p class="info-text"><strong>Your data is safe!</strong></p>
+        <ul class="feature-list">
+          <li>Reports are saved locally</li>
+          <li>Auto-sync when back online</li>
+          <li>View cached incident history</li>
+          <li>Full offline functionality</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      // Monitor connection status
+      window.addEventListener("online", () => {
+        const statusDot = document.querySelector(".status-dot");
+        const statusText = document.querySelector(".status-text");
+        const status = document.querySelector(".status");
+
+        statusDot.style.background = "#10b981";
+        statusText.textContent = "Back online! Syncing...";
+        status.style.background = "#d1fae5";
+        statusText.style.color = "#065f46";
+
+        // Reload after a short delay
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      });
+
+      // Update UI on load if online
+      if (navigator.onLine) {
+        document.querySelector(".status-text").textContent =
+          "Connection restored!";
+        setTimeout(() => location.reload(), 500);
+      }
+    </script>
+  </body>
+</html>
