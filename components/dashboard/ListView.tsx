@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Phone } from "lucide-react";
 import {
@@ -77,6 +77,16 @@ export function ListView({
         reports.map((r) => [r.localId, normalizeAdminStatus(r.status)])
       )
   );
+
+  useEffect(() => {
+    setStatusById((prev) => {
+      const next = { ...prev };
+      for (const r of reports) {
+        next[r.localId] = normalizeAdminStatus(r.status);
+      }
+      return next;
+    });
+  }, [reports]);
 
   const toggleSort = (field: "createdAtLocal" | "severity") => {
     if (sortField === field) {
@@ -356,31 +366,31 @@ export function ListView({
 
             {/* Sync Information */}
             {/* <div>
-              <h3 className="font-semibold text-slate-900 mb-3">Sync Information</h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-slate-600" />
-                  <div>
-                    <div className="text-xs text-slate-600">Synced At</div>
-                    <div className="text-sm">
-                      {selectedReport.syncedAt 
-                        ? format(new Date(selectedReport.syncedAt), 'MMM d, yyyy HH:mm:ss')
-                        : <span className="text-slate-600">Not synced</span>
-                      }
+                <h3 className="font-semibold text-slate-900 mb-3">Sync Information</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-slate-600" />
+                    <div>
+                      <div className="text-xs text-slate-600">Synced At</div>
+                      <div className="text-sm">
+                        {selectedReport.syncedAt 
+                          ? format(new Date(selectedReport.syncedAt), 'MMM d, yyyy HH:mm:ss')
+                          : <span className="text-slate-600">Not synced</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="h-4 w-4 text-slate-600" />
+                    <div>
+                      <div className="text-xs text-slate-600">Device Info</div>
+                      <div className="font-mono text-sm">
+                        {selectedReport.deviceId} • v{selectedReport.appVersion}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Smartphone className="h-4 w-4 text-slate-600" />
-                  <div>
-                    <div className="text-xs text-slate-600">Device Info</div>
-                    <div className="font-mono text-sm">
-                      {selectedReport.deviceId} • v{selectedReport.appVersion}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+              </div> */}
           </div>
         )}
       </Dialog>
