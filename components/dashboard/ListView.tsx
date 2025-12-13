@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Phone } from "lucide-react";
 import {
@@ -25,9 +25,11 @@ import {
   formatLatency,
 } from "@/data/MockReports";
 import { LocationGeocode } from "@/components/dashboard/LocationGeocode";
+import { toast } from "@/hooks/use-toast";
 
 interface ListViewProps {
   reports: IncidentReport[];
+  adminStatusFilter?: "all" | "pending" | "resolved" | "canceled";
 }
 
 type AdminStatus = "pending" | "resolved" | "canceled";
@@ -50,7 +52,17 @@ const SortIcon = ({
   );
 };
 
-export function ListView({ reports }: ListViewProps) {
+function normalizeAdminStatus(s?: string): AdminStatus {
+  const val = (s || "").toLowerCase();
+  if (val === "resolved") return "resolved";
+  if (val === "cancelled" || val === "canceled") return "canceled";
+  return "pending";
+}
+
+export function ListView({
+  reports,
+  adminStatusFilter = "all",
+}: ListViewProps) {
   const [selectedReport, setSelectedReport] = useState<IncidentReport | null>(
     null
   );
@@ -60,14 +72,21 @@ export function ListView({ reports }: ListViewProps) {
   );
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [statusById, setStatusById] = useState<Record<string, AdminStatus>>(
-    () => {
-      const existing: Record<string, AdminStatus> = {};
-      for (const r of reports) {
-        existing[r.localId] = "pending";
-      }
-      return existing;
-    }
+    () =>
+      Object.fromEntries(
+        reports.map((r) => [r.localId, normalizeAdminStatus(r.status)])
+      )
   );
+
+  useEffect(() => {
+    setStatusById((prev) => {
+      const next = { ...prev };
+      for (const r of reports) {
+        next[r.localId] = normalizeAdminStatus(r.status);
+      }
+      return next;
+    });
+  }, [reports]);
 
   const toggleSort = (field: "createdAtLocal" | "severity") => {
     if (sortField === field) {
@@ -96,6 +115,14 @@ export function ListView({ reports }: ListViewProps) {
     setSelectedReport(report);
     setDialogOpen(true);
   };
+
+  // Apply Admin Status filter based on local status map
+  const adminFilteredReports =
+    adminStatusFilter === "all"
+      ? sortedReports
+      : sortedReports.filter(
+          (r) => (statusById[r.localId] ?? "pending") === adminStatusFilter
+        );
 
   return (
     <div className="glass-card overflow-hidden animate-fade-in">
@@ -146,7 +173,7 @@ export function ListView({ reports }: ListViewProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedReports.map((report) => (
+            {adminFilteredReports.map((report) => (
               <TableRow
                 key={report.localId}
                 className="border-border/30 transition-colors hover:bg-secondary/30 cursor-pointer"
@@ -178,12 +205,54 @@ export function ListView({ reports }: ListViewProps) {
                 <TableCell onClick={(e) => e.stopPropagation()}>
                   <Select
                     value={statusById[report.localId] ?? "pending"}
-                    onValueChange={(value) =>
+                    onValueChange={async (value) => {
+                      const newStatus = value as AdminStatus;
+                      // Optimistic update
                       setStatusById((prev) => ({
                         ...prev,
-                        [report.localId]: value as AdminStatus,
-                      }))
-                    }
+                        [report.localId]: newStatus,
+                      }));
+                      try {
+                        const params = new URLSearchParams({
+                          serverId: report.serverId ?? "",
+                          localId: report.localId,
+                          status:
+                            newStatus === "resolved"
+                              ? "resolved"
+                              : newStatus === "pending"
+                              ? "pending"
+                              : "cancelled",
+                        });
+                        const resp = await fetch(
+                          `/api/reports/update?${params.toString()}`,
+                          {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                          }
+                        );
+                        if (!resp.ok) {
+                          const text = await resp.text();
+                          throw new Error(
+                            text || `Status update failed (${resp.status})`
+                          );
+                        }
+                        toast.success("Status updated", {
+                          description: `Report status set to ${newStatus}.`,
+                        });
+                      } catch (err) {
+                        // Revert on error
+                        setStatusById((prev) => ({
+                          ...prev,
+                          [report.localId]: prev[report.localId] ?? "pending",
+                        }));
+                        toast.error("Update failed", {
+                          description:
+                            err instanceof Error
+                              ? err.message
+                              : "Could not update status",
+                        });
+                      }
+                    }}
                   >
                     <SelectTrigger
                       className={`w-32 border ${
@@ -297,31 +366,31 @@ export function ListView({ reports }: ListViewProps) {
 
             {/* Sync Information */}
             {/* <div>
-              <h3 className="font-semibold text-slate-900 mb-3">Sync Information</h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-slate-600" />
-                  <div>
-                    <div className="text-xs text-slate-600">Synced At</div>
-                    <div className="text-sm">
-                      {selectedReport.syncedAt 
-                        ? format(new Date(selectedReport.syncedAt), 'MMM d, yyyy HH:mm:ss')
-                        : <span className="text-slate-600">Not synced</span>
-                      }
+                <h3 className="font-semibold text-slate-900 mb-3">Sync Information</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-slate-600" />
+                    <div>
+                      <div className="text-xs text-slate-600">Synced At</div>
+                      <div className="text-sm">
+                        {selectedReport.syncedAt 
+                          ? format(new Date(selectedReport.syncedAt), 'MMM d, yyyy HH:mm:ss')
+                          : <span className="text-slate-600">Not synced</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="h-4 w-4 text-slate-600" />
+                    <div>
+                      <div className="text-xs text-slate-600">Device Info</div>
+                      <div className="font-mono text-sm">
+                        {selectedReport.deviceId} • v{selectedReport.appVersion}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Smartphone className="h-4 w-4 text-slate-600" />
-                  <div>
-                    <div className="text-xs text-slate-600">Device Info</div>
-                    <div className="font-mono text-sm">
-                      {selectedReport.deviceId} • v{selectedReport.appVersion}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+              </div> */}
           </div>
         )}
       </Dialog>
