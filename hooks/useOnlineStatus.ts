@@ -1,0 +1,29 @@
+import { useState, useEffect, useCallback } from 'react';
+
+export const useOnlineStatus = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [lastOnline, setLastOnline] = useState<Date | null>(
+    navigator.onLine ? new Date() : null
+  );
+
+  const handleOnline = useCallback(() => {
+    setIsOnline(true);
+    setLastOnline(new Date());
+  }, []);
+
+  const handleOffline = useCallback(() => {
+    setIsOnline(false);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [handleOnline, handleOffline]);
+
+  return { isOnline, lastOnline };
+};
