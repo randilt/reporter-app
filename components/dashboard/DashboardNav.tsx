@@ -12,6 +12,11 @@ export function DashboardNav() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Hide nav if on map-fullscreen page
+  if (pathname && pathname.includes("map-fullscreen")) {
+    return null;
+  }
+
   const handleLogout = async () => {
     try {
       // Call logout API to clear cookies
@@ -45,6 +50,12 @@ export function DashboardNav() {
       href: "/dashboard/safe-places",
       icon: MapPin,
       match: (path: string) => path.includes("/safe-places"),
+    },
+    {
+      name: "Fullscreen Map",
+      href: "/dashboard/map-fullscreen",
+      icon: MapPin,
+      match: (path: string) => path.includes("/map-fullscreen"),
     },
   ];
 

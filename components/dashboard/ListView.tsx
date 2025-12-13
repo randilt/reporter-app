@@ -423,7 +423,7 @@ export function ListView({
                             rel="noopener noreferrer"
                             className="text-primary hover:underline text-xs inline-flex items-center gap-1 mt-1"
                           >
-                            View on Google Maps
+                            View Directions on Google Maps
                             <svg
                               className="h-3 w-3"
                               fill="none"
