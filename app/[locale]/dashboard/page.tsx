@@ -2,12 +2,13 @@
 import { useState } from "react";
 import { ListView } from "@/components/dashboard/ListView";
 import { Button } from "@/components/ui/button";
-import { Plus, List } from "lucide-react";
+import { Plus, List, Map } from "lucide-react";
 import { useReports } from "@/hooks/useReports";
 import { mockReports } from "@/data/MockReports";
+import {ReportFilters} from "@/components/dashboard/ReportFilters";
 
 export default function DashboardPage() {
-  const [view, setView] = useState<"list" | "new">("list");
+  const [view, setView] = useState<"list" | "map">("list");
   const { pendingCount, syncedCount, failedCount } = useReports();
 
   return (
@@ -31,11 +32,27 @@ export default function DashboardPage() {
             <List className="h-4 w-4" />
             List View
           </Button>
+          <Button
+            onClick={() => setView("map")}
+            variant={view === "map" ? "default" : "outline"}
+            className="gap-2"
+          >
+            <Map className="h-4 w-4" />
+            Map View
+          </Button>
         </div>
 
         {view === "list" && (
           <div className="bg-white rounded-lg shadow-lg p-6">
             <ListView reports={mockReports} />
+          </div>
+        )}
+
+        {view === "map" && (
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex items-center justify-center h-96 text-slate-500">
+              Map View - Coming Soon
+            </div>
           </div>
         )}
       </div>
