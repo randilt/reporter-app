@@ -51,6 +51,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
   const [incidentType, setIncidentType] = useState<IncidentType | "">("");
   const [severity, setSeverity] = useState<Severity | "">("");
   const [description, setDescription] = useState("");
+  const [manualAddress, setManualAddress] = useState("");
   const [overrideTime, setOverrideTime] = useState(false);
   const [customTime, setCustomTime] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -71,7 +72,9 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!incidentType || !severity || !location) return;
+    // Require either GPS location or manual address
+    if (!incidentType || !severity || (!location && !manualAddress.trim()))
+      return;
 
     setSubmitting(true);
 
@@ -81,7 +84,12 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
         incidentType,
         severity,
         description: description || undefined,
-        locationCapturedAtCreation: location,
+        manualAddress: manualAddress.trim() || undefined,
+        locationCapturedAtCreation: location || {
+          lat: 0,
+          lng: 0,
+          accuracyMeters: 0,
+        },
         deviceTime: now.toISOString(),
         userCorrectedTime:
           overrideTime && customTime
@@ -245,6 +253,23 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
         </div>
       </div>
 
+      {/* Manual Address (if GPS fails) */}
+      <div className="space-y-2">
+        <Label className="text-base font-semibold flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-primary" />
+          {t("manualAddress")}
+        </Label>
+        <Input
+          value={manualAddress}
+          onChange={(e) => setManualAddress(e.target.value)}
+          placeholder={t("manualAddressPlaceholder")}
+          className="bg-secondary border-border"
+        />
+        <p className="text-xs text-muted-foreground">
+          {t("manualAddressHint")}
+        </p>
+      </div>
+
       {/* Timestamp */}
       <div className="space-y-3">
         <Label className="text-base font-semibold flex items-center gap-2">
@@ -311,7 +336,12 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
         <Button
           type="submit"
           size="lg"
-          disabled={!incidentType || !severity || !location || submitting}
+          disabled={
+            !incidentType ||
+            !severity ||
+            (!location && !manualAddress.trim()) ||
+            submitting
+          }
           className="w-full h-16 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground glow-primary disabled:opacity-50 disabled:shadow-none"
         >
           {submitting ? (

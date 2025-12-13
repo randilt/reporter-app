@@ -35,6 +35,7 @@ export interface IncidentReport {
   incidentType: IncidentType;
   severity: Severity;
   description?: string;
+  manualAddress?: string; // Optional manual address if GPS fails
   createdAtLocal: string;
   lastEditedAtLocal: string;
   syncedAt: string | null;

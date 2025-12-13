@@ -26,6 +26,7 @@ export interface SyncReportPayload {
   incidentType: string;
   severity: string;
   description?: string;
+  manualAddress?: string; // Optional manual address if GPS fails
   createdAtLocal: string;
   locationCapturedAtCreation: {
     lat: number;
