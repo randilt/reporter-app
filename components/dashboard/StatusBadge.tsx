@@ -36,9 +36,11 @@ interface SeverityBadgeProps {
 export function SeverityBadge({ severity }: SeverityBadgeProps) {
   const severityConfig: Record<Severity, string> = {
     low: "px-2 py-1 rounded-md bg-green-100 dark:bg-green-950 font-bold text-green-600 dark:text-green-400",
-    medium: "px-2 py-1 rounded-md bg-yellow-100 dark:bg-yellow-950 font-bold text-yellow-600 dark:text-yellow-400",
+    medium:
+      "px-2 py-1 rounded-md bg-yellow-100 dark:bg-yellow-950 font-bold text-yellow-600 dark:text-yellow-400",
     high: "px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-950 font-bold text-orange-600 dark:text-orange-400",
-    critical: "px-2 py-1 rounded-md bg-red-100 dark:bg-red-950 font-bold text-red-600 dark:text-red-400",
+    critical:
+      "px-2 py-1 rounded-md bg-red-100 dark:bg-red-950 font-bold text-red-600 dark:text-red-400",
   };
 
   return <span className={severityConfig[severity]}>{severity}</span>;
