@@ -36,7 +36,7 @@ export function Dialog({
         className="fixed inset-0 z-40 bg-black/50"
         onClick={() => onOpenChange(false)}
       />
-      <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-7xl max-h-[90vh] -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg flex flex-col">
+      <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-2xl md:max-w-7xl max-h-[90vh] -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg flex flex-col">
         <div className="flex items-center justify-between p-6 pb-4 shrink-0">
           {title && <h2 className="text-xl font-bold">{title}</h2>}
           <Button
