@@ -11,6 +11,10 @@ import { v4 as uuidv4 } from "uuid";
 import { useOnlineStatus } from "./useOnlineStatus";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import {
+  syncReport as apiSyncReport,
+  type SyncReportPayload,
+} from "@/lib/api-client";
 
 export const useReports = () => {
   const { isOnline } = useOnlineStatus();
@@ -81,7 +85,7 @@ export const useReports = () => {
     [t]
   );
 
-  // Simulate sync to server
+  // Sync report to server using real API
   const syncReport = useCallback(async (localId: string) => {
     const report = await db.reports.get(localId);
     if (!report) return;
@@ -92,22 +96,15 @@ export const useReports = () => {
       lastEditedAtLocal: new Date().toISOString(),
     });
 
-    // Simulate network request (90% success rate for demo)
-    const success = Math.random() > 0.1;
-
-    // Simulate latency
-    await new Promise((resolve) =>
-      setTimeout(resolve, 500 + Math.random() * 1000)
-    );
-
-    if (success) {
-      // Capture location at sync time
+    try {
+      // Capture location at sync time (optional)
       let syncLocation = null;
       try {
         const position = await new Promise<GeolocationPosition>(
           (resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject, {
               timeout: 5000,
+              enableHighAccuracy: false,
             });
           }
         );
@@ -117,24 +114,57 @@ export const useReports = () => {
           accuracyMeters: position.coords.accuracy,
         };
       } catch {
-        // Location capture at sync is optional
+        // Location capture at sync is optional, use creation location
+        syncLocation = null;
       }
 
-      await db.reports.update(localId, {
-        syncStatus: "synced" as SyncStatus,
-        serverId: `srv-${uuidv4().slice(0, 8)}`,
-        syncedAt: new Date().toISOString(),
+      // Prepare payload for API
+      const payload: SyncReportPayload = {
+        localId: report.localId,
+        serverId: report.serverId,
+        incidentType: report.incidentType,
+        severity: report.severity,
+        description: report.description,
+        createdAtLocal: report.createdAtLocal,
+        locationCapturedAtCreation: report.locationCapturedAtCreation,
         locationCapturedAtSync: syncLocation,
-        lastSyncError: null,
-      });
+        deviceTime: report.deviceTime,
+        userCorrectedTime: report.userCorrectedTime,
+        deviceTimezone: report.deviceTimezone,
+        timezoneOffsetMinutes: report.timezoneOffsetMinutes,
+        responderId: report.responderId,
+        deviceId: report.deviceId,
+        appVersion: report.appVersion,
+      };
 
-      console.log(`[SYNC] Report ${localId} synced successfully`);
-    } else {
+      // Make actual API call
+      console.log("[SYNC] Attempting to sync report:", localId);
+      const response = await apiSyncReport(payload);
+
+      if (response.success && response.data) {
+        await db.reports.update(localId, {
+          syncStatus: "synced" as SyncStatus,
+          serverId: response.data.serverId,
+          syncedAt: response.data.syncedAt,
+          locationCapturedAtSync: syncLocation,
+          lastSyncError: null,
+        });
+
+        console.log(`[SYNC] Report ${localId} synced successfully`);
+      } else {
+        throw new Error(response.error || "Sync failed");
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+
       await db.reports.update(localId, {
         syncStatus: "failed" as SyncStatus,
-        lastSyncError: "Network timeout - will retry automatically",
+        lastSyncError: errorMessage,
       });
-      console.log(`[SYNC] Report ${localId} failed to sync`);
+
+      console.error(`[SYNC] Report ${localId} failed to sync:`, errorMessage);
+      throw error;
     }
   }, []);
 
