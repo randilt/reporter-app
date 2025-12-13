@@ -16,6 +16,9 @@ import {
   type SyncReportPayload,
 } from "@/lib/api-client";
 
+// Global sync lock to prevent multiple instances from syncing simultaneously
+let globalSyncLock = false; // mutable by design
+
 export const useReports = () => {
   const { isOnline } = useOnlineStatus();
   const [syncing, setSyncing] = useState(false);
@@ -97,7 +100,7 @@ export const useReports = () => {
     });
 
     try {
-      // Capture location at sync time (optional)
+      // Capture location at sync time (falls back to creation location if unavailable)
       let syncLocation = null;
       try {
         const position = await new Promise<GeolocationPosition>(
@@ -113,8 +116,12 @@ export const useReports = () => {
           lng: position.coords.longitude,
           accuracyMeters: position.coords.accuracy,
         };
+        console.log("[SYNC] Location captured at sync time:", syncLocation);
       } catch {
-        // Location capture at sync is optional, use creation location
+        // Location capture at sync failed, will use creation location as fallback
+        console.log(
+          "[SYNC] Could not capture location at sync time, using creation location"
+        );
         syncLocation = null;
       }
 
@@ -170,33 +177,51 @@ export const useReports = () => {
 
   // Sync all pending reports
   const syncAllPending = useCallback(async () => {
-    if (!isOnline || syncing) return;
-
-    setSyncing(true);
-    const pendingReports = await db.reports
-      .where("syncStatus")
-      .equals("pending")
-      .toArray();
-    const failedReports = await db.reports
-      .where("syncStatus")
-      .equals("failed")
-      .toArray();
-
-    const toSync = [...pendingReports, ...failedReports];
-
-    if (toSync.length > 0) {
-      console.log(`[SYNC] Starting sync of ${toSync.length} reports...`);
-
-      for (const report of toSync) {
-        await syncReport(report.localId);
-      }
-
-      toast.success(t("syncComplete"), {
-        description: t("syncCompleteDesc", { count: toSync.length }),
-      });
+    // Prevent concurrent sync operations using global lock
+    if (!isOnline || syncing || globalSyncLock) {
+      console.log("[SYNC] Skipping sync - already in progress or offline");
+      return;
     }
 
-    setSyncing(false);
+    // Acquire global lock
+    globalSyncLock = true;
+    setSyncing(true);
+
+    try {
+      const pendingReports = await db.reports
+        .where("syncStatus")
+        .equals("pending")
+        .toArray();
+      const failedReports = await db.reports
+        .where("syncStatus")
+        .equals("failed")
+        .toArray();
+
+      const toSync = [...pendingReports, ...failedReports];
+
+      if (toSync.length > 0) {
+        console.log(`[SYNC] Starting sync of ${toSync.length} reports...`);
+
+        for (const report of toSync) {
+          try {
+            await syncReport(report.localId);
+          } catch (error) {
+            console.error(`[SYNC] Failed to sync ${report.localId}:`, error);
+            // Continue with next report even if one fails
+          }
+        }
+
+        toast.success(t("syncComplete"), {
+          description: t("syncCompleteDesc", { count: toSync.length }),
+        });
+      }
+    } catch (error) {
+      console.error("[SYNC] Sync operation failed:", error);
+    } finally {
+      setSyncing(false);
+      // Release global lock
+      globalSyncLock = false;
+    }
   }, [isOnline, syncing, syncReport, t]);
 
   // Retry a specific failed report
@@ -226,13 +251,26 @@ export const useReports = () => {
     [t]
   );
 
-  // Auto-sync when coming online
+  // Auto-sync when coming online (only trigger on isOnline change)
   useEffect(() => {
-    if (isOnline) {
-      const timer = setTimeout(syncAllPending, 1000);
+    if (isOnline && !syncing) {
+      const timer = setTimeout(() => {
+        // Only sync if there are pending/failed reports
+        db.reports
+          .where("syncStatus")
+          .anyOf(["pending", "failed"])
+          .count()
+          .then((count) => {
+            if (count > 0) {
+              syncAllPending();
+            }
+          });
+      }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [isOnline, syncAllPending]);
+    // Only depend on isOnline to avoid re-triggering during sync
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOnline]);
 
   return {
     reports: reports ?? [],

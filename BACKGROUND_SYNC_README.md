@@ -95,6 +95,39 @@ Service Worker Takes Over
 Auto-retry when connectivity restored
 ```
 
+## Timestamp Structure
+
+### Two Important Timestamps
+
+1. **`createdByUser`**: When the user actually created/reported the incident on their device
+
+   - Captured from device time at the moment of incident creation
+   - Represents the real-world time the incident occurred
+   - Used for incident timeline and chronological ordering
+
+2. **`syncedAt`**: When the server received and processed the incident
+   - Server-generated timestamp when API receives the request
+   - May be different from `createdByUser` due to:
+     - Offline delay (user created while offline, synced later)
+     - Network latency
+     - Background sync retry delays
+   - Used for server-side tracking and audit trails
+
+**Example Scenario:**
+
+```json
+{
+  "createdByUser": "2024-12-13T08:20:34.567Z", // User reported at 8:20 AM
+  "syncedAt": "2024-12-13T08:25:12.123Z", // Server received at 8:25 AM (5 min delay)
+  "delay": "278s" // User was offline for 4.5 minutes
+}
+```
+
+### Location Data Structure
+
+1. **`locationCapturedAtCreation`**: Where the incident was reported (always present)
+2. **`locationCapturedAtSync`**: Where user was during sync attempt (may be null if geolocation fails)
+
 ## Key Components
 
 ### 1. Service Worker (`public/sw.js`)

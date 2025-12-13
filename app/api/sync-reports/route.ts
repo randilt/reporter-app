@@ -22,7 +22,10 @@ export async function POST(request: NextRequest) {
       reportId: body.localId,
       incidentType: body.incidentType,
       severity: body.severity,
-      timestamp: new Date().toISOString(),
+      locationAtCreation: body.locationCapturedAtCreation,
+      locationAtSync: body.locationCapturedAtSync,
+      userCreatedAt: body.createdAtLocal, // When user actually created the incident
+      syncedAtServer: new Date().toISOString(), // When server received it
     });
 
     // Validate required fields
@@ -53,13 +56,16 @@ export async function POST(request: NextRequest) {
       .toString(36)
       .substring(7)}`;
 
+    const syncedAtServer = new Date().toISOString();
+
     return NextResponse.json(
       {
         success: true,
         data: {
           serverId,
           localId: body.localId,
-          syncedAt: new Date().toISOString(),
+          createdByUser: body.createdAtLocal, // When user created the incident
+          syncedAt: syncedAtServer, // When server received/processed it
           message: "Report synced successfully",
         },
       },
