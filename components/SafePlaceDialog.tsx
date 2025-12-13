@@ -129,8 +129,24 @@ export function SafePlaceDialog({ open, onOpenChange }: SafePlaceDialogProps) {
         appVersion: deviceInfo.appVersion,
       };
 
-      // TODO: Send to API in realtime
-      console.log("Safe place data with metadata:", safePlaceData);
+      // Send to API in realtime
+      console.log("Submitting safe place data:", safePlaceData);
+
+      const response = await fetch("/api/safe-places/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(safePlaceData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Failed to mark safe place");
+      }
+
+      console.log("Safe place created successfully:", result.data);
 
       toast.success("Safe place marked!", {
         description: "Thank you for helping others stay safe.",
