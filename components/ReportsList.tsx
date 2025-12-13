@@ -63,8 +63,9 @@ const ReportCard = ({ report, onRetry, onDelete }: ReportCardProps) => {
           <div className="flex items-center gap-2 mb-2">
             <span
               className={cn(
-                "px-2 py-0.5 rounded text-xs font-bold",
-                severity.color
+                "px-2 py-0.5 rounded text-xs font-bold transition-colors",
+                severity.color,
+                severity.textColor
               )}
             >
               {severity.label}
