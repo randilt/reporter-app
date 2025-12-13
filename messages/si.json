@@ -52,7 +52,7 @@
   },
   "StatusIndicator": {
     "syncing": "සමමුහුර්ත කරමින්...",
-    "online": "මාර්ගගතයි",
+    "online": "Online",
     "offline": "නොබැඳිව"
   },
   "Toasts": {
