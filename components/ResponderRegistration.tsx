@@ -191,6 +191,15 @@ export function ResponderRegistration({
           </Button>
         </form>
 
+        <div className="rounded-lg border border-blue-200 bg-blue-50/80 p-4 mb-4">
+          <h3 className="mb-2 font-semibold text-blue-900">
+            📱 {t("installTitle")}
+          </h3>
+          <ul className="text-sm text-blue-900 list-disc pl-5 space-y-1">
+            <li>{t("installAndroid")}</li>
+            <li>{t("installIOS")}</li>
+          </ul>
+        </div>
         <div className="rounded-lg border border-muted bg-muted/20 p-4">
           <h3 className="mb-2 font-semibold">🔒 {t("privacyTitle")}</h3>
           <p className="text-sm text-muted-foreground">{t("privacyNotice")}</p>

@@ -108,6 +108,9 @@
     "registrationFailed": "Registration Failed",
     "registrationFailedDesc": "Could not save your profile. Please try again.",
     "privacyTitle": "Privacy Notice",
-    "privacyNotice": "Your information is stored securely on your device and is only shared with emergency services when you submit incident reports. We respect your privacy and will never share your data with third parties."
+    "privacyNotice": "Your information is stored securely on your device and is only shared with emergency services when you submit incident reports. We respect your privacy and will never share your data with third parties.",
+    "installTitle": "Install as App (PWA)",
+    "installAndroid": "On Android: Tap the browser menu (⋮) and select 'Add to Home screen' to install this app.",
+    "installIOS": "On iPhone/iPad: Tap the Share button ( ) and choose 'Add to Home Screen' to install."
   }
 }
