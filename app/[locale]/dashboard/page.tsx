@@ -14,11 +14,18 @@ export default function DashboardPage() {
     search: "",
     incidentType: "all",
     severity: "all",
-    syncStatus: "all",
+    adminStatus: "all",
   });
   const { reports: apiReports, loading, error } = useApiReports();
 
   // Filter reports based on current filters
+  const normalizeAdminStatus = (s?: string) => {
+    const val = (s || '').toLowerCase();
+    if (val === 'resolved') return 'resolved';
+    if (val === 'cancelled' || val === 'canceled') return 'canceled';
+    return 'pending';
+  };
+
   const filteredReports = useMemo(() => {
     return apiReports.filter((report) => {
       const matchesSearch =
@@ -32,14 +39,14 @@ export default function DashboardPage() {
       const matchesSeverity =
         filters.severity === "all" || report.severity === filters.severity;
 
-      const matchesSyncStatus =
-        filters.syncStatus === "all" || (report.syncStatus === filters.syncStatus);
+      const matchesAdminStatus =
+        filters.adminStatus === "all" || normalizeAdminStatus(report.status) === filters.adminStatus;
 
       return (
         matchesSearch &&
         matchesIncidentType &&
         matchesSeverity &&
-        matchesSyncStatus
+        matchesAdminStatus
       );
     });
   }, [apiReports, filters]);
@@ -105,7 +112,7 @@ export default function DashboardPage() {
 
             {view === "list" && (
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <ListView reports={filteredReports} />
+                <ListView reports={filteredReports} adminStatusFilter={filters.adminStatus ?? 'all'} />
               </div>
             )}
 

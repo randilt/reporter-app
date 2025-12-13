@@ -20,29 +20,39 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { IncidentReport, getSyncLatency, formatLatency } from '@/data/MockReports';
+import { toast } from '@/hooks/use-toast';
 
 interface ListViewProps {
   reports: IncidentReport[];
+  adminStatusFilter?: 'all' | 'pending' | 'resolved' | 'canceled';
 }
 
 type AdminStatus = 'pending' | 'resolved' | 'canceled';
 
-export function ListView({ reports }: ListViewProps) {
+function normalizeAdminStatus(s?: string): AdminStatus {
+  const val = (s || '').toLowerCase();
+  if (val === 'resolved') return 'resolved';
+  if (val === 'cancelled' || val === 'canceled') return 'canceled';
+  return 'pending';
+}
+
+export function ListView({ reports, adminStatusFilter = 'all' }: ListViewProps) {
   const [selectedReport, setSelectedReport] = useState<IncidentReport | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sortField, setSortField] = useState<'createdAtLocal' | 'severity'>('createdAtLocal');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [statusById, setStatusById] = useState<Record<string, AdminStatus>>(
-    () => Object.fromEntries(reports.map((r) => [r.localId, 'pending']))
+    () => Object.fromEntries(
+      reports.map((r) => [r.localId, normalizeAdminStatus(r.status)])
+    )
   );
+  // toast imported directly from sonner re-export
 
   useEffect(() => {
     setStatusById((prev) => {
       const next = { ...prev };
       for (const r of reports) {
-        if (!next[r.localId]) {
-          next[r.localId] = 'pending';
-        }
+        next[r.localId] = normalizeAdminStatus(r.status);
       }
       return next;
     });
@@ -83,6 +93,11 @@ export function ListView({ reports }: ListViewProps) {
     setDialogOpen(true);
   };
 
+  // Apply Admin Status filter based on local status map
+  const adminFilteredReports = adminStatusFilter === 'all'
+    ? sortedReports
+    : sortedReports.filter((r) => (statusById[r.localId] ?? 'pending') === adminStatusFilter);
+
   return (
     <div className="glass-card overflow-hidden animate-fade-in">
       <div className="overflow-x-auto">
@@ -110,7 +125,7 @@ export function ListView({ reports }: ListViewProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedReports.map((report) => (
+            {adminFilteredReports.map((report) => (
               <TableRow 
                 key={report.localId}
                 className="border-border/30 transition-colors hover:bg-secondary/30 cursor-pointer"
@@ -134,9 +149,33 @@ export function ListView({ reports }: ListViewProps) {
                 <TableCell onClick={(e) => e.stopPropagation()}>
                   <Select
                     value={statusById[report.localId] ?? 'pending'}
-                    onValueChange={(value) =>
-                      setStatusById((prev) => ({ ...prev, [report.localId]: value as AdminStatus }))
-                    }
+                    onValueChange={async (value) => {
+                      const newStatus = value as AdminStatus;
+                      // Optimistic update
+                      setStatusById((prev) => ({ ...prev, [report.localId]: newStatus }));
+                      try {
+                        const params = new URLSearchParams({
+                          serverId: report.serverId ?? '',
+                          localId: report.localId,
+                          status: newStatus === 'resolved' ? 'resolved' : newStatus === 'pending' ? 'pending' : 'cancelled',
+                        });
+                        const resp = await fetch(`/api/reports/update?${params.toString()}`, {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                        });
+                        if (!resp.ok) {
+                          const text = await resp.text();
+                          throw new Error(text || `Status update failed (${resp.status})`);
+                        }
+                        toast.success('Status updated', { description: `Report status set to ${newStatus}.` });
+                      } catch (err) {
+                        // Revert on error
+                        setStatusById((prev) => ({ ...prev, [report.localId]: prev[report.localId] ?? 'pending' }));
+                        toast.error('Update failed', {
+                          description: err instanceof Error ? err.message : 'Could not update status',
+                        });
+                      }
+                    }}
                   >
                     <SelectTrigger className={`w-32 border ${
                       (statusById[report.localId] ?? 'pending') === 'resolved'
