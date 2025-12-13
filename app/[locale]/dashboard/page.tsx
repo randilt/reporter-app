@@ -1,6 +1,8 @@
 "use client";
 import { useState, useMemo } from "react";
 import { ListView } from "@/components/dashboard/ListView";
+import dynamic from 'next/dynamic';
+const LiveMap = dynamic(() => import('@/components/dashboard/LiveMap'), { ssr: false });
 import { Button } from "@/components/ui/button";
 import { Plus, List, Map } from "lucide-react";
 import { useApiReports } from "@/hooks/useApiReports";
@@ -109,9 +111,7 @@ export default function DashboardPage() {
 
             {view === "map" && (
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <div className="flex items-center justify-center h-96 text-slate-500">
-                  Map View - Coming Soon
-                </div>
+                <LiveMap />
               </div>
             )}
           </>
