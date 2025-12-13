@@ -5,6 +5,7 @@
   },
   "IncidentForm": {
     "incidentType": "Incident Type",
+    "selectIncidentType": "Select incident type",
     "severityLevel": "Severity Level",
     "gpsLocation": "GPS Location",
     "acquiring": "Acquiring GPS signal...",
@@ -13,11 +14,26 @@
     "timestamp": "Timestamp",
     "overrideTimestamp": "Override timestamp",
     "description": "Description (Optional)",
+    "descriptionPlaceholder": "Additional details about the incident...",
     "photo": "Photo (Optional)",
     "capturePhoto": "Tap to capture photo",
     "save": "Save Incident Report",
     "reportSaved": "Report Saved",
-    "reportSavedDesc": "Incident saved locally. Will sync automatically."
+    "reportSavedDesc": "Incident saved locally. Will sync automatically.",
+    "incidentTypes": {
+      "flood": "Flood",
+      "landslide": "Landslide",
+      "fire": "Fire",
+      "accident": "Accident",
+      "road_block": "Road Block",
+      "power_line_down": "Power Line Down"
+    },
+    "severityLevels": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    }
   },
   "ReportsList": {
     "noReportsAll": "No reports yet. Create your first incident report.",

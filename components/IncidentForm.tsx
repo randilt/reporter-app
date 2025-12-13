@@ -139,12 +139,12 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
           onValueChange={(v) => setIncidentType(v as IncidentType)}
         >
           <SelectTrigger className="h-14 text-lg bg-secondary border-border hover:border-primary/50 transition-colors">
-            <SelectValue placeholder="Select incident type" />
+            <SelectValue placeholder={t("selectIncidentType")} />
           </SelectTrigger>
           <SelectContent>
             {(Object.keys(incidentTypeLabels) as IncidentType[]).map((type) => (
               <SelectItem key={type} value={type} className="py-3 text-base">
-                {incidentTypeLabels[type]}
+                {t(`incidentTypes.${type}`)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -167,7 +167,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
                   : "bg-secondary border-border hover:border-primary/50"
               )}
             >
-              {severityConfig[sev].label}
+              {t(`severityLevels.${sev}`)}
             </button>
           ))}
         </div>
@@ -264,7 +264,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
         <Textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Additional details about the incident..."
+          placeholder={t("descriptionPlaceholder")}
           className="min-h-[100px] bg-secondary border-border resize-none"
         />
       </div>

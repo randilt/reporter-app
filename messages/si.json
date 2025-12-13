@@ -5,6 +5,7 @@
   },
   "IncidentForm": {
     "incidentType": "සිදුවීමේ වර්ගය",
+    "selectIncidentType": "සිදුවීමේ වර්ගය තෝරන්න",
     "severityLevel": "දැඩි මට්ටම",
     "gpsLocation": "GPS ස්ථානය",
     "acquiring": "GPS සංඥාව ලබා ගනිමින්...",
@@ -13,11 +14,26 @@
     "timestamp": "වේලාව සහ දිනය",
     "overrideTimestamp": "වේලාව සහ දිනය වෙනස් කරන්න",
     "description": "විස්තරය (අනිවාර්ය නොවේ)",
+    "descriptionPlaceholder": "සිදුවීම පිළිබඳ අමතර තොරතුරු...",
     "photo": "ඡායාරූපය (අනිවාර්ය නොවේ)",
     "capturePhoto": "ඡායාරූපයක් ගැනීමට තට්ටු කරන්න",
     "save": "සිද්ධි වාර්තාව සුරකින්න",
     "reportSaved": "වාර්තාව සුරැකිණි",
-    "reportSavedDesc": "සිදුවීම දේශීයව සුරැකිණි. ස්වයංක්‍රීයව සමමුහුර්ත වනු ඇත."
+    "reportSavedDesc": "සිදුවීම දේශීයව සුරැකිණි. ස්වයංක්‍රීයව සමමුහුර්ත වනු ඇත.",
+    "incidentTypes": {
+      "flood": "ගංවතුර",
+      "landslide": "නායයෑම",
+      "fire": "ගිනි",
+      "accident": "අනතුර",
+      "road_block": "මාර්ග අවහිරතාව",
+      "power_line_down": "විදුලි රැහැන් කඩා වැටීම"
+    },
+    "severityLevels": {
+      "low": "අඩු",
+      "medium": "මධ්‍යම",
+      "high": "ඉහළ",
+      "critical": "අතිශය"
+    }
   },
   "ReportsList": {
     "noReportsAll": "තවම වාර්තා නැත. ඔබේ පළමු සිද්ධි වාර්තාව සාදන්න.",
