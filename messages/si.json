@@ -1,28 +1,28 @@
 {
   "Header": {
-    "title": "ප්‍රොජෙක්ට් ඒජිස්",
-    "subtitle": "ක්ෂේත්‍ර වාර්තාකරු"
+    "title": "Project Aegis",
+    "subtitle": "Field Reporter"
   },
   "IncidentForm": {
     "incidentType": "සිදුවීමේ වර්ගය",
     "selectIncidentType": "සිදුවීමේ වර්ගය තෝරන්න",
-    "severityLevel": "දැඩි මට්ටම",
+    "severityLevel": "ආපදා මට්ටම",
     "gpsLocation": "GPS ස්ථානය",
     "acquiring": "GPS සංඥාව ලබා ගනිමින්...",
     "retry": "නැවත උත්සාහ කරන්න",
     "accuracy": "නිරවද්‍යතාවය: ±{accuracy}m",
-    "manualAddress": "අතින් ලිපිනය (අනිවාර්ය නොවේ)",
-    "manualAddressPlaceholder": "GPS ලබා ගත නොහැකි නම් ස්ථාන ලිපිනය ඇතුළත් කරන්න",
+    "manualAddress": "ලිපිනය (අනිවාර්ය නොවේ)",
+    "manualAddressPlaceholder": "ස්ථානීය ලිපිනය ඇතුළත් කරන්න",
     "manualAddressHint": "GPS ක්‍රියා නොකරන්නේ නම් හෝ ලබා ගත නොහැකි නම් මෙය ලබා දෙන්න",
     "timestamp": "වේලාව සහ දිනය",
     "overrideTimestamp": "වේලාව සහ දිනය වෙනස් කරන්න",
     "description": "විස්තරය (අනිවාර්ය නොවේ)",
     "descriptionPlaceholder": "සිදුවීම පිළිබඳ අමතර තොරතුරු...",
     "photo": "ඡායාරූපය (අනිවාර්ය නොවේ)",
-    "capturePhoto": "ඡායාරූපයක් ගැනීමට තට්ටු කරන්න",
-    "save": "සිද්ධි වාර්තාව සුරකින්න",
+    "capturePhoto": "ඡායාරූපයක් ගැනීමට ස්පර්ශ කරන්න",
+    "save": "සිදුවීම් වාර්තාව සුරකින්න",
     "reportSaved": "වාර්තාව සුරැකිණි",
-    "reportSavedDesc": "සිදුවීම දේශීයව සුරැකිණි. ස්වයංක්‍රීයව සමමුහුර්ත වනු ඇත.",
+    "reportSavedDesc": "සිදුවීම උපාංගයේ සුරැකිණි. ස්වයංක්‍රීයව සමමුහුර්ත වනු ඇත.",
     "incidentTypes": {
       "flood": "ගංවතුර",
       "landslide": "නායයෑම",
@@ -39,13 +39,13 @@
     }
   },
   "ReportsList": {
-    "noReportsAll": "තවම වාර්තා නැත. ඔබේ පළමු සිද්ධි වාර්තාව සාදන්න.",
+    "noReportsAll": "තවම වාර්තා නැත. ඔබේ පළමු සිදුවීම් වාර්තාව සාදන්න.",
     "noReports": "{status} වාර්තා නැත.",
     "pending": "පොරොත්තුවෙන්",
     "synced": "සමමුහුර්තයි",
     "failed": "අසාර්ථකයි",
-    "reportDeleted": "වාර්තාව මැකිණි",
-    "reportDeletedDesc": "සිද්ධි වාර්තාව ඉවත් කර ඇත.",
+    "reportDeleted": "වාර්තාව මකා දමන ලදී",
+    "reportDeletedDesc": "සිදුවීම් වාර්තාව ඉවත් කර ඇත.",
     "syncComplete": "සමමුහුර්ත කිරීම සම්පූර්ණයි",
     "syncCompleteDesc": "{count} වාර්තා ක්‍රියාවට නංවා ඇත.",
     "cannotSync": "සමමුහුර්ත කළ නොහැක",
@@ -60,14 +60,14 @@
     "pending": "පොරොත්තුවෙන්"
   },
   "Toasts": {
-    "reportSavedLocally": "වාර්තාව දේශීයව සුරැකිණි",
-    "reportSavedLocallyDesc": "ඔබගේ සිද්ධි වාර්තාව සුරැකිණි. ඔබ මාර්ගගත වූ විට එය ස්වයංක්‍රීයව සමමුහුර්ත වනු ඇත.",
+    "reportSavedLocally": "වාර්තාව උපාංගයේ සුරැකිණි",
+    "reportSavedLocallyDesc": "ඔබගේ සිදුවීම් වාර්තාව සුරැකිණි. ඔබ මාර්ගගත වූ විට එය ස්වයංක්‍රීයව සමමුහුර්ත වනු ඇත.",
     "syncComplete": "සමමුහුර්ත කිරීම සම්පූර්ණයි",
     "syncCompleteDesc": "{count} වාර්තා ක්‍රියාවට නංවා ඇත.",
     "cannotSync": "සමමුහුර්ත කළ නොහැක",
     "cannotSyncDesc": "ඔබ දැනට නොබැඳිව සිටී. ඔබ මාර්ගගත වූ විට සමමුහුර්ත කිරීම නැවත ආරම්භ වේ.",
-    "reportDeleted": "වාර්තාව මැකිණි",
-    "reportDeletedDesc": "සිද්ධි වාර්තාව ඉවත් කර ඇත."
+    "reportDeleted": "වාර්තාව මකා දමන ලදී",
+    "reportDeletedDesc": "සිදුවීම් වාර්තාව ඉවත් කර ඇත."
   },
   "LanguageSwitcher": {
     "label": "භාෂාව",
@@ -75,10 +75,10 @@
     "sinhala": "සිංහල"
   },
   "HomePage": {
-    "newIncidentReport": "නව සිද්ධි වාර්තාව",
-    "newIncidentDesc": "පහත විස්තර පුරවන්න. දත්ත මුලින්ම දේශීයව සුරැකේ.",
+    "newIncidentReport": "නව ආපදා සිදුවීම් වාර්තාව",
+    "newIncidentDesc": "පහත විස්තර පුරවන්න. දත්ත මුලින්ම උපාංගයේ ම සුරැකේ.",
     "reportQueue": "වාර්තා පෝලිම",
-    "reportQueueDesc": "ඔබගේ සිද්ධි වාර්තා බලන්න සහ කළමනාකරණය කරන්න.",
+    "reportQueueDesc": "ඔබගේ සිදුවීම් වාර්තා බලන්න සහ කළමනාකරණය කරන්න.",
     "all": "සියල්ල",
     "newReport": "නව වාර්තාව",
     "queue": "පෝලිම"
@@ -90,11 +90,11 @@
     "namePlaceholder": "කමල් පෙරේරා",
     "nameRequired": "නම අවශ්‍යයි",
     "phoneLabel": "දුරකථන අංකය",
-    "phonePlaceholder": "+94771234567",
+    "phonePlaceholder": "+94 771234567",
     "phoneRequired": "දුරකථන අංකය අවශ්‍යයි",
     "phoneInvalid": "කරුණාකර වලංගු දුරකථන අංකයක් ඇතුළත් කරන්න",
     "emailLabel": "විද්‍යුත් තැපෑල",
-    "emailPlaceholder": "kamal.perera@example.com",
+    "emailPlaceholder": "kamalperera@example.com",
     "emailInvalid": "කරුණාකර වලංගු විද්‍යුත් තැපැල් ලිපිනයක් ඇතුළත් කරන්න",
     "nicLabel": "ජාතික හැඳුනුම්පත් අංකය",
     "nicPlaceholder": "912345678V",
