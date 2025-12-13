@@ -8,13 +8,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { SyncStatus, Severity, IncidentType } from '@/data/MockReports';
+import { Severity, IncidentType } from '@/data/MockReports';
 
 export interface FilterState {
   search: string;
   incidentType: IncidentType | 'all';
   severity: Severity | 'all';
-  syncStatus: SyncStatus | 'all';
+  adminStatus: 'all' | 'pending' | 'resolved' | 'canceled';
 }
 
 interface ReportFiltersProps {
@@ -26,21 +26,21 @@ interface ReportFiltersProps {
 
 const incidentTypes: IncidentType[] = ['Flood', 'Fire', 'Earthquake', 'Storm', 'Accident', 'Medical', 'Hazmat', 'Infrastructure'];
 const severities: Severity[] = ['Low', 'Medium', 'High', 'Critical'];
-const syncStatuses: SyncStatus[] = ['pending', 'synced', 'failed'];
+// Removed Sync Status filter; using Admin Status only
 
 export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCount }: ReportFiltersProps) {
   const hasActiveFilters = 
     filters.search !== '' || 
     filters.incidentType !== 'all' || 
     filters.severity !== 'all' || 
-    filters.syncStatus !== 'all';
+    filters.adminStatus !== 'all';
 
   const clearFilters = () => {
     onFiltersChange({
       search: '',
       incidentType: 'all',
       severity: 'all',
-      syncStatus: 'all',
+      adminStatus: 'all',
     });
   };
 
@@ -114,19 +114,21 @@ export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCo
           </Select>
         </div>
 
+        
+
         <div className="w-[160px]">
           <Select
-            value={filters.syncStatus}
-            onValueChange={(value) => onFiltersChange({ ...filters, syncStatus: value as SyncStatus | 'all' })}
+            value={filters.adminStatus}
+            onValueChange={(value) => onFiltersChange({ ...filters, adminStatus: value as FilterState['adminStatus'] })}
           >
             <SelectTrigger className="bg-slate-50 border-slate-200">
-              <SelectValue placeholder="Sync Status" />
+              <SelectValue placeholder="Admin Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              {syncStatuses.map((status) => (
-                <SelectItem key={status} value={status} className="capitalize">{status}</SelectItem>
-              ))}
+              <SelectItem value="all">All Admin Statuses</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="resolved">Resolved</SelectItem>
+              <SelectItem value="canceled">Canceled</SelectItem>
             </SelectContent>
           </Select>
         </div>
