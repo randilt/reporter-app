@@ -24,20 +24,10 @@ export const Header = () => {
       >
         <div className="container py-4">
           <div className="flex items-center justify-between gap-4">
-            {/* Safe Place Button - Left */}
-            <button
-              onClick={() => setSafePlaceDialogOpen(true)}
-              className="h-10 w-10 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-950 hover:bg-green-200 dark:hover:bg-green-900 transition-colors cursor-pointer"
-              title="Mark Safe Place"
-            >
-              <ShieldCheck className="h-6 w-6 text-green-600 dark:text-green-400" />
-            </button>
-
             {/* Status Indicator - Centered */}
-            <div className="flex-1 flex justify-center">
+            <div className="">
               <StatusIndicator syncing={syncing} pendingCount={pendingCount} />
             </div>
-
             {/* Right Actions */}
             <div className="flex items-center gap-2">
               {isOnline && pendingCount > 0 && !syncing && (
@@ -56,6 +46,16 @@ export const Header = () => {
           </div>
         </div>
       </motion.header>
+
+      {/* Floating Safe Place Button */}
+      <button
+        onClick={() => setSafePlaceDialogOpen(true)}
+        className="fixed bottom-20 right-6 h-14 w-14 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-950 hover:bg-green-200 dark:hover:bg-green-900 transition-colors cursor-pointer shadow-lg z-50"
+        title="Mark Safe Place"
+        aria-label="Mark Safe Place"
+      >
+        <ShieldCheck className="h-8 w-8 text-green-600 dark:text-green-400" />
+      </button>
 
       <SafePlaceDialog
         open={safePlaceDialogOpen}
