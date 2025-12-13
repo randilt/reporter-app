@@ -155,21 +155,46 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
       <div className="space-y-2">
         <Label className="text-base font-semibold">{t("severityLevel")}</Label>
         <div className="grid grid-cols-4 gap-2">
-          {(Object.keys(severityConfig) as Severity[]).map((sev) => (
-            <button
-              key={sev}
-              type="button"
-              onClick={() => setSeverity(sev)}
-              className={cn(
-                "py-3 px-2 rounded-lg border-2 transition-all text-sm font-semibold",
-                severity === sev
-                  ? `${severityConfig[sev].color} border-transparent text-white`
-                  : "bg-secondary border-border hover:border-primary/50"
-              )}
-            >
-              {t(`severityLevels.${sev}`)}
-            </button>
-          ))}
+          {(Object.keys(severityConfig) as Severity[]).map((sev) => {
+            const isSelected = severity === sev;
+
+            // Define explicit background and text colors for each severity
+            let selectedClasses = "";
+            if (isSelected) {
+              switch (sev) {
+                case "low":
+                  selectedClasses =
+                    "bg-green-500 text-white border-transparent";
+                  break;
+                case "medium":
+                  selectedClasses =
+                    "bg-amber-500 text-white border-transparent";
+                  break;
+                case "high":
+                  selectedClasses = "bg-blue-600 text-white border-transparent";
+                  break;
+                case "critical":
+                  selectedClasses = "bg-red-600 text-white border-transparent";
+                  break;
+              }
+            }
+
+            return (
+              <button
+                key={sev}
+                type="button"
+                onClick={() => setSeverity(sev)}
+                className={cn(
+                  "py-3 px-2 rounded-lg border-2 transition-all text-sm font-semibold",
+                  isSelected
+                    ? selectedClasses
+                    : "bg-secondary border-border hover:border-primary/50"
+                )}
+              >
+                {t(`severityLevels.${sev}`)}
+              </button>
+            );
+          })}
         </div>
       </div>
 
