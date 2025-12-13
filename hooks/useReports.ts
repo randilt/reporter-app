@@ -10,10 +10,12 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { useOnlineStatus } from "./useOnlineStatus";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export const useReports = () => {
   const { isOnline } = useOnlineStatus();
   const [syncing, setSyncing] = useState(false);
+  const t = useTranslations("Toasts");
 
   // Live query for all reports
   const reports = useLiveQuery(
@@ -70,14 +72,13 @@ export const useReports = () => {
 
       await db.reports.add(report);
 
-      toast.success("Report Saved Locally", {
-        description:
-          "Your incident report has been saved. It will sync automatically when online.",
+      toast.success(t("reportSavedLocally"), {
+        description: t("reportSavedLocallyDesc"),
       });
 
       return report;
     },
-    []
+    [t]
   );
 
   // Simulate sync to server
@@ -160,21 +161,20 @@ export const useReports = () => {
         await syncReport(report.localId);
       }
 
-      toast.success("Sync Complete", {
-        description: `Processed ${toSync.length} report(s).`,
+      toast.success(t("syncComplete"), {
+        description: t("syncCompleteDesc", { count: toSync.length }),
       });
     }
 
     setSyncing(false);
-  }, [isOnline, syncing, syncReport]);
+  }, [isOnline, syncing, syncReport, t]);
 
   // Retry a specific failed report
   const retrySync = useCallback(
     async (localId: string) => {
       if (!isOnline) {
-        toast.error("Cannot Sync", {
-          description:
-            "You are currently offline. Sync will resume when online.",
+        toast.error(t("cannotSync"), {
+          description: t("cannotSyncDesc"),
         });
         return;
       }
@@ -182,16 +182,19 @@ export const useReports = () => {
       await db.reports.update(localId, { syncStatus: "pending" as SyncStatus });
       await syncReport(localId);
     },
-    [isOnline, syncReport]
+    [isOnline, syncReport, t]
   );
 
   // Delete a report
-  const deleteReport = useCallback(async (localId: string) => {
-    await db.reports.delete(localId);
-    toast.success("Report Deleted", {
-      description: "The incident report has been removed.",
-    });
-  }, []);
+  const deleteReport = useCallback(
+    async (localId: string) => {
+      await db.reports.delete(localId);
+      toast.success(t("reportDeleted"), {
+        description: t("reportDeletedDesc"),
+      });
+    },
+    [t]
+  );
 
   // Auto-sync when coming online
   useEffect(() => {

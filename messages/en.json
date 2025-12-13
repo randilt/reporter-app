@@ -1,0 +1,66 @@
+{
+  "Header": {
+    "title": "Project Aegis",
+    "subtitle": "Field Reporter"
+  },
+  "IncidentForm": {
+    "incidentType": "Incident Type",
+    "severityLevel": "Severity Level",
+    "gpsLocation": "GPS Location",
+    "acquiring": "Acquiring GPS signal...",
+    "retry": "Retry",
+    "accuracy": "Accuracy: ±{accuracy}m",
+    "timestamp": "Timestamp",
+    "overrideTimestamp": "Override timestamp",
+    "description": "Description (Optional)",
+    "photo": "Photo (Optional)",
+    "capturePhoto": "Tap to capture photo",
+    "save": "Save Incident Report",
+    "reportSaved": "Report Saved",
+    "reportSavedDesc": "Incident saved locally. Will sync automatically."
+  },
+  "ReportsList": {
+    "noReportsAll": "No reports yet. Create your first incident report.",
+    "noReports": "No {status} reports.",
+    "pending": "Pending",
+    "synced": "Synced",
+    "failed": "Failed",
+    "reportDeleted": "Report Deleted",
+    "reportDeletedDesc": "The incident report has been removed.",
+    "syncComplete": "Sync Complete",
+    "syncCompleteDesc": "Processed {count} report(s).",
+    "cannotSync": "Cannot Sync",
+    "cannotSyncDesc": "You are currently offline. Sync will resume when online.",
+    "retry": "Retry",
+    "delete": "Delete"
+  },
+  "StatusIndicator": {
+    "syncing": "Syncing...",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "Toasts": {
+    "reportSavedLocally": "Report Saved Locally",
+    "reportSavedLocallyDesc": "Your incident report has been saved. It will sync automatically when online.",
+    "syncComplete": "Sync Complete",
+    "syncCompleteDesc": "Processed {count} report(s).",
+    "cannotSync": "Cannot Sync",
+    "cannotSyncDesc": "You are currently offline. Sync will resume when online.",
+    "reportDeleted": "Report Deleted",
+    "reportDeletedDesc": "The incident report has been removed."
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "english": "English",
+    "sinhala": "සිංහල"
+  },
+  "HomePage": {
+    "newIncidentReport": "New Incident Report",
+    "newIncidentDesc": "Fill in the details below. Data is saved locally first.",
+    "reportQueue": "Report Queue",
+    "reportQueueDesc": "View and manage your incident reports.",
+    "all": "All",
+    "newReport": "New Report",
+    "queue": "Queue"
+  }
+}

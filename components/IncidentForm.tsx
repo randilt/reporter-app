@@ -1,36 +1,58 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Clock, AlertTriangle, Camera, Loader2, CheckCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
-import { useGeolocation } from '@/hooks/useGeolocation';
-import { useReports } from '@/hooks/useReports';
-import { 
-  type IncidentType, 
-  type Severity, 
-  getDefaultSeverity, 
-  incidentTypeLabels, 
-  severityConfig 
-} from '@/lib/db';
-import { cn } from '@/lib/utils';
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  MapPin,
+  Clock,
+  AlertTriangle,
+  Camera,
+  Loader2,
+  CheckCircle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { useReports } from "@/hooks/useReports";
+import {
+  type IncidentType,
+  type Severity,
+  getDefaultSeverity,
+  incidentTypeLabels,
+  severityConfig,
+} from "@/lib/db";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface IncidentFormProps {
   onSuccess?: () => void;
 }
 
 export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
-  const { location, loading: locationLoading, error: locationError, getLocation } = useGeolocation();
+  const {
+    location,
+    loading: locationLoading,
+    error: locationError,
+    getLocation,
+  } = useGeolocation();
   const { createReport } = useReports();
-  
-  const [incidentType, setIncidentType] = useState<IncidentType | ''>('');
-  const [severity, setSeverity] = useState<Severity | ''>('');
-  const [description, setDescription] = useState('');
+  const t = useTranslations("IncidentForm");
+
+  const [incidentType, setIncidentType] = useState<IncidentType | "">("");
+  const [severity, setSeverity] = useState<Severity | "">("");
+  const [description, setDescription] = useState("");
   const [overrideTime, setOverrideTime] = useState(false);
-  const [customTime, setCustomTime] = useState('');
+  const [customTime, setCustomTime] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -48,11 +70,11 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!incidentType || !severity || !location) return;
-    
+
     setSubmitting(true);
-    
+
     try {
       const now = new Date();
       await createReport({
@@ -61,15 +83,18 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
         description: description || undefined,
         locationCapturedAtCreation: location,
         deviceTime: now.toISOString(),
-        userCorrectedTime: overrideTime && customTime ? new Date(customTime).toISOString() : null,
+        userCorrectedTime:
+          overrideTime && customTime
+            ? new Date(customTime).toISOString()
+            : null,
       });
-      
+
       setSubmitted(true);
       setTimeout(() => {
         onSuccess?.();
       }, 1500);
     } catch (error) {
-      console.error('Failed to save report:', error);
+      console.error("Failed to save report:", error);
     } finally {
       setSubmitting(false);
     }
@@ -85,15 +110,13 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           className="w-20 h-20 rounded-full bg-success/20 flex items-center justify-center mb-6 glow-success"
         >
           <CheckCircle className="w-10 h-10 text-success" />
         </motion.div>
-        <h3 className="text-2xl font-bold mb-2">Report Saved</h3>
-        <p className="text-muted-foreground">
-          Incident saved locally. Will sync automatically.
-        </p>
+        <h3 className="text-2xl font-bold mb-2">{t("reportSaved")}</h3>
+        <p className="text-muted-foreground">{t("reportSavedDesc")}</p>
       </motion.div>
     );
   }
@@ -109,9 +132,12 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
       <div className="space-y-2">
         <Label className="text-base font-semibold flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-primary" />
-          Incident Type
+          {t("incidentType")}
         </Label>
-        <Select value={incidentType} onValueChange={(v) => setIncidentType(v as IncidentType)}>
+        <Select
+          value={incidentType}
+          onValueChange={(v) => setIncidentType(v as IncidentType)}
+        >
           <SelectTrigger className="h-14 text-lg bg-secondary border-border hover:border-primary/50 transition-colors">
             <SelectValue placeholder="Select incident type" />
           </SelectTrigger>
@@ -127,7 +153,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
 
       {/* Severity */}
       <div className="space-y-2">
-        <Label className="text-base font-semibold">Severity Level</Label>
+        <Label className="text-base font-semibold">{t("severityLevel")}</Label>
         <div className="grid grid-cols-4 gap-2">
           {(Object.keys(severityConfig) as Severity[]).map((sev) => (
             <button
@@ -151,19 +177,24 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
       <div className="space-y-2">
         <Label className="text-base font-semibold flex items-center gap-2">
           <MapPin className="w-4 h-4 text-primary" />
-          GPS Location
+          {t("gpsLocation")}
         </Label>
         <div className="p-4 rounded-lg bg-secondary border border-border">
           {locationLoading ? (
             <div className="flex items-center gap-3 text-muted-foreground">
               <Loader2 className="w-5 h-5 animate-spin" />
-              <span>Acquiring GPS signal...</span>
+              <span>{t("acquiring")}</span>
             </div>
           ) : locationError ? (
             <div className="space-y-2">
               <p className="text-destructive text-sm">{locationError}</p>
-              <Button type="button" variant="outline" size="sm" onClick={() => getLocation()}>
-                Retry
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => getLocation()}
+              >
+                {t("retry")}
               </Button>
             </div>
           ) : location ? (
@@ -172,11 +203,17 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
                 {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
               </p>
               <p className="text-xs text-muted-foreground">
-                Accuracy: ±{location.accuracyMeters.toFixed(0)}m
+                {t("accuracy", {
+                  accuracy: location.accuracyMeters.toFixed(0),
+                })}
               </p>
             </div>
           ) : (
-            <Button type="button" variant="outline" onClick={() => getLocation()}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => getLocation()}
+            >
               Get Location
             </Button>
           )}
@@ -187,15 +224,16 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
       <div className="space-y-3">
         <Label className="text-base font-semibold flex items-center gap-2">
           <Clock className="w-4 h-4 text-primary" />
-          Timestamp
+          {t("timestamp")}
         </Label>
         <div className="p-4 rounded-lg bg-secondary border border-border">
-          <p className="font-mono mb-3">
-            {new Date().toLocaleString()}
-          </p>
+          <p className="font-mono mb-3">{new Date().toLocaleString()}</p>
           <div className="flex items-center justify-between">
-            <Label htmlFor="override-time" className="text-sm text-muted-foreground">
-              Override timestamp
+            <Label
+              htmlFor="override-time"
+              className="text-sm text-muted-foreground"
+            >
+              {t("overrideTimestamp")}
             </Label>
             <Switch
               id="override-time"
@@ -206,7 +244,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
           {overrideTime && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               className="mt-3"
             >
               <Input
@@ -222,7 +260,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
 
       {/* Description */}
       <div className="space-y-2">
-        <Label className="text-base font-semibold">Description (Optional)</Label>
+        <Label className="text-base font-semibold">{t("description")}</Label>
         <Textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -235,11 +273,11 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
       <div className="space-y-2">
         <Label className="text-base font-semibold flex items-center gap-2">
           <Camera className="w-4 h-4 text-primary" />
-          Photo (Optional)
+          {t("photo")}
         </Label>
         <div className="p-8 rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer flex flex-col items-center justify-center text-muted-foreground">
           <Camera className="w-8 h-8 mb-2" />
-          <span className="text-sm">Tap to capture photo</span>
+          <span className="text-sm">{t("capturePhoto")}</span>
         </div>
       </div>
 
@@ -257,7 +295,7 @@ export const IncidentForm = ({ onSuccess }: IncidentFormProps) => {
               Saving...
             </>
           ) : (
-            'Save Incident Report'
+            t("save")
           )}
         </Button>
       </div>

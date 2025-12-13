@@ -1,0 +1,66 @@
+{
+  "Header": {
+    "title": "ප්‍රොජෙක්ට් ඒජිස්",
+    "subtitle": "ක්ෂේත්‍ර වාර්තාකරු"
+  },
+  "IncidentForm": {
+    "incidentType": "ආසිද්ධී ප්‍රකාරය",
+    "severityLevel": "දරුණුකම",
+    "gpsLocation": "GPS ස්ථානය",
+    "acquiring": "GPS සංKeතය ලබා ගනී...",
+    "retry": "다වට උත්සාහ කරන්න",
+    "accuracy": "නිවැරදිභාවය: ±{accuracy}m",
+    "timestamp": "කාලසටහන",
+    "overrideTimestamp": "කාලය අඩංගු කරන්න",
+    "description": "විස්තර (අමතර)",
+    "photo": "ඡායාරූපය (අමතර)",
+    "capturePhoto": "ඡායාරූපයක් ගන්න",
+    "save": "වාර්තාව සුරකින්න",
+    "reportSaved": "වාර්තාව සුරක්ෂිතයි",
+    "reportSavedDesc": "ආසිද්ධී වාර්තාව ස්ථානයේ සුරක්ෂිත කරන ලදී. ස්වයංක්‍රීයව සංක‍්‍යනය වේ."
+  },
+  "ReportsList": {
+    "noReportsAll": "වර්තමානයේ වාර්තා නැත. මුලින්ම වාර්තාවක් සාදන්න.",
+    "noReports": "{status} වාර්තාවන් නොමැත.",
+    "pending": "පැවතියි",
+    "synced": "සංක‍්‍රස්ත",
+    "failed": "අසාර්ථකයි",
+    "reportDeleted": "වාර්තාව මකා දමනු ලදි",
+    "reportDeletedDesc": "ආසිද්ධී වාර්තාව ඉවත් කර ඇත.",
+    "syncComplete": "සංක‍්‍රියය සම්පූර්ණයි",
+    "syncCompleteDesc": "සංස්කරණය කළ වාර්තා: {count}",
+    "cannotSync": "සංක්‍රිය කළ නොහැක",
+    "cannotSyncDesc": "ඔබ දැන් අන්තර්ජාලයට සම්බන්ධ නොවේ. සංක‍්‍රිය කිරීම පසු වරට සිදු වේ.",
+    "retry": "ආයෙත් උත්සාහ කරන්න",
+    "delete": "මකන්න"
+  },
+  "StatusIndicator": {
+    "syncing": "සංක්‍රිය වෙමින්...",
+    "online": "අන්තර්ජාල සම්බන්ධයි",
+    "offline": "අන්තර්ජාලයට සම්බන්ධ නොවේ"
+  },
+  "Toasts": {
+    "reportSavedLocally": "වාර්තාව ස්ථානගත කර ඇත",
+    "reportSavedLocallyDesc": "ඔබගේ වාර්තාව සුරක්ෂිත කරන ලදී. අන්තර්ජාලයට සම්බන්ධ වීමේදී ස්වයංක්‍රීයව සංක‍්‍රිය වේ.",
+    "syncComplete": "සංක‍්‍රිය කිරීම සම්පූර්ණයි",
+    "syncCompleteDesc": "සංස්කරණය කළ වාර්තා: {count}",
+    "cannotSync": "සංක‍්‍රිය කළ නොහැක",
+    "cannotSyncDesc": "ඔබ දැන් අන්තර්ජාලයෙන් පිටවී සිටී. සංක‍්‍රිය කිරීම පසු වරට සිදු වේ.",
+    "reportDeleted": "වාර්තාව මකා දමන ලදි",
+    "reportDeletedDesc": "වාර්තාව ඉවත් කළා."
+  },
+  "LanguageSwitcher": {
+    "label": "භාෂාව",
+    "english": "English",
+    "sinhala": "සිංහල"
+  },
+  "HomePage": {
+    "newIncidentReport": "නව ආසිද්ධී වාර්තාව",
+    "newIncidentDesc": "විස්තර පහත පුරවන්න. දත්ත මුලින්ම ස්ථානගතව සුරක්ෂිත වේ.",
+    "reportQueue": "වාර්තා පෝලිම",
+    "reportQueueDesc": "ඔබේ වාර්තා බලන්න සහ කළමනාකරණය කරන්න.",
+    "all": "සියලුම",
+    "newReport": "නව වාර්තාව",
+    "queue": "පෝලිම"
+  }
+}
