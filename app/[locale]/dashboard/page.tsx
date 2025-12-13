@@ -137,7 +137,7 @@ export default function DashboardPage() {
                 </div>
                 {view === "map" && (
                   <div className="bg-white rounded-lg shadow-lg p-6">
-                    <LiveMap />
+                    <LiveMap reports={filteredReports} />
                   </div>
                 )}
 
