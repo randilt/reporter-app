@@ -35,14 +35,14 @@ interface SeverityBadgeProps {
 
 export function SeverityBadge({ severity }: SeverityBadgeProps) {
   const severityConfig: Record<Severity, string> = {
-    Low: 'severity-low',
-    Medium: 'severity-medium',
-    High: 'severity-high',
-    Critical: 'severity-critical',
+    Low: 'font-bold text-green-600',
+    Medium: 'font-bold text-yellow-600',
+    High: 'font-bold text-red-600',
+    Critical: 'font-bold text-red-700',
   };
 
   return (
-    <span className={cn('status-badge', severityConfig[severity])}>
+    <span className={severityConfig[severity]}>
       {severity}
     </span>
   );

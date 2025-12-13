@@ -74,7 +74,6 @@ export function ListView({ reports }: ListViewProps) {
               >
                 Created <SortIcon field="createdAtLocal" />
               </TableHead>
-              <TableHead className="text-muted-foreground font-medium">Sync Status</TableHead>
               <TableHead className="text-muted-foreground font-medium">Latency</TableHead>
               <TableHead className="text-muted-foreground font-medium w-10"></TableHead>
             </TableRow>
@@ -103,9 +102,6 @@ export function ListView({ reports }: ListViewProps) {
                   <TableCell className="text-sm text-muted-foreground">
                     {format(new Date(report.createdAtLocal), 'MMM d, HH:mm')}
                   </TableCell>
-                  <TableCell>
-                    <StatusBadge status={report.syncStatus} animated />
-                  </TableCell>
                   <TableCell className="font-mono text-xs text-muted-foreground">
                     {formatLatency(getSyncLatency(report))}
                   </TableCell>
@@ -121,7 +117,7 @@ export function ListView({ reports }: ListViewProps) {
                 </TableRow>
                 {expandedRow === report.localId && (
                   <TableRow className="bg-secondary/30 border-border/30">
-                    <TableCell colSpan={8} className="py-4">
+                    <TableCell colSpan={7} className="py-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm animate-fade-in">
                         <div className="space-y-2">
                           <div className="text-muted-foreground text-xs uppercase tracking-wider">Description</div>
