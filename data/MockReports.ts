@@ -79,10 +79,8 @@ export function convertApiToReport(
   return {
     localId: apiReport.localId,
     serverId: apiReport.serverId || null,
-    incidentType: (apiReport.incidentType.charAt(0).toUpperCase() +
-      apiReport.incidentType.slice(1)) as IncidentType,
-    severity: (apiReport.severity.charAt(0).toUpperCase() +
-      apiReport.severity.slice(1)) as Severity,
+    incidentType: apiReport.incidentType.toLowerCase() as IncidentType,
+    severity: apiReport.severity.toLowerCase() as Severity,
     createdAtLocal: apiReport.createdAtLocal,
     syncedAt: null,
     locationCapturedAtCreation: apiReport.locationCapturedAtCreation,
