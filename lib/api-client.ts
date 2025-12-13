@@ -43,7 +43,8 @@ export interface SyncResponse {
   data?: {
     serverId: string;
     localId: string;
-    syncedAt: string;
+    createdByUser: string; // When user actually created the incident
+    syncedAt: string; // When server received/processed it
     message: string;
   };
   error?: string;

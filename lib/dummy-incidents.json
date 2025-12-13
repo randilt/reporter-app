@@ -1,0 +1,608 @@
+[
+  {
+    "id": "srv_1734089234567_a1b2c3",
+    "localId": "local_1734089234567_x9y8z7",
+    "type": "fire",
+    "description": "Large fire reported at commercial building on Main Street. Multiple floors affected, heavy smoke visible from distance.",
+    "location": {
+      "latitude": 6.9271,
+      "longitude": 79.8612,
+      "address": "123 Main Street, Colombo 01, Sri Lanka"
+    },
+    "severity": "high",
+    "status": "in-progress",
+    "reporter": {
+      "name": "Kamal Perera",
+      "phone": "+94771234567",
+      "email": "kamal.perera@email.com"
+    },
+    "responder": {
+      "name": "Fire Chief Nimal Silva",
+      "mobile": "+94772345678",
+      "unit": "Fire Station Alpha",
+      "badge": "FS-001"
+    },
+    "createdByUser": "2024-12-13T08:20:34.567Z",
+    "syncedAt": "2024-12-13T08:25:12.123Z",
+    "updatedAt": "2024-12-13T08:35:12.123Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident1_img1.jpg",
+      "https://example.com/incident1_img2.jpg"
+    ]
+  },
+  {
+    "id": "srv_1734088934123_d4e5f6",
+    "localId": "local_1734088934123_w6v5u4",
+    "type": "medical",
+    "description": "Traffic accident with multiple casualties at Galle Road intersection. Ambulance required immediately.",
+    "location": {
+      "latitude": 6.9147,
+      "longitude": 79.873,
+      "address": "Galle Road, Bambalapitiya, Colombo 04"
+    },
+    "severity": "critical",
+    "status": "resolved",
+    "reporter": {
+      "name": "Sanduni Fernando",
+      "phone": "+94763456789",
+      "email": "sanduni.f@email.com"
+    },
+    "responder": {
+      "name": "Dr. Ruwan Jayawardena",
+      "mobile": "+94773456789",
+      "unit": "Colombo General Hospital",
+      "badge": "EMT-042"
+    },
+    "updatedAt": "2024-12-13T09:20:45.678Z",
+    "synced": true,
+    "images": ["https://example.com/incident2_img1.jpg"],
+    "createdByUser": "2024-12-13T08:15:34.123Z",
+    "syncedAt": "2024-12-13T08:21:15.873Z"
+  },
+  {
+    "id": "srv_1734087634890_g7h8i9",
+    "localId": "local_1734087634890_t3s2r1",
+    "type": "crime",
+    "description": "Suspicious activity reported near jewelry store. Possible attempted break-in.",
+    "location": {
+      "latitude": 6.9349,
+      "longitude": 79.8538,
+      "address": "Pettah Market Road, Colombo 11"
+    },
+    "severity": "medium",
+    "status": "in-progress",
+    "reporter": {
+      "name": "Dilshan Rajapaksa",
+      "phone": "+94754567890",
+      "email": "dilshan.r@email.com"
+    },
+    "responder": {
+      "name": "Inspector Chaminda Wickramasinghe",
+      "mobile": "+94774567890",
+      "unit": "Colombo Central Police",
+      "badge": "POL-156"
+    },
+    "updatedAt": "2024-12-13T08:10:22.456Z",
+    "synced": true,
+    "images": [],
+    "createdByUser": "2024-12-13T07:53:54.890Z",
+    "syncedAt": "2024-12-13T07:57:36.333Z"
+  },
+  {
+    "id": "srv_1734086234456_j1k2l3",
+    "localId": "local_1734086234456_q9p8o7",
+    "type": "flood",
+    "description": "Flash flooding on residential street after heavy rainfall. Water level rising rapidly, families trapped on upper floors.",
+    "location": {
+      "latitude": 6.8935,
+      "longitude": 79.8569,
+      "address": "Baseline Road, Colombo 09"
+    },
+    "severity": "high",
+    "status": "pending",
+    "reporter": {
+      "name": "Tharindu Gunasekara",
+      "phone": "+94745678901",
+      "email": "tharindu.g@email.com"
+    },
+    "responder": {
+      "name": "Lt. Pradeep Samaraweera",
+      "mobile": "+94775678901",
+      "unit": "Disaster Response Team Bravo",
+      "badge": "DRT-089"
+    },
+    "updatedAt": "2024-12-13T07:30:34.456Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident4_img1.jpg",
+      "https://example.com/incident4_img2.jpg",
+      "https://example.com/incident4_img3.jpg"
+    ],
+    "createdByUser": "2024-12-13T07:30:34.456Z",
+    "syncedAt": "2024-12-13T07:31:50.382Z"
+  },
+  {
+    "id": "srv_1734085134789_m4n5o6",
+    "localId": "local_1734085134789_n6m5l4",
+    "type": "infrastructure",
+    "description": "Major power line down across main road. Sparking wires pose electrocution hazard. Road closed to traffic.",
+    "location": {
+      "latitude": 6.9388,
+      "longitude": 79.8539,
+      "address": "Maradana Road, Colombo 10"
+    },
+    "severity": "critical",
+    "status": "in-progress",
+    "reporter": {
+      "name": "Lakshmi Wijesinghe",
+      "phone": "+94736789012",
+      "email": "lakshmi.w@email.com"
+    },
+    "responder": {
+      "name": "Engineer Sunil Bandara",
+      "mobile": "+94776789012",
+      "unit": "Ceylon Electricity Board - Emergency",
+      "badge": "CEB-234"
+    },
+    "updatedAt": "2024-12-13T07:45:33.890Z",
+    "synced": true,
+    "images": ["https://example.com/incident5_img1.jpg"],
+    "createdByUser": "2024-12-13T07:12:14.789Z",
+    "syncedAt": "2024-12-13T07:13:23.869Z"
+  },
+  {
+    "id": "srv_1734084034123_p7q8r9",
+    "localId": "local_1734084034123_k3j2i1",
+    "type": "fire",
+    "description": "Kitchen fire in apartment complex. Residents evacuated safely, fire contained to single unit.",
+    "location": {
+      "latitude": 6.9144,
+      "longitude": 79.896,
+      "address": "Park Avenue, Wellawatte, Colombo 06"
+    },
+    "severity": "medium",
+    "status": "resolved",
+    "reporter": {
+      "name": "Asanka De Silva",
+      "phone": "+94727890123",
+      "email": "asanka.ds@email.com"
+    },
+    "responder": {
+      "name": "Fire Officer Mahesh Kumara",
+      "mobile": "+94777890123",
+      "unit": "Fire Station Beta",
+      "badge": "FS-087"
+    },
+    "updatedAt": "2024-12-13T07:30:22.567Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident6_img1.jpg",
+      "https://example.com/incident6_img2.jpg"
+    ],
+    "createdByUser": "2024-12-13T06:53:54.123Z",
+    "syncedAt": "2024-12-13T06:57:44.284Z"
+  },
+  {
+    "id": "srv_1734082934456_s1t2u3",
+    "localId": "local_1734082934456_h9g8f7",
+    "type": "medical",
+    "description": "Elderly person collapsed at bus stop. Unconscious, needs immediate medical attention.",
+    "location": {
+      "latitude": 6.927,
+      "longitude": 79.8612,
+      "address": "Fort Railway Station, Colombo 01"
+    },
+    "severity": "high",
+    "status": "resolved",
+    "reporter": {
+      "name": "Nimali Jayakody",
+      "phone": "+94718901234",
+      "email": "nimali.j@email.com"
+    },
+    "responder": {
+      "name": "Dr. Anura Rodrigo",
+      "mobile": "+94778901234",
+      "unit": "National Hospital Colombo",
+      "badge": "EMT-067"
+    },
+    "updatedAt": "2024-12-13T07:05:12.789Z",
+    "synced": true,
+    "images": [],
+    "createdByUser": "2024-12-13T06:35:34.456Z",
+    "syncedAt": "2024-12-13T06:36:37.231Z"
+  },
+  {
+    "id": "srv_1734081834789_v4w5x6",
+    "localId": "local_1734081834789_e6d5c4",
+    "type": "crime",
+    "description": "Armed robbery in progress at convenience store. Suspects still on premises, police backup needed urgently.",
+    "location": {
+      "latitude": 6.8936,
+      "longitude": 79.8584,
+      "address": "Duplication Road, Colombo 04"
+    },
+    "severity": "critical",
+    "status": "in-progress",
+    "reporter": {
+      "name": "Priyanka Mendis",
+      "phone": "+94709012345",
+      "email": "priyanka.m@email.com"
+    },
+    "responder": {
+      "name": "Sergeant Rohan Perera",
+      "mobile": "+94779012345",
+      "unit": "Colombo South Police - Rapid Response",
+      "badge": "POL-234"
+    },
+    "updatedAt": "2024-12-13T06:25:45.123Z",
+    "synced": true,
+    "images": ["https://example.com/incident8_img1.jpg"],
+    "createdByUser": "2024-12-13T06:17:14.789Z",
+    "syncedAt": "2024-12-13T06:19:05.277Z"
+  },
+  {
+    "id": "srv_1734080734123_y7z8a9",
+    "localId": "local_1734080734123_b3a2z1",
+    "type": "infrastructure",
+    "description": "Large tree fallen across main road blocking both lanes. Possible damage to parked vehicles underneath.",
+    "location": {
+      "latitude": 6.9023,
+      "longitude": 79.8612,
+      "address": "Green Path, Colombo 03"
+    },
+    "severity": "medium",
+    "status": "pending",
+    "reporter": {
+      "name": "Rajitha Amarasinghe",
+      "phone": "+94700123456",
+      "email": "rajitha.a@email.com"
+    },
+    "responder": {
+      "name": "Supervisor Gamini Fonseka",
+      "mobile": "+94770123456",
+      "unit": "Municipal Council - Emergency Services",
+      "badge": "MC-123"
+    },
+    "updatedAt": "2024-12-13T05:58:54.123Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident9_img1.jpg",
+      "https://example.com/incident9_img2.jpg"
+    ],
+    "createdByUser": "2024-12-13T05:58:54.123Z",
+    "syncedAt": "2024-12-13T06:00:18.386Z"
+  },
+  {
+    "id": "srv_1734079634456_b1c2d3",
+    "localId": "local_1734079634456_y9x8w7",
+    "type": "flood",
+    "description": "Sewage overflow causing flooding in residential area. Health hazard, immediate cleanup required.",
+    "location": {
+      "latitude": 6.8834,
+      "longitude": 79.8787,
+      "address": "Kirulapone Avenue, Colombo 05"
+    },
+    "severity": "high",
+    "status": "in-progress",
+    "reporter": {
+      "name": "Chaminda Rathnayake",
+      "phone": "+94691234567",
+      "email": "chaminda.r@email.com"
+    },
+    "responder": {
+      "name": "Engineer Saman Dias",
+      "mobile": "+94771234568",
+      "unit": "Water Supply & Drainage Board",
+      "badge": "WSDB-067"
+    },
+    "updatedAt": "2024-12-13T06:15:23.678Z",
+    "synced": true,
+    "images": ["https://example.com/incident10_img1.jpg"],
+    "createdByUser": "2024-12-13T05:40:34.456Z",
+    "syncedAt": "2024-12-13T05:42:19.921Z"
+  },
+  {
+    "id": "srv_1734078534789_e4f5g6",
+    "localId": "local_1734078534789_v6u5t4",
+    "type": "medical",
+    "description": "Child fell from playground equipment at public park. Possible fracture, parents present but distressed.",
+    "location": {
+      "latitude": 6.912,
+      "longitude": 79.884,
+      "address": "Viharamahadevi Park, Colombo 07"
+    },
+    "severity": "medium",
+    "status": "resolved",
+    "reporter": {
+      "name": "Malini Samarawickrama",
+      "phone": "+94682345678",
+      "email": "malini.s@email.com"
+    },
+    "responder": {
+      "name": "Dr. Thilini Abeywickrama",
+      "mobile": "+94772345679",
+      "unit": "Lady Ridgeway Hospital",
+      "badge": "EMT-101"
+    },
+    "updatedAt": "2024-12-13T06:10:45.234Z",
+    "synced": true,
+    "images": [],
+    "createdByUser": "2024-12-13T05:22:14.789Z",
+    "syncedAt": "2024-12-13T05:25:12.431Z"
+  },
+  {
+    "id": "srv_1734077434123_h7i8j9",
+    "localId": "local_1734077434123_s3r2q1",
+    "type": "fire",
+    "description": "Vehicle fire on expressway. Single vehicle involved, driver evacuated safely, fire spreading to nearby vegetation.",
+    "location": {
+      "latitude": 6.856,
+      "longitude": 79.9291,
+      "address": "Colombo-Katunayake Expressway, KM 12"
+    },
+    "severity": "high",
+    "status": "resolved",
+    "reporter": {
+      "name": "Dinesh Bandara",
+      "phone": "+94673456789",
+      "email": "dinesh.b@email.com"
+    },
+    "responder": {
+      "name": "Fire Chief Ajith Gunasekara",
+      "mobile": "+94773456780",
+      "unit": "Fire Station Gamma - Highway Unit",
+      "badge": "FS-145"
+    },
+    "updatedAt": "2024-12-13T05:45:12.890Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident12_img1.jpg",
+      "https://example.com/incident12_img2.jpg",
+      "https://example.com/incident12_img3.jpg"
+    ],
+    "createdByUser": "2024-12-13T05:03:54.123Z",
+    "syncedAt": "2024-12-13T05:07:51.451Z"
+  },
+  {
+    "id": "srv_1734076334456_k1l2m3",
+    "localId": "local_1734076334456_p9o8n7",
+    "type": "crime",
+    "description": "Domestic disturbance reported. Loud arguing and sounds of property damage. Neighbors concerned for safety.",
+    "location": {
+      "latitude": 6.8987,
+      "longitude": 79.8543,
+      "address": "Ward Place, Colombo 07"
+    },
+    "severity": "medium",
+    "status": "resolved",
+    "reporter": {
+      "name": "Anonymous Caller",
+      "phone": "+94664567890",
+      "email": null
+    },
+    "responder": {
+      "name": "Officer Kusala Fernando",
+      "mobile": "+94774567891",
+      "unit": "Cinnamon Gardens Police",
+      "badge": "POL-178"
+    },
+    "updatedAt": "2024-12-13T05:20:34.567Z",
+    "synced": true,
+    "images": [],
+    "createdByUser": "2024-12-13T04:45:34.456Z",
+    "syncedAt": "2024-12-13T04:47:32.391Z"
+  },
+  {
+    "id": "srv_1734075234789_n4o5p6",
+    "localId": "local_1734075234789_m6l5k4",
+    "type": "infrastructure",
+    "description": "Gas leak detected near commercial building. Strong odor reported, area being evacuated as precaution.",
+    "location": {
+      "latitude": 6.9333,
+      "longitude": 79.85,
+      "address": "Main Street, Colombo 11"
+    },
+    "severity": "critical",
+    "status": "in-progress",
+    "reporter": {
+      "name": "Suresh Wickramaratne",
+      "phone": "+94655678901",
+      "email": "suresh.w@email.com"
+    },
+    "responder": {
+      "name": "Engineer Lalith Senanayake",
+      "mobile": "+94775678902",
+      "unit": "Laugfs Gas - Emergency Response",
+      "badge": "LG-045"
+    },
+    "updatedAt": "2024-12-13T04:50:45.123Z",
+    "synced": true,
+    "images": ["https://example.com/incident14_img1.jpg"],
+    "createdByUser": "2024-12-13T04:27:14.789Z",
+    "syncedAt": "2024-12-13T04:29:00.441Z"
+  },
+  {
+    "id": "srv_1734074134123_q7r8s9",
+    "localId": "local_1734074134123_j3i2h1",
+    "type": "medical",
+    "description": "Workplace accident at construction site. Worker injured by falling debris, bleeding heavily.",
+    "location": {
+      "latitude": 6.9212,
+      "longitude": 79.8544,
+      "address": "Union Place, Colombo 02"
+    },
+    "severity": "critical",
+    "status": "resolved",
+    "reporter": {
+      "name": "Ranjith Herath",
+      "phone": "+94646789012",
+      "email": "ranjith.h@email.com"
+    },
+    "responder": {
+      "name": "Dr. Kumari Dissanayake",
+      "mobile": "+94776789013",
+      "unit": "Castle Street Hospital",
+      "badge": "EMT-092"
+    },
+    "updatedAt": "2024-12-13T04:55:23.456Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident15_img1.jpg",
+      "https://example.com/incident15_img2.jpg"
+    ],
+    "createdByUser": "2024-12-13T04:08:54.123Z",
+    "syncedAt": "2024-12-13T04:13:32.597Z"
+  },
+  {
+    "id": "srv_1734073034456_t1u2v3",
+    "localId": "local_1734073034456_g9f8e7",
+    "type": "flood",
+    "description": "Canal overflow flooding neighborhood streets. Multiple homes at risk, sandbags needed urgently.",
+    "location": {
+      "latitude": 6.8789,
+      "longitude": 79.8698,
+      "address": "Pamankada Lane, Colombo 06"
+    },
+    "severity": "high",
+    "status": "pending",
+    "reporter": {
+      "name": "Anura Silva",
+      "phone": "+94637890123",
+      "email": "anura.s@email.com"
+    },
+    "responder": {
+      "name": "Lt. Nuwan Jayasinghe",
+      "mobile": "+94777890124",
+      "unit": "Disaster Response Team Charlie",
+      "badge": "DRT-112"
+    },
+    "updatedAt": "2024-12-13T03:50:34.456Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident16_img1.jpg",
+      "https://example.com/incident16_img2.jpg"
+    ],
+    "createdByUser": "2024-12-13T03:50:34.456Z",
+    "syncedAt": "2024-12-13T03:53:59.427Z"
+  },
+  {
+    "id": "srv_1734071934789_w4x5y6",
+    "localId": "local_1734071934789_d6c5b4",
+    "type": "crime",
+    "description": "Vandalism at public school. Windows broken, graffiti on walls. Perpetrators fled the scene.",
+    "location": {
+      "latitude": 6.9056,
+      "longitude": 79.8789,
+      "address": "Thimbirigasyaya Road, Colombo 05"
+    },
+    "severity": "low",
+    "status": "pending",
+    "reporter": {
+      "name": "Samantha Wijesekara",
+      "phone": "+94628901234",
+      "email": "samantha.w@email.com"
+    },
+    "responder": {
+      "name": "Constable Janaka Abeyratne",
+      "mobile": "+94778901235",
+      "unit": "Narahenpita Police",
+      "badge": "POL-089"
+    },
+    "updatedAt": "2024-12-13T03:32:14.789Z",
+    "synced": true,
+    "images": ["https://example.com/incident17_img1.jpg"],
+    "createdByUser": "2024-12-13T03:32:14.789Z",
+    "syncedAt": "2024-12-13T03:33:21.537Z"
+  },
+  {
+    "id": "srv_1734070834123_z7a8b9",
+    "localId": "local_1734070834123_a3z2y1",
+    "type": "infrastructure",
+    "description": "Water main break flooding street. Traffic disrupted, businesses affected by water damage.",
+    "location": {
+      "latitude": 6.9178,
+      "longitude": 79.8654,
+      "address": "Baseline Road, Colombo 09"
+    },
+    "severity": "high",
+    "status": "in-progress",
+    "reporter": {
+      "name": "Buddhi Rathnayake",
+      "phone": "+94619012345",
+      "email": "buddhi.r@email.com"
+    },
+    "responder": {
+      "name": "Engineer Piyal Gunawardena",
+      "mobile": "+94779012346",
+      "unit": "National Water Supply & Drainage Board",
+      "badge": "NWSDB-156"
+    },
+    "updatedAt": "2024-12-13T03:45:12.678Z",
+    "synced": true,
+    "images": [
+      "https://example.com/incident18_img1.jpg",
+      "https://example.com/incident18_img2.jpg"
+    ],
+    "createdByUser": "2024-12-13T03:13:54.123Z",
+    "syncedAt": "2024-12-13T03:18:19.527Z"
+  },
+  {
+    "id": "srv_1734069734456_c1d2e3",
+    "localId": "local_1734069734456_x9w8v7",
+    "type": "medical",
+    "description": "Severe allergic reaction at restaurant. Patron having difficulty breathing after meal.",
+    "location": {
+      "latitude": 6.9234,
+      "longitude": 79.8501,
+      "address": "Galle Face, Colombo 03"
+    },
+    "severity": "critical",
+    "status": "resolved",
+    "reporter": {
+      "name": "Restaurant Manager",
+      "phone": "+94610123456",
+      "email": "manager@restaurant.lk"
+    },
+    "responder": {
+      "name": "Dr. Sampath Wijeratne",
+      "mobile": "+94770123457",
+      "unit": "Colombo General Hospital",
+      "badge": "EMT-078"
+    },
+    "updatedAt": "2024-12-13T03:30:45.890Z",
+    "synced": true,
+    "images": [],
+    "createdByUser": "2024-12-13T02:55:34.456Z",
+    "syncedAt": "2024-12-13T03:01:09.763Z"
+  },
+  {
+    "id": "srv_1734068634789_f4g5h6",
+    "localId": "local_1734068634789_u6t5s4",
+    "type": "fire",
+    "description": "Small electrical fire in office building. Smoke on 3rd floor, building evacuation in progress.",
+    "location": {
+      "latitude": 6.9311,
+      "longitude": 79.8478,
+      "address": "York Street, Colombo 01"
+    },
+    "severity": "medium",
+    "status": "resolved",
+    "reporter": {
+      "name": "Security Officer",
+      "phone": "+94601234567",
+      "email": "security@building.lk"
+    },
+    "responder": {
+      "name": "Fire Officer Chandana Bandara",
+      "mobile": "+94771234569",
+      "unit": "Fire Station Alpha",
+      "badge": "FS-023"
+    },
+    "updatedAt": "2024-12-13T03:15:34.123Z",
+    "synced": true,
+    "images": ["https://example.com/incident20_img1.jpg"],
+    "createdByUser": "2024-12-13T02:37:14.789Z",
+    "syncedAt": "2024-12-13T02:41:40.817Z"
+  }
+]
