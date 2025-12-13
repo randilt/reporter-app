@@ -1,20 +1,21 @@
-import { Search, Filter, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Search, Filter, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Severity, IncidentType } from '@/data/MockReports';
+} from "@/components/ui/select";
+import { Severity, IncidentType } from "@/data/MockReports";
+import { incidentTypeLabels } from "@/lib/db";
 
 export interface FilterState {
   search: string;
-  incidentType: IncidentType | 'all';
-  severity: Severity | 'all';
-  adminStatus: 'all' | 'pending' | 'resolved' | 'canceled';
+  incidentType: IncidentType | "all";
+  severity: Severity | "all";
+  adminStatus: "all" | "pending" | "resolved" | "canceled";
 }
 
 interface ReportFiltersProps {
@@ -24,23 +25,35 @@ interface ReportFiltersProps {
   filteredCount: number;
 }
 
-const incidentTypes: IncidentType[] = ['Flood', 'Fire', 'Earthquake', 'Storm', 'Accident', 'Medical', 'Hazmat', 'Infrastructure'];
-const severities: Severity[] = ['Low', 'Medium', 'High', 'Critical'];
+const incidentTypes: IncidentType[] = [
+  "flood",
+  "landslide",
+  "fire",
+  "accident",
+  "road_block",
+  "power_line_down",
+];
+const severities: Severity[] = ["low", "medium", "high", "critical"];
 // Removed Sync Status filter; using Admin Status only
 
-export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCount }: ReportFiltersProps) {
-  const hasActiveFilters = 
-    filters.search !== '' || 
-    filters.incidentType !== 'all' || 
-    filters.severity !== 'all' || 
-    filters.adminStatus !== 'all';
+export function ReportFilters({
+  filters,
+  onFiltersChange,
+  totalCount,
+  filteredCount,
+}: ReportFiltersProps) {
+  const hasActiveFilters =
+    filters.search !== "" ||
+    filters.incidentType !== "all" ||
+    filters.severity !== "all" ||
+    filters.adminStatus !== "all";
 
   const clearFilters = () => {
     onFiltersChange({
-      search: '',
-      incidentType: 'all',
-      severity: 'all',
-      adminStatus: 'all',
+      search: "",
+      incidentType: "all",
+      severity: "all",
+      adminStatus: "all",
     });
   };
 
@@ -49,11 +62,17 @@ export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCo
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Filter className="h-5 w-5 text-slate-600" />
-          <span className="text-base font-semibold text-slate-900">Filters</span>
+          <span className="text-base font-semibold text-slate-900">
+            Filters
+          </span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-sm text-slate-600">
-            Showing <span className="text-slate-900 font-semibold">{filteredCount}</span> of {totalCount} reports
+            Showing{" "}
+            <span className="text-slate-900 font-semibold">
+              {filteredCount}
+            </span>{" "}
+            of {totalCount} reports
           </span>
           {hasActiveFilters && (
             <Button
@@ -75,7 +94,9 @@ export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCo
           <Input
             placeholder="Search by ID or Responder..."
             value={filters.search}
-            onChange={(e) => onFiltersChange({ ...filters, search: e.target.value })}
+            onChange={(e) =>
+              onFiltersChange({ ...filters, search: e.target.value })
+            }
             className="pl-9 bg-slate-50 border-slate-200 focus:border-slate-400 focus:ring-slate-400"
           />
         </div>
@@ -83,7 +104,12 @@ export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCo
         <div className="w-[180px]">
           <Select
             value={filters.incidentType}
-            onValueChange={(value) => onFiltersChange({ ...filters, incidentType: value as IncidentType | 'all' })}
+            onValueChange={(value) =>
+              onFiltersChange({
+                ...filters,
+                incidentType: value as IncidentType | "all",
+              })
+            }
           >
             <SelectTrigger className="bg-slate-50 border-slate-200">
               <SelectValue placeholder="Incident Type" />
@@ -91,7 +117,9 @@ export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCo
             <SelectContent>
               <SelectItem value="all">All Types</SelectItem>
               {incidentTypes.map((type) => (
-                <SelectItem key={type} value={type}>{type}</SelectItem>
+                <SelectItem key={type} value={type}>
+                  {incidentTypeLabels[type]}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -100,7 +128,12 @@ export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCo
         <div className="w-[160px]">
           <Select
             value={filters.severity}
-            onValueChange={(value) => onFiltersChange({ ...filters, severity: value as Severity | 'all' })}
+            onValueChange={(value) =>
+              onFiltersChange({
+                ...filters,
+                severity: value as Severity | "all",
+              })
+            }
           >
             <SelectTrigger className="bg-slate-50 border-slate-200">
               <SelectValue placeholder="Severity" />
@@ -108,18 +141,23 @@ export function ReportFilters({ filters, onFiltersChange, totalCount, filteredCo
             <SelectContent>
               <SelectItem value="all">All Severities</SelectItem>
               {severities.map((sev) => (
-                <SelectItem key={sev} value={sev}>{sev}</SelectItem>
+                <SelectItem key={sev} value={sev}>
+                  {sev.charAt(0).toUpperCase() + sev.slice(1)}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
-        
-
         <div className="w-[160px]">
           <Select
             value={filters.adminStatus}
-            onValueChange={(value) => onFiltersChange({ ...filters, adminStatus: value as FilterState['adminStatus'] })}
+            onValueChange={(value) =>
+              onFiltersChange({
+                ...filters,
+                adminStatus: value as FilterState["adminStatus"],
+              })
+            }
           >
             <SelectTrigger className="bg-slate-50 border-slate-200">
               <SelectValue placeholder="Admin Status" />

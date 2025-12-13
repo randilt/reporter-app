@@ -1,14 +1,12 @@
 export type SyncStatus = "pending" | "synced" | "failed";
-export type Severity = "Low" | "Medium" | "High" | "Critical";
+export type Severity = "low" | "medium" | "high" | "critical";
 export type IncidentType =
-  | "Flood"
-  | "Fire"
-  | "Earthquake"
-  | "Storm"
-  | "Accident"
-  | "Medical"
-  | "Hazmat"
-  | "Infrastructure";
+  | "flood"
+  | "landslide"
+  | "fire"
+  | "accident"
+  | "road_block"
+  | "power_line_down";
 
 export interface Location {
   lat: number;
@@ -106,16 +104,14 @@ export function convertApiToReport(
 
 // Generate realistic mock data around Sri Lanka
 const incidentTypes: IncidentType[] = [
-  "Flood",
-  "Fire",
-  "Earthquake",
-  "Storm",
-  "Accident",
-  "Medical",
-  "Hazmat",
-  "Infrastructure",
+  "flood",
+  "landslide",
+  "fire",
+  "accident",
+  "road_block",
+  "power_line_down",
 ];
-const severities: Severity[] = ["Low", "Medium", "High", "Critical"];
+const severities: Severity[] = ["low", "medium", "high", "critical"];
 const syncStatuses: SyncStatus[] = [
   "pending",
   "synced",
@@ -125,53 +121,41 @@ const syncStatuses: SyncStatus[] = [
 ]; // weighted towards synced
 
 const descriptions: Record<IncidentType, string[]> = {
-  Flood: [
+  flood: [
     "Road submerged under 2ft water",
     "Basement flooding reported",
     "River overflow affecting nearby homes",
     "Flash flood warning area",
   ],
-  Fire: [
+  landslide: [
+    "Debris on mountain road",
+    "Hillside collapse near residential area",
+    "Mudslide blocking highway",
+    "Rock fall reported",
+  ],
+  fire: [
     "Building fire, 3rd floor",
     "Wildfire approaching residential area",
     "Kitchen fire contained",
     "Electrical fire in warehouse",
   ],
-  Earthquake: [
-    "Minor tremor felt",
-    "Structural damage to old buildings",
-    "Aftershock monitoring",
-    "Cracks in foundation reported",
-  ],
-  Storm: [
-    "Power lines down",
-    "Trees blocking main road",
-    "Roof damage to multiple homes",
-    "Storm surge warning",
-  ],
-  Accident: [
+  accident: [
     "Multi-vehicle collision",
     "Pedestrian struck",
     "Industrial machinery accident",
     "Construction site incident",
   ],
-  Medical: [
-    "Mass casualty incident",
-    "Cardiac emergency",
-    "Allergic reaction reported",
-    "Heat stroke cases",
+  road_block: [
+    "Trees blocking main road",
+    "Vehicle breakdown causing congestion",
+    "Protest blocking highway",
+    "Road construction barrier",
   ],
-  Hazmat: [
-    "Chemical spill on highway",
-    "Gas leak detected",
-    "Unknown substance found",
-    "Industrial chemical release",
-  ],
-  Infrastructure: [
-    "Bridge structural concern",
-    "Water main break",
-    "Power grid failure",
-    "Road collapse",
+  power_line_down: [
+    "Power lines down on main street",
+    "Electrical hazard reported",
+    "Transformer failure",
+    "Utility pole collapsed",
   ],
 };
 
