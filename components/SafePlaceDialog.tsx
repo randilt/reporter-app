@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useResponder } from "@/hooks/useResponder";
+import { getDeviceInfo } from "@/lib/db";
 import { toast } from "sonner";
 
 interface SafePlaceDialogProps {
@@ -40,6 +42,7 @@ interface SafePlaceData {
 
 export function SafePlaceDialog({ open, onOpenChange }: SafePlaceDialogProps) {
   const { getLocation, loading: locationLoading } = useGeolocation();
+  const { responder } = useResponder();
   const [formData, setFormData] = useState<SafePlaceData>({
     location: null,
     address: "",
@@ -93,10 +96,41 @@ export function SafePlaceDialog({ open, onOpenChange }: SafePlaceDialogProps) {
       return;
     }
 
+    if (!responder) {
+      toast.error("Profile required", {
+        description: "Please complete your profile before marking safe places",
+      });
+      return;
+    }
+
     setSubmitting(true);
     try {
-      // TODO: Implement API call to save safe place
-      console.log("Safe place data:", formData);
+      const deviceInfo = getDeviceInfo();
+      const now = new Date();
+      const localId = crypto.randomUUID();
+
+      const safePlaceData = {
+        localId,
+        location: formData.location,
+        address: formData.address,
+        amenities: formData.amenities,
+        description: formData.description,
+        // Responder information
+        responderId: responder.responderId,
+        responderName: responder.name,
+        responderPhone: responder.phone,
+        // Timestamp and timezone information
+        createdAtLocal: now.toISOString(),
+        deviceTime: now.toISOString(),
+        deviceTimezone: deviceInfo.deviceTimezone,
+        timezoneOffsetMinutes: deviceInfo.timezoneOffsetMinutes,
+        // Device information
+        deviceId: deviceInfo.deviceId,
+        appVersion: deviceInfo.appVersion,
+      };
+
+      // TODO: Send to API in realtime
+      console.log("Safe place data with metadata:", safePlaceData);
 
       toast.success("Safe place marked!", {
         description: "Thank you for helping others stay safe.",
