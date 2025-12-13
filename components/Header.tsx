@@ -48,8 +48,8 @@ export const Header = () => {
                 <RefreshCw className="w-4 h-4" />
               </Button>
             )}
-            <LanguageSwitcher />
           </div>
+          <LanguageSwitcher />
         </div>
       </div>
     </motion.header>
