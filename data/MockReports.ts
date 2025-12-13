@@ -16,20 +16,86 @@ export interface Location {
   accuracyMeters: number;
 }
 
+export interface ResponderInfo {
+  name: string;
+  responderId: string;
+  phone: string;
+  email: string;
+}
+
 export interface IncidentReport {
   localId: string;
   serverId: string | null;
   incidentType: IncidentType;
   severity: Severity;
   createdAtLocal: string;
-  syncedAt: string | null;
+  syncedAt?: string | null;
   locationCapturedAtCreation: Location;
   locationCapturedAtSync: Location | null;
-  syncStatus: SyncStatus;
+  syncStatus?: SyncStatus;
   responderId: string;
+  responderName?: string;
+  responderPhone?: string;
+  responderInfo?: ResponderInfo;
   deviceId: string;
   appVersion: string;
   description: string;
+  images?: string[];
+  status?: string;
+}
+
+// API types
+export interface ApiIncidentReport {
+  responderId: string;
+  appVersion: string;
+  responderInfo: ResponderInfo;
+  status: string;
+  serverId: string;
+  localId: string;
+  timezoneOffsetMinutes: number;
+  incidentType: string;
+  createdAtLocal: string;
+  deviceTimezone: string;
+  deviceTime: string;
+  locationCapturedAtSync: Location;
+  deviceId: string;
+  locationCapturedAtCreation: Location;
+  description: string;
+  userCorrectedTime: string | null;
+  severity: string;
+}
+
+export interface ApiResponse {
+  data: ApiIncidentReport[];
+}
+
+// Convert API response to internal format
+export function convertApiToReport(
+  apiReport: ApiIncidentReport
+): IncidentReport {
+  return {
+    localId: apiReport.localId,
+    serverId: apiReport.serverId || null,
+    incidentType: (apiReport.incidentType.charAt(0).toUpperCase() +
+      apiReport.incidentType.slice(1)) as IncidentType,
+    severity: (apiReport.severity.charAt(0).toUpperCase() +
+      apiReport.severity.slice(1)) as Severity,
+    createdAtLocal: apiReport.createdAtLocal,
+    syncedAt: null,
+    locationCapturedAtCreation: apiReport.locationCapturedAtCreation,
+    locationCapturedAtSync: apiReport.locationCapturedAtSync || null,
+    syncStatus:
+      apiReport.status === "waiting" ? "pending" : ("synced" as SyncStatus),
+    responderId: apiReport.responderId,
+    responderName: apiReport.responderInfo?.name || "Unknown",
+    responderPhone: apiReport.responderInfo?.phone || "",
+    responderInfo: apiReport.responderInfo,
+    deviceId: apiReport.deviceId,
+    appVersion: apiReport.appVersion,
+    description: apiReport.description,
+    images: [],
+    status: apiReport.status,
+  };
 }
 
 // Generate realistic mock data around Sri Lanka
@@ -103,6 +169,27 @@ const descriptions: Record<IncidentType, string[]> = {
   ],
 };
 
+const responderNames = [
+  "Roshan Silva",
+  "Priya Kumari",
+  "Kasun Perera",
+  "Amara Jayasinghe",
+  "Dilshan Fernando",
+  "Nidhi Sharma",
+  "Sanjeev Kumar",
+  "Lakshmi Patel",
+  "Arjun Reddy",
+  "Maya Desai",
+];
+
+const imageUrls = [
+  "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=400&h=300&fit=crop",
+  "https://images.unsplash.com/photo-1587569536149-2b0b9e94b22f?w=400&h=300&fit=crop",
+  "https://images.unsplash.com/photo-1579033100900-be2e78838ac7?w=400&h=300&fit=crop",
+  "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop",
+  "https://images.unsplash.com/photo-1559839673-92ecb05241ba?w=400&h=300&fit=crop",
+];
+
 // Locations around Sri Lanka
 const baseLocations = [
   { lat: 6.9271, lng: 79.8612, name: "Colombo" },
@@ -174,12 +261,19 @@ function generateReport(index: number): IncidentReport {
       3,
       "0"
     )}`,
+    responderName: randomFromArray(responderNames),
+    responderPhone: `+94${String(
+      Math.floor(Math.random() * 900000000) + 100000000
+    ).padStart(9, "0")}`,
     deviceId: `device-${String(Math.floor(Math.random() * 100) + 1).padStart(
       3,
       "0"
     )}`,
     appVersion: randomFromArray(["1.0.0", "1.0.1", "1.1.0", "1.2.0"]),
     description: randomFromArray(descriptions[incidentType]),
+    images: Array.from({ length: Math.floor(Math.random() * 4) }, () =>
+      randomFromArray(imageUrls)
+    ),
   };
 }
 

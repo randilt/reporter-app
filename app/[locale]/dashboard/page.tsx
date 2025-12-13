@@ -3,8 +3,7 @@ import { useState, useMemo } from "react";
 import { ListView } from "@/components/dashboard/ListView";
 import { Button } from "@/components/ui/button";
 import { Plus, List, Map } from "lucide-react";
-import { useReports } from "@/hooks/useReports";
-import { mockReports } from "@/data/MockReports";
+import { useApiReports } from "@/hooks/useApiReports";
 import { ReportFilters, FilterState } from "@/components/dashboard/ReportFilters";
 
 export default function DashboardPage() {
@@ -15,14 +14,15 @@ export default function DashboardPage() {
     severity: "all",
     syncStatus: "all",
   });
-  const { pendingCount, syncedCount, failedCount } = useReports();
+  const { reports: apiReports, loading, error } = useApiReports();
 
   // Filter reports based on current filters
   const filteredReports = useMemo(() => {
-    return mockReports.filter((report) => {
+    return apiReports.filter((report) => {
       const matchesSearch =
         filters.search === "" ||
-        report.description.toLowerCase().includes(filters.search.toLowerCase());
+        report.localId.toLowerCase().includes(filters.search.toLowerCase()) ||
+        report.responderName?.toLowerCase().includes(filters.search.toLowerCase());
 
       const matchesIncidentType =
         filters.incidentType === "all" || report.incidentType === filters.incidentType;
@@ -31,7 +31,7 @@ export default function DashboardPage() {
         filters.severity === "all" || report.severity === filters.severity;
 
       const matchesSyncStatus =
-        filters.syncStatus === "all" || report.syncStatus === filters.syncStatus;
+        filters.syncStatus === "all" || (report.syncStatus === filters.syncStatus);
 
       return (
         matchesSearch &&
@@ -40,16 +40,21 @@ export default function DashboardPage() {
         matchesSyncStatus
       );
     });
-  }, [filters]);
+  }, [apiReports, filters]);
+
+  // Calculate stats from API reports
+  const pendingCount = apiReports.filter(r => r.syncStatus === 'pending').length;
+  const syncedCount = apiReports.filter(r => r.syncStatus === 'synced').length;
+  const failedCount = apiReports.filter(r => r.syncStatus === 'failed').length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold text-slate-900">Dashboard</h1>
             <p className="text-slate-600 mt-2">
-              Total Reports: {mockReports.length} | Pending: {pendingCount} | Synced: {syncedCount} | Failed: {failedCount}
+              Total Reports: {apiReports.length} | Pending: {pendingCount} | Synced: {syncedCount} | Failed: {failedCount}
             </p>
           </div>
         </div>
@@ -58,43 +63,58 @@ export default function DashboardPage() {
           <ReportFilters
             filters={filters}
             onFiltersChange={setFilters}
-            totalCount={mockReports.length}
+            totalCount={apiReports.length}
             filteredCount={filteredReports.length}
           />
         </div>
-      
 
-        <div className="mb-6 flex gap-4">
-          <Button
-            onClick={() => setView("list")}
-            variant={view === "list" ? "default" : "outline"}
-            className="gap-2"
-          >
-            <List className="h-4 w-4" />
-            List View
-          </Button>
-          <Button
-            onClick={() => setView("map")}
-            variant={view === "map" ? "default" : "outline"}
-            className="gap-2"
-          >
-            <Map className="h-4 w-4" />
-            Map View
-          </Button>
-        </div>
-
-        {view === "list" && (
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <ListView reports={filteredReports} />
+        {loading && (
+          <div className="text-center py-12">
+            <p className="text-slate-600">Loading reports...</p>
           </div>
         )}
 
-        {view === "map" && (
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <div className="flex items-center justify-center h-96 text-slate-500">
-              Map View - Coming Soon
-            </div>
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-red-700">Error loading reports: {error}</p>
           </div>
+        )}
+
+        {!loading && !error && (
+          <>
+            <div className="mb-6 flex gap-4">
+              <Button
+                onClick={() => setView("list")}
+                variant={view === "list" ? "default" : "outline"}
+                className="gap-2"
+              >
+                <List className="h-4 w-4" />
+                List View
+              </Button>
+              <Button
+                onClick={() => setView("map")}
+                variant={view === "map" ? "default" : "outline"}
+                className="gap-2"
+              >
+                <Map className="h-4 w-4" />
+                Map View
+              </Button>
+            </div>
+
+            {view === "list" && (
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <ListView reports={filteredReports} />
+              </div>
+            )}
+
+            {view === "map" && (
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <div className="flex items-center justify-center h-96 text-slate-500">
+                  Map View - Coming Soon
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

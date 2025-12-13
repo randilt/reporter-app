@@ -37,7 +37,7 @@ export function SeverityBadge({ severity }: SeverityBadgeProps) {
   const severityConfig: Record<Severity, string> = {
     Low: 'font-bold text-green-600',
     Medium: 'font-bold text-yellow-600',
-    High: 'font-bold text-red-600',
+    High: 'font-bold text-red-400',
     Critical: 'font-bold text-red-700',
   };
 
