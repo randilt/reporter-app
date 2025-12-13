@@ -128,13 +128,15 @@ export const useReports = () => {
 
       // Get responder info for API
       const responderProfile = await db.responders.get(report.responderId);
-      const responderInfo = responderProfile ? {
-        responderId: responderProfile.responderId,
-        name: responderProfile.name,
-        phone: responderProfile.phone,
-        email: responderProfile.email,
-        nic: responderProfile.nic,
-      } : null;
+      const responderInfo = responderProfile
+        ? {
+            responderId: responderProfile.responderId,
+            name: responderProfile.name,
+            phone: responderProfile.phone,
+            email: responderProfile.email,
+            nic: responderProfile.nic,
+          }
+        : null;
 
       // Prepare payload for API
       const payload: SyncReportPayload = {
@@ -143,6 +145,7 @@ export const useReports = () => {
         incidentType: report.incidentType,
         severity: report.severity,
         description: report.description,
+        manualAddress: report.manualAddress,
         createdAtLocal: report.createdAtLocal,
         locationCapturedAtCreation: report.locationCapturedAtCreation,
         locationCapturedAtSync: syncLocation,
