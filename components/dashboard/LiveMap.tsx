@@ -7,10 +7,37 @@ import {
   Popup,
   Tooltip,
 } from "react-leaflet";
-import { useApiReports } from "@/hooks/useApiReports";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap } from "leaflet";
+// import type { Report } from "@/lib/db/types";
+
+type Report = {
+  localId?: string;
+  id?: string;
+  locationCapturedAtCreation?: { lat: number; lng: number };
+  incidentType?: string;
+  createdAtLocal?: string;
+  severity?: string | number;
+  description?: string;
+  images?: string[];
+  location?: {
+    latitude?: number;
+    longitude?: number;
+    lat?: number;
+    lng?: number;
+    address?: string;
+  };
+  reporter?: {
+    name?: string;
+    phone?: string;
+  };
+  reporterName?: string;
+  responderName?: string;
+  responderPhone?: string;
+  createdByUser?: string;
+  type?: string;
+};
 
 const severityColor: Record<string, string> = {
   critical: "#ef4444",
@@ -19,12 +46,12 @@ const severityColor: Record<string, string> = {
   low: "#34d399",
 };
 
-export default function LiveMap() {
-  const { reports: apiReports = [] } = useApiReports();
-  const mapRef = useRef<LeafletMap | null>(null);
+interface LiveMapProps {
+  reports: Report[];
+}
 
-  // Use only API reports
-  const reports = apiReports;
+export default function LiveMap({ reports }: LiveMapProps) {
+  const mapRef = useRef<LeafletMap | null>(null);
 
   const points = reports
     .map((r) => {
