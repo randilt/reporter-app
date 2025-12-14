@@ -66,8 +66,11 @@ const navigationRoute = new NavigationRoute(offlineHandler, {
     /^\/admin\//,
     /^\/en\/admin\//,
     /^\/si\/admin\//,
+    /^\/dashboard$/,
     /^\/dashboard\//,
+    /^\/en\/dashboard$/,
     /^\/en\/dashboard\//,
+    /^\/si\/dashboard$/,
     /^\/si\/dashboard\//,
   ],
 })
