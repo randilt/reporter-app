@@ -58,7 +58,18 @@ precacheAndRoute([
 const offlineHandler = createHandlerBoundToURL('/offline.html')
 const navigationRoute = new NavigationRoute(offlineHandler, {
   // Don't use offline page for API routes
-  denylist: [/^\/api\//, /^\/en\/api\//, /^\/si\/api\//, /^\/_next\//],
+  denylist: [
+    /^\/api\//,
+    /^\/en\/api\//,
+    /^\/si\/api\//,
+    /^\/_next\//,
+    /^\/admin\//,
+    /^\/en\/admin\//,
+    /^\/si\/admin\//,
+    /^\/dashboard\//,
+    /^\/en\/dashboard\//,
+    /^\/si\/dashboard\//,
+  ],
 })
 registerRoute(navigationRoute)
 
